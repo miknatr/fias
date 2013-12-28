@@ -1,0 +1,20 @@
+<phpunit
+	backupGlobals               = "false"
+	backupStaticAttributes      = "false"
+	colors                      = "true"
+	convertErrorsToExceptions   = "true"
+	convertNoticesToExceptions  = "true"
+	convertWarningsToExceptions = "true"
+	processIsolation            = "false"
+	stopOnError                 = "false"
+	stopOnFailure               = "false"
+	stopOnIncomplete            = "false"
+	stopOnSkipped               = "false"
+	syntaxCheck                 = "false"
+	bootstrap                   = "bootstrap_test.php" >
+	<testsuites>
+		<testsuite name="All tests">
+			<directory>src/Fias/Tests</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
