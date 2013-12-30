@@ -2,6 +2,6 @@
 
 namespace Fias;
 
-require_once(__DIR__ . '/vendor/autoload.php');
+define('ROOT_DIR', __DIR__ . '/');
 
-// STOPPER посчитать на сколько нужно расширить время выполнения и размер памяти для инициализации полной базе.
+require_once ROOT_DIR . '/vendor/autoload.php';
