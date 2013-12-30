@@ -10,7 +10,7 @@ class Config
     {
         $this->config = require($pathToFile);
         if (!is_array($this->config)) {
-            throw new \Exception('Ошибка загрузки конфигурационного файла: ' . $pathToFile);
+            throw new \LogicException('Ошибка загрузки конфигурационного файла: ' . $pathToFile);
         }
     }
 
@@ -25,18 +25,19 @@ class Config
     /** @var  Config[] */
     private static $configCaches;
 
-    public static function get($pathToFile)
+    public static function get($name)
     {
-        $realPathToFile = realpath($pathToFile);
-        if(!$realPathToFile)
-        {
-            throw new \Exception('Файл не найден: ' . $pathToFile);
+        $name       = basename($name);
+        $pathToFile = ROOT_DIR . 'config/' . $name . '.php';
+
+        if (!is_file($pathToFile)) {
+            throw new FileNotFoundException('Файл не найден: ' . $pathToFile);
         }
 
-        if (!isset(self::$configCaches[$realPathToFile])) {
-            self::$configCaches[$realPathToFile] = new Config($realPathToFile);
+        if (!isset(self::$configCaches[$pathToFile])) {
+            self::$configCaches[$pathToFile] = new Config($pathToFile);
         }
 
-        return self::$configCaches[$realPathToFile];
+        return self::$configCaches[$pathToFile];
     }
 }

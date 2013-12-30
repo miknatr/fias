@@ -6,10 +6,13 @@ use Fias\Config;
 
 class ConfigTest extends Base
 {
+    private $fileName;
     private $filePath;
     protected function setUp()
     {
-        $testConfig = "
+        $this->fileName = md5(time());
+        $this->filePath = ROOT_DIR . 'config/' . $this->fileName . '.php';
+        $testConfig     = "
         <?php
             return array(
                 'string' => 'someString',
@@ -17,31 +20,30 @@ class ConfigTest extends Base
 
         ";
 
-        $this->filePath = $this->createTestConfigFile($testConfig);
+        file_put_contents($this->filePath, $testConfig);
+    }
+
+    protected function tearDown()
+    {
+        unlink($this->filePath);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Файл не найден: /fake/path
+     * @expectedException \Fias\FileNotFoundException
      */
     public function testFileNotFound()
     {
-        Config::get('/fake/path');
+            Config::get('fakeConfig');
     }
 
     public function testGet()
     {
-        $config = Config::get($this->filePath);
+        $config = Config::get($this->fileName);
+
         $this->assertEquals('someString',   $config->getParam('string', 'fakeString'));
         $this->assertEquals('someString',   $config->getParam('string'));
         $this->assertEquals('defaultValue', $config->getParam('anotherKey', 'defaultValue'));
         $this->assertEquals(null,           $config->getParam('anotherKey', null));
     }
 
-    private function createTestConfigFile($content)
-    {
-        $fileName = tempnam('let us write to system\'s temporary directory', 'configTest');
-        file_put_contents($fileName, $content);
-        return $fileName;
-    }
 }
