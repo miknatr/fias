@@ -8,7 +8,8 @@ class UpdateLoaderTest extends Base
 {
     public function testLoad()
     {
+        // STOPPER тесты докачки нормальные.
         $loader = new UpdateLoader();
-        $loader->loadFile();
+        $this->assertTrue(filesize($loader->loadFile()) > 0);
     }
 }
