@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'file_loader_url' => 'http://fias.nalog.ru/WebServices/Public/DownloadService.asmx',
+    'wdsl_url' => 'http://fias.nalog.ru/WebServices/Public/DownloadService.asmx?WSDL',
     'file_folder'     => '/var/www/upload',
     'database'        => array(
         'adapter'  => 'pgsql',
