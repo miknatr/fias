@@ -17,12 +17,14 @@ abstract class Loader
     /**
      * @return \stdClass
      */
-    protected function getLastFileInfo() {
-        $client = new \SoapClient($this->config->getParam('file_loader_url') . '?WSDL');
+    protected function getLastFileInfo()
+    {
+        $client = new \SoapClient($this->config->getParam('wdsl_url'));
         return $client->__soapCall('GetLastDownloadFileInfo', array());
     }
 
-    protected function loadFileFromUrl($fileName, $url) {
+    protected function loadFileFromUrl($fileName, $url)
+    {
         set_time_limit(0);
 
         $filePath = $this->config->getParam('file_folder') . '/' . $fileName;
@@ -30,7 +32,7 @@ abstract class Loader
             return $filePath;
         }
 
-        $fp = fopen ($filePath, 'w+');
+        $fp = fopen($filePath, 'w+');
         $ch = curl_init($url);
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -52,9 +54,9 @@ abstract class Loader
     protected function fileIsCorrect($filePath, $url)
     {
         $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, TRUE);
-        curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
 
         $correctSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 
