@@ -9,9 +9,9 @@ abstract class Loader
     /** @var  Config */
     protected $config;
 
-    public function __construct()
+    public function __construct(Config $config)
     {
-        $this->config = Config::get('config');
+        $this->config = $config;
     }
 
     /**
@@ -28,11 +28,15 @@ abstract class Loader
         set_time_limit(0);
 
         $filePath = $this->config->getParam('file_folder') . '/' . $fileName;
-        if (file_exists($filePath) && $this->fileIsCorrect($filePath, $url)) {
-            return $filePath;
+        if (file_exists($filePath)) {
+            if ($this->fileIsCorrect($filePath, $url)) {
+                return $filePath;
+            } else {
+                unlink($filePath);
+            }
         }
 
-        $fp = fopen($filePath, 'w+');
+        $fp = fopen($filePath, 'w');
         $ch = curl_init($url);
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -57,11 +61,12 @@ abstract class Loader
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
 
         $correctSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
 
         curl_close($ch);
 
-        return filesize($filePath) == $correctSize;
+        return (filesize($filePath) == $correctSize);
     }
 }

@@ -34,10 +34,10 @@ class Config
             throw new FileNotFoundException('Файл не найден: ' . $pathToFile);
         }
 
-        if (!isset(self::$configCaches[$pathToFile])) {
-            self::$configCaches[$pathToFile] = new Config($pathToFile);
+        if (!isset(static::$configCaches[$pathToFile])) {
+            static::$configCaches[$pathToFile] = new Config($pathToFile);
         }
 
-        return self::$configCaches[$pathToFile];
+        return static::$configCaches[$pathToFile];
     }
 }
