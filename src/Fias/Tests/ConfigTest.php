@@ -8,6 +8,7 @@ class ConfigTest extends Base
 {
     private $fileName;
     private $filePath;
+
     protected function setUp()
     {
         $this->fileName = md5(time());
@@ -28,12 +29,10 @@ class ConfigTest extends Base
         unlink($this->filePath);
     }
 
-    /**
-     * @expectedException \Fias\FileNotFoundException
-     */
+    /** @expectedException \Fias\FileException */
     public function testFileNotFound()
     {
-            Config::get('fakeConfig');
+        Config::get('fakeConfig');
     }
 
     public function testGet()
@@ -45,5 +44,4 @@ class ConfigTest extends Base
         $this->assertEquals('defaultValue', $config->getParam('anotherKey', 'defaultValue'));
         $this->assertEquals(null,           $config->getParam('anotherKey', null));
     }
-
 }
