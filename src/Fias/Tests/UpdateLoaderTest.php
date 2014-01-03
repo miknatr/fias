@@ -32,8 +32,10 @@ class UpdateLoaderTest extends Base
     public function testReWritingBadFile()
     {
         file_put_contents(
-            $this->config->getParam('file_folder') . '/' . $this->getInformationAboutCurrentUpdateFile(
-            )['version'] . '_fias_delta_xml.rar',
+            $this->config->getParam('file_folder')
+            . '/'
+            . $this->getInformationAboutCurrentUpdateFile()['version']
+            . '_fias_delta_xml.rar',
             'Really bad file'
         );
 

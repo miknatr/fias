@@ -8,6 +8,7 @@ class InitLoader extends Loader
     {
         $filesInfo = $this->getLastFileInfo();
         $fileName  = $this->generateFileName($filesInfo, 'FiasCompleteXmlUrl');
+
         return $this->loadFileFromUrl($fileName, $filesInfo->GetLastDownloadFileInfoResult->FiasCompleteXmlUrl);
     }
 }
