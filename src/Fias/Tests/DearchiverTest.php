@@ -2,12 +2,14 @@
 
 namespace Fias\Tests;
 
+use Fias\Dearchiver;
+use Fias\Config;
+
 class DearchiverTest extends Base
 {
-    public function testIncomplete()
+    /** @expectedException \Fias\FileException */
+    public function testBadFile()
     {
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        new Dearchiver(__DIR__ . 'badfile', Config::get('config.test.php'));
     }
 }

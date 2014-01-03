@@ -31,7 +31,7 @@ class Config
         $pathToFile = ROOT_DIR . 'config/' . $name . '.php';
 
         if (!is_file($pathToFile)) {
-            throw new FileNotFoundException('Файл не найден: ' . $pathToFile);
+            throw new FileException('Файл не найден: ' . $pathToFile);
         }
 
         if (!isset(static::$configCaches[$pathToFile])) {
