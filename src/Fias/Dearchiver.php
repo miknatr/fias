@@ -11,6 +11,7 @@ class Dearchiver
     {
         $this->pathToFile = $pathToFile;
         $this->config     = $config;
+
         $this->checkFile();
     }
 
@@ -25,7 +26,7 @@ class Dearchiver
 
         mkdir($folder);
         exec('unrar e ' . $this->pathToFile . ' ' . $folder, $output, $result);
-        if($result !== 0) {
+        if ($result !== 0) {
             throw new \Exception('Ошибка разархивации: ' . implode("\n", $output));
         }
 
@@ -34,7 +35,7 @@ class Dearchiver
 
     private function checkFile()
     {
-        if(!is_readable($this->pathToFile)) {
+        if (!is_readable($this->pathToFile)) {
             throw new FileException('Файл недоступен для чтения: ' . $this->pathToFile);
         }
     }

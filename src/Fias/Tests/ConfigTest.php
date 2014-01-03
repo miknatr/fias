@@ -39,9 +39,9 @@ class ConfigTest extends Base
     {
         $config = Config::get($this->fileName);
 
-        $this->assertEquals('someString',   $config->getParam('string', 'fakeString'));
-        $this->assertEquals('someString',   $config->getParam('string'));
+        $this->assertEquals('someString', $config->getParam('string', 'fakeString'));
+        $this->assertEquals('someString', $config->getParam('string'));
         $this->assertEquals('defaultValue', $config->getParam('anotherKey', 'defaultValue'));
-        $this->assertEquals(null,           $config->getParam('anotherKey', null));
+        $this->assertEquals(null, $config->getParam('anotherKey', null));
     }
 }

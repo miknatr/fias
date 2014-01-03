@@ -10,7 +10,7 @@ class DearchiverTest extends Base
     private $testRarFile;
     private $testTxtFile;
 
-    protected  function setUp()
+    protected function setUp()
     {
         $text       = 'Test File For Dearchiver';
         $fileFolder = Config::get('config.test')->getParam('file_folder');
@@ -20,7 +20,7 @@ class DearchiverTest extends Base
 
         file_put_contents($this->testTxtFile, $text);
         exec('rar a ' . $this->testRarFile . ' ' . $this->testTxtFile, $output, $result);
-        if($result !== 0) {
+        if ($result !== 0) {
             throw new \Exception('Ошибка архивации: ' . implode("\n", $output));
         }
     }
@@ -34,7 +34,7 @@ class DearchiverTest extends Base
     /** @expectedException \Fias\FileException */
     public function testBadFile()
     {
-        new Dearchiver(__DIR__ . 'badfile', Config::get('config.test.php'));
+        new Dearchiver(__DIR__ . 'bad_file', Config::get('config.test.php'));
     }
 
     public function testNormalFile()
