@@ -8,6 +8,7 @@ class Config
 
     protected function __construct($pathToFile)
     {
+        /** @noinspection PhpIncludeInspection */
         $this->config = require($pathToFile);
         if (!is_array($this->config)) {
             throw new \LogicException('Ошибка загрузки конфигурационного файла: ' . $pathToFile);
