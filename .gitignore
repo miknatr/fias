@@ -2,3 +2,4 @@
 /vendor
 /config/config.php
 /composer.lock
+/src/Fias/Tests/file_folder/*

@@ -16,7 +16,20 @@ class Dearchiver
 
     public function extract()
     {
-        // STOPPER уточнить у Миши  по поводу реализации.
+        $folder = $this->config->getParam('file_folder')
+            . '/'
+            . explode('_', basename($this->pathToFile))[0]
+            . '_'
+            . date('YmdHis')
+        ;
+
+        mkdir($folder);
+        exec('unrar e ' . $this->pathToFile . ' ' . $folder, $output, $result);
+        if($result !== 0) {
+            throw new \Exception('Ошибка разархивации: ' . implode("\n", $output));
+        }
+
+        return $folder;
     }
 
     private function checkFile()
