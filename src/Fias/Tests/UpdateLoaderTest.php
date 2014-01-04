@@ -5,14 +5,14 @@ namespace Fias\Tests;
 use Fias\UpdateLoader;
 use Fias\Config;
 
-class UpdateLoaderTest extends Base
+class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  Config */
     private $config;
 
     protected function setUp()
     {
-        $this->config = Config::get('config.test');
+        $this->config = Config::get('config');
         $file_folder  = $this->config->getParam('file_folder');
 
         if (!is_dir($file_folder)) {
@@ -25,7 +25,7 @@ class UpdateLoaderTest extends Base
 
     public function testLoad()
     {
-        $loader = new UpdateLoader(Config::get('config.test'));
+        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_folder');
         $this->assertEquals($this->getInformationAboutCurrentUpdateFile()['file_size'], filesize($loader->loadFile()));
     }
 
@@ -39,17 +39,17 @@ class UpdateLoaderTest extends Base
             'Really bad file'
         );
 
-        $loader = new UpdateLoader(Config::get('config.test'));
+        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_folder');
         $this->assertEquals($this->getInformationAboutCurrentUpdateFile()['file_size'], filesize($loader->loadFile()));
     }
 
     public function testNoRewritingGoodFile()
     {
-        $loader   = new UpdateLoader(Config::get('config.test'));
+        $loader   = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_folder');
         $filePath = $loader->loadFile();
 
         $this->assertTrue(
-            $this->invokeMethod(
+            Helper::invokeMethod(
                 $loader,
                 'fileIsCorrect',
                 array(
@@ -65,7 +65,7 @@ class UpdateLoaderTest extends Base
     private function getInformationAboutCurrentUpdateFile()
     {
         if (!$this->updateInformation) {
-            $client    = new \SoapClient($this->config->getParam('wdsl_url'));
+            $client    = new \SoapClient($this->config->getParam('wsdl_url'));
             $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
 
             $ch = curl_init($filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl);

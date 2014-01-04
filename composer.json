@@ -2,7 +2,7 @@
     "name": "stiffbeards/fias",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.4.0",
         "miknatr/grace-dbal": "dev-master",
         "monolog/monolog": "1.6.0"
     },

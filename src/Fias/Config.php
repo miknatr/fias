@@ -9,27 +9,28 @@ class Config
     protected function __construct($pathToFile)
     {
         /** @noinspection PhpIncludeInspection */
-        $this->config = require($pathToFile);
+        $this->config = require $pathToFile;
         if (!is_array($this->config)) {
             throw new \LogicException('Ошибка загрузки конфигурационного файла: ' . $pathToFile);
         }
     }
 
-    public function getParam($key, $default = null)
+    public function getParam($key)
     {
-        return isset($this->config[$key])
-            ? $this->config[$key]
-            : $default
-        ;
+        if (!isset($this->config[$key])) {
+            throw new ConfigException('Не найден конфигурационный параметр: ' . $key);
+        }
+
+        return $this->config[$key];
     }
 
-    /** @var  Config[] */
+    /** @var Config[] */
     private static $configCaches;
 
     public static function get($name)
     {
         $name       = basename($name);
-        $pathToFile = ROOT_DIR . 'config/' . $name . '.php';
+        $pathToFile = __DIR__ . '/../../config/' . $name . '.php';
 
         if (!is_file($pathToFile)) {
             throw new FileException('Файл не найден: ' . $pathToFile);

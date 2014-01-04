@@ -3,23 +3,24 @@
 namespace Fias\Tests;
 
 use Fias\Dearchiver;
-use Fias\Config;
 
-class DearchiverTest extends Base
+class DearchiverTest extends \PHPUnit_Framework_TestCase
 {
     private $testRarFile;
     private $testTxtFile;
+    private $fileFolder;
 
     protected function setUp()
     {
-        $text       = 'Test File For Dearchiver';
-        $fileFolder = Config::get('config.test')->getParam('file_folder');
+        $text = 'Test File For Dearchiver';
 
-        $this->testTxtFile = $fileFolder . '/dearchiverTestFile.txt';
-        $this->testRarFile = $fileFolder . '/dearchiverTestFile.rar';
+        $this->fileFolder  = __DIR__ . '/file_folder';
+        $this->testTxtFile = $this->fileFolder . '/dearchiverTestFile.txt';
+        $this->testRarFile = $this->fileFolder . '/dearchiverTestFile.rar';
 
         file_put_contents($this->testTxtFile, $text);
         exec('rar a ' . $this->testRarFile . ' ' . $this->testTxtFile, $output, $result);
+
         if ($result !== 0) {
             throw new \Exception('Ошибка архивации: ' . implode("\n", $output));
         }
@@ -34,15 +35,22 @@ class DearchiverTest extends Base
     /** @expectedException \Fias\FileException */
     public function testBadFile()
     {
-        new Dearchiver(__DIR__ . 'bad_file', Config::get('config.test.php'));
+        new Dearchiver('bad_file', $this->fileFolder);
     }
 
+    /** @expectedException \Fias\FileException */
+    public function testBadFolder()
+    {
+        new Dearchiver($this->testRarFile, 'bad_folder');
+    }
+
+    private $extractedFiles;
     public function testNormalFile()
     {
-        $extracted_files = (new Dearchiver($this->testRarFile, Config::get('config.test')))->extract();
+        $this->extractedFiles = (new Dearchiver($this->testRarFile, $this->fileFolder))->extract();
         $this->assertEquals(
             md5_file($this->testTxtFile),
-            md5_file($extracted_files . '/' . basename($this->testTxtFile))
+            md5_file($this->extractedFiles . '/' . basename($this->testTxtFile))
         );
     }
 }

@@ -6,12 +6,16 @@ abstract class Loader
 {
     abstract public function loadFile();
 
-    /** @var  Config */
-    protected $config;
+    protected $wsdlUrl;
+    protected $fileFolder;
 
-    public function __construct(Config $config)
+    public function __construct($wsdlUrl, $fileFolder)
     {
-        $this->config = $config;
+        $this->wsdlUrl    = $wsdlUrl;
+        $this->fileFolder = $fileFolder;
+
+        FileHelper::isFolder($fileFolder);
+        FileHelper::isItWritable($fileFolder);
     }
 
     /**
@@ -19,7 +23,7 @@ abstract class Loader
      */
     protected function getLastFileInfo()
     {
-        $client = new \SoapClient($this->config->getParam('wdsl_url'));
+        $client = new \SoapClient($this->wsdlUrl);
         return $client->__soapCall('GetLastDownloadFileInfo', array());
     }
 
@@ -27,7 +31,7 @@ abstract class Loader
     {
         set_time_limit(0);
 
-        $filePath = $this->config->getParam('file_folder') . '/' . $fileName;
+        $filePath = $this->fileFolder . '/' . $fileName;
         if (file_exists($filePath)) {
             if ($this->fileIsCorrect($filePath, $url)) {
                 return $filePath;

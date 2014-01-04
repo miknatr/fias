@@ -4,7 +4,7 @@ namespace Fias\Tests;
 
 use Fias\Config;
 
-class ConfigTest extends Base
+class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     private $fileName;
     private $filePath;
@@ -12,7 +12,7 @@ class ConfigTest extends Base
     protected function setUp()
     {
         $this->fileName = md5(time());
-        $this->filePath = ROOT_DIR . 'config/' . $this->fileName . '.php';
+        $this->filePath = __DIR__ . '/../../../config/' . $this->fileName . '.php';
         $testConfig     = "
         <?php
             return array(
@@ -37,11 +37,12 @@ class ConfigTest extends Base
 
     public function testGet()
     {
-        $config = Config::get($this->fileName);
+        $this->assertEquals('someString', Config::get($this->fileName)->getParam('string'));
+    }
 
-        $this->assertEquals('someString', $config->getParam('string', 'fakeString'));
-        $this->assertEquals('someString', $config->getParam('string'));
-        $this->assertEquals('defaultValue', $config->getParam('anotherKey', 'defaultValue'));
-        $this->assertEquals(null, $config->getParam('anotherKey', null));
+    /** @expectedException \Fias\ConfigException */
+    public function testGetException()
+    {
+        Config::get($this->fileName)->getParam('fakeKey');
     }
 }
