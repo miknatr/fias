@@ -29,8 +29,6 @@ abstract class Loader
 
     protected function loadFileFromUrl($fileName, $url)
     {
-        set_time_limit(0);
-
         $filePath = $this->fileFolder . '/' . $fileName;
         if (file_exists($filePath)) {
             if ($this->fileIsCorrect($filePath, $url)) {
