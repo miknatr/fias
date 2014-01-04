@@ -48,20 +48,20 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
     /** @expectedException \Fias\FileException */
     public function testBadFile()
     {
-        new Dearchiver('bad_file', $this->fileFolder);
+        Dearchiver::extract($this->fileFolder, 'bad_file');
     }
 
     /** @expectedException \Fias\FileException */
     public function testBadFolder()
     {
-        new Dearchiver($this->testRarFile, 'bad_folder');
+        Dearchiver::extract('bad_folder', $this->testRarFile);
     }
 
     private $extractedFiles;
 
     public function testNormalFile()
     {
-        $this->extractedFiles = (new Dearchiver($this->testRarFile, $this->fileFolder))->extract();
+        $this->extractedFiles = Dearchiver::extract($this->fileFolder, $this->testRarFile);
         $this->assertEquals(
             md5_file($this->testTxtFile),
             md5_file($this->extractedFiles . '/' . basename($this->testTxtFile))
