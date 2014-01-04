@@ -30,6 +30,19 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
     {
         unlink($this->testRarFile);
         unlink($this->testTxtFile);
+
+        if ($this->extractedFiles) {
+            $files = scandir($this->extractedFiles);
+            foreach ($files as $file) {
+                if ($file == '.' || $file == '..') {
+                    continue;
+                }
+
+                unlink($this->extractedFiles . '/' . $file);
+            }
+
+            rmdir($this->extractedFiles);
+        }
     }
 
     /** @expectedException \Fias\FileException */
@@ -45,6 +58,7 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
     }
 
     private $extractedFiles;
+
     public function testNormalFile()
     {
         $this->extractedFiles = (new Dearchiver($this->testRarFile, $this->fileFolder))->extract();
