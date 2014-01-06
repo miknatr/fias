@@ -4,26 +4,26 @@ namespace Fias;
 
 class Dearchiver
 {
-    public static function extract($pathToFileFolder, $pathToFile)
+    public static function extract($pathToFileDirectory, $pathToFile)
     {
-        static::checkPaths($pathToFileFolder, $pathToFile);
-        $folder = static::generateFolderName($pathToFileFolder, $pathToFile);
-        static::doExtract($folder, $pathToFile);
+        static::checkPaths($pathToFileDirectory, $pathToFile);
+        $directory = static::generateDirectoryName($pathToFileDirectory, $pathToFile);
+        static::doExtract($directory, $pathToFile);
 
-        return $folder;
+        return $directory;
     }
 
-    private static function checkPaths($pathToFileFolder, $pathToFile)
+    private static function checkPaths($pathToFileDirectory, $pathToFile)
     {
-        FileHelper::isItReadable($pathToFile);
-        FileHelper::isFolder($pathToFileFolder);
-        FileHelper::isItWritable($pathToFileFolder);
+        FileHelper::checkReadable($pathToFile);
+        FileHelper::checkThatIsDirectory($pathToFileDirectory);
+        FileHelper::checkWritable($pathToFileDirectory);
     }
 
-    private static function generateFolderName($pathToFileFolder, $pathToFile)
+    private static function generateDirectoryName($pathToFileDirectory, $pathToFile)
     {
         // Формируем имя папки вида VersionID_DateAndTime
-        return $pathToFileFolder
+        return $pathToFileDirectory
             . '/'
             . explode('_', basename($pathToFile), 1)[0]
             . '_'
@@ -31,19 +31,19 @@ class Dearchiver
         ;
     }
 
-    private static function doExtract($folderForExtract, $pathToFile)
+    private static function doExtract($directoryForExtract, $pathToFile)
     {
-        mkdir($folderForExtract);
+        mkdir($directoryForExtract);
 
-        $pathToFile       = escapeshellarg($pathToFile);
-        $folderForExtract = escapeshellarg($folderForExtract);
+        $pathToFile          = escapeshellarg($pathToFile);
+        $directoryForExtract = escapeshellarg($directoryForExtract);
 
-        exec('unrar e ' . $pathToFile . ' ' . $folderForExtract . ' 2>&1', $output, $result);
+        exec('unrar e ' . $pathToFile . ' ' . $directoryForExtract . ' 2>&1', $output, $result);
 
         if ($result !== 0) {
             throw new \Exception('Ошибка разархивации: ' . implode("\n", $output));
         }
 
-        return $folderForExtract;
+        return $directoryForExtract;
     }
 }

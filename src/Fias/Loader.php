@@ -7,15 +7,15 @@ abstract class Loader
     abstract public function loadFile();
 
     protected $wsdlUrl;
-    protected $fileFolder;
+    protected $fileDirectory;
 
-    public function __construct($wsdlUrl, $fileFolder)
+    public function __construct($wsdlUrl, $fileDirectory)
     {
-        $this->wsdlUrl    = $wsdlUrl;
-        $this->fileFolder = $fileFolder;
+        $this->wsdlUrl       = $wsdlUrl;
+        $this->fileDirectory = $fileDirectory;
 
-        FileHelper::isFolder($fileFolder);
-        FileHelper::isItWritable($fileFolder);
+        FileHelper::checkThatIsDirectory($fileDirectory);
+        FileHelper::checkWritable($fileDirectory);
     }
 
     /**
@@ -29,7 +29,7 @@ abstract class Loader
 
     protected function loadFileFromUrl($fileName, $url)
     {
-        $filePath = $this->fileFolder . '/' . $fileName;
+        $filePath = $this->fileDirectory . '/' . $fileName;
         if (file_exists($filePath)) {
             if ($this->fileIsCorrect($filePath, $url)) {
                 return $filePath;

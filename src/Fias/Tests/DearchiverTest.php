@@ -8,15 +8,15 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
 {
     private $testRarFile;
     private $testTxtFile;
-    private $fileFolder;
+    private $fileDirectory;
 
     protected function setUp()
     {
         $text = 'Test File For Dearchiver';
 
-        $this->fileFolder  = __DIR__ . '/file_folder';
-        $this->testTxtFile = $this->fileFolder . '/dearchiverTestFile.txt';
-        $this->testRarFile = $this->fileFolder . '/dearchiverTestFile.rar';
+        $this->fileDirectory = __DIR__ . '/file_directory';
+        $this->testTxtFile   = $this->fileDirectory . '/dearchiverTestFile.txt';
+        $this->testRarFile   = $this->fileDirectory . '/dearchiverTestFile.rar';
 
         file_put_contents($this->testTxtFile, $text);
 
@@ -55,20 +55,20 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
     /** @expectedException \Fias\FileException */
     public function testBadFile()
     {
-        Dearchiver::extract($this->fileFolder, 'bad_file');
+        Dearchiver::extract($this->fileDirectory, 'bad_file');
     }
 
     /** @expectedException \Fias\FileException */
-    public function testBadFolder()
+    public function testBadDirectory()
     {
-        Dearchiver::extract('bad_folder', $this->testRarFile);
+        Dearchiver::extract('bad_directory', $this->testRarFile);
     }
 
     private $extractedFiles;
 
     public function testNormalFile()
     {
-        $this->extractedFiles = Dearchiver::extract($this->fileFolder, $this->testRarFile);
+        $this->extractedFiles = Dearchiver::extract($this->fileDirectory, $this->testRarFile);
         $this->assertEquals(
             md5_file($this->testTxtFile),
             md5_file($this->extractedFiles . '/' . basename($this->testTxtFile))

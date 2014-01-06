@@ -2,7 +2,7 @@
 
 return array(
     'wsdl_url'    => 'http://fias.nalog.ru/WebServices/Public/DownloadService.asmx?WSDL',
-    'file_folder' => '/var/www/upload',
+    'file_directory' => '/var/www/upload',
     'database'    => array(
         'adapter'  => 'pgsql',
         'host'     => '127.0.0.1',

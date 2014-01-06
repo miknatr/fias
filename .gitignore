@@ -1,4 +1,4 @@
 /.idea/
 /vendor
 /config/config.php
-/src/Fias/Tests/file_folder/*
+/src/Fias/Tests/file_directory/*

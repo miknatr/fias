@@ -13,39 +13,39 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->config = Config::get('config');
-        $fileFolder   = $this->config->getParam('file_folder');
+        $fileDirectory   = $this->config->getParam('file_directory');
 
-        if (!is_dir($fileFolder)) {
-            mkdir($fileFolder);
+        if (!is_dir($fileDirectory)) {
+            mkdir($fileDirectory);
         }
 
         $information = $this->getInformationAboutCurrentUpdateFile();
-        @unlink($fileFolder . '/' . $information['version'] . '_fias_delta_xml.rar');
+        @unlink($fileDirectory . '/' . $information['version'] . '_fias_delta_xml.rar');
     }
 
     public function testLoad()
     {
-        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_folder');
+        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_directory');
         $this->assertEquals($this->getInformationAboutCurrentUpdateFile()['file_size'], filesize($loader->loadFile()));
     }
 
     public function testReWritingBadFile()
     {
         file_put_contents(
-            $this->config->getParam('file_folder')
+            $this->config->getParam('file_directory')
             . '/'
             . $this->getInformationAboutCurrentUpdateFile()['version']
             . '_fias_delta_xml.rar',
             'Really bad file'
         );
 
-        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_folder');
+        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_directory');
         $this->assertEquals($this->getInformationAboutCurrentUpdateFile()['file_size'], filesize($loader->loadFile()));
     }
 
     public function testNoRewritingGoodFile()
     {
-        $loader   = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_folder');
+        $loader   = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_directory');
         $filePath = $loader->loadFile();
 
         $this->assertTrue(
