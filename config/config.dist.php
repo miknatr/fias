@@ -11,4 +11,8 @@ return array(
         'user'     => 'postgres',
         'password' => '1',
     ),
+    'importer' => array(
+        // Коды округов для импорта, если не установлено будут импортированы все округа
+        'areas' => null,
+    ),
 );
