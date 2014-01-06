@@ -7,7 +7,7 @@ use Fias\Config;
 
 class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  Config */
+    /** @var Config */
     private $config;
 
     protected function setUp()
