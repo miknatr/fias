@@ -38,7 +38,7 @@ class Dearchiver
         $pathToFile       = escapeshellarg($pathToFile);
         $folderForExtract = escapeshellarg($folderForExtract);
 
-        exec('unrar e ' . $pathToFile . ' ' . $folderForExtract, $output, $result);
+        exec('unrar e ' . $pathToFile . ' ' . $folderForExtract . ' 2>&1', $output, $result);
 
         if ($result !== 0) {
             throw new \Exception('Ошибка разархивации: ' . implode("\n", $output));
