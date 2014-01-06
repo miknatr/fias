@@ -4,7 +4,7 @@ namespace Fias;
 
 class Config
 {
-    private $config;
+    private $config = array();
 
     protected function __construct($pathToFile)
     {
@@ -25,7 +25,7 @@ class Config
     }
 
     /** @var Config[] */
-    private static $configCaches;
+    private static $configCaches = array();
 
     public static function get($name)
     {

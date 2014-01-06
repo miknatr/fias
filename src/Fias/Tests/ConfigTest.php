@@ -13,12 +13,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->fileName = md5(time());
         $this->filePath = __DIR__ . '/../../../config/' . $this->fileName . '.php';
-        $testConfig     = "
-        <?php
+        $testConfig     = "<?php
             return array(
                 'string' => 'someString',
             );
-
         ";
 
         file_put_contents($this->filePath, $testConfig);

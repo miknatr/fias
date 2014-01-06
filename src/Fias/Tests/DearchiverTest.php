@@ -23,7 +23,8 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
         $cmd = 'rar a '
             . escapeshellarg($this->testRarFile)
             . ' '
-            . escapeshellarg($this->testTxtFile);
+            . escapeshellarg($this->testTxtFile)
+        ;
         exec($cmd, $output, $result);
 
         if ($result !== 0) {

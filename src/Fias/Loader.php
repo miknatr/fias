@@ -33,9 +33,9 @@ abstract class Loader
         if (file_exists($filePath)) {
             if ($this->fileIsCorrect($filePath, $url)) {
                 return $filePath;
-            } else {
-                unlink($filePath);
             }
+
+            unlink($filePath);
         }
 
         $fp = fopen($filePath, 'w');

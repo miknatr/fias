@@ -54,7 +54,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
                 'fileIsCorrect',
                 array(
                     $filePath,
-                    $this->getInformationAboutCurrentUpdateFile()['url']
+                    $this->getInformationAboutCurrentUpdateFile()['url'],
                 )
             )
         );
@@ -77,7 +77,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
             $this->updateInformation = array(
                 'url'       => $filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl,
                 'version'   => $filesInfo->GetLastDownloadFileInfoResult->VersionId,
-                'file_size' => curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD)
+                'file_size' => curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD),
             );
 
             curl_close($ch);
