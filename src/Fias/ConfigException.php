@@ -2,6 +2,7 @@
 
 namespace Fias;
 
-class ConfigException extends \Exception {
+class ConfigException extends \Exception
+{
 
 }

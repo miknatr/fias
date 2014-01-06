@@ -13,14 +13,14 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->config = Config::get('config');
-        $file_folder  = $this->config->getParam('file_folder');
+        $fileFolder   = $this->config->getParam('file_folder');
 
-        if (!is_dir($file_folder)) {
-            mkdir($file_folder);
+        if (!is_dir($fileFolder)) {
+            mkdir($fileFolder);
         }
 
         $information = $this->getInformationAboutCurrentUpdateFile();
-        @unlink($file_folder . '/' . $information['version'] . '_fias_delta_xml.rar');
+        @unlink($fileFolder . '/' . $information['version'] . '_fias_delta_xml.rar');
     }
 
     public function testLoad()
@@ -60,7 +60,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private $updateInformation;
+    private $updateInformation = array();
 
     private function getInformationAboutCurrentUpdateFile()
     {

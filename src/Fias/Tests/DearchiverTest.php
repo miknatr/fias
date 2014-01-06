@@ -19,7 +19,12 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
         $this->testRarFile = $this->fileFolder . '/dearchiverTestFile.rar';
 
         file_put_contents($this->testTxtFile, $text);
-        exec('rar a ' . $this->testRarFile . ' ' . $this->testTxtFile, $output, $result);
+
+        $cmd = 'rar a '
+            . escapeshellarg($this->testRarFile)
+            . ' '
+            . escapeshellarg($this->testTxtFile);
+        exec($cmd, $output, $result);
 
         if ($result !== 0) {
             throw new \Exception('Ошибка архивации: ' . implode("\n", $output));

@@ -34,6 +34,10 @@ class Dearchiver
     private static function doExtract($folderForExtract, $pathToFile)
     {
         mkdir($folderForExtract);
+
+        $pathToFile       = escapeshellarg($pathToFile);
+        $folderForExtract = escapeshellarg($folderForExtract);
+
         exec('unrar e ' . $pathToFile . ' ' . $folderForExtract, $output, $result);
 
         if ($result !== 0) {
