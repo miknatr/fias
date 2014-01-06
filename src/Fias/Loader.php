@@ -18,13 +18,12 @@ abstract class Loader
         FileHelper::checkWritable($fileDirectory);
     }
 
-    /**
-     * @return \stdClass
-     */
     protected function getLastFileInfo()
     {
-        $client = new \SoapClient($this->wsdlUrl);
-        return $client->__soapCall('GetLastDownloadFileInfo', array());
+        $client    = new \SoapClient($this->wsdlUrl);
+        $rawResult = $client->__soapCall('GetLastDownloadFileInfo', array());
+
+        return new SoapInfoResultWrapper($rawResult);
     }
 
     protected function loadFileFromUrl($fileName, $url)
@@ -49,12 +48,6 @@ abstract class Loader
         fclose($fp);
 
         return $filePath;
-    }
-
-    protected function generateFileName($filesInfo, $fileVariableName)
-    {
-        $fileName = basename($filesInfo->GetLastDownloadFileInfoResult->$fileVariableName);
-        return $filesInfo->GetLastDownloadFileInfoResult->VersionId . '_' . $fileName;
     }
 
     protected function fileIsCorrect($filePath, $url)
