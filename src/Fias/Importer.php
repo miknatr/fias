@@ -10,8 +10,8 @@ class Importer
 
     public function __constructor($areas, $table, $fields)
     {
-        $this->areas = $areas;
-        $this->table = $table;
+        $this->areas  = $areas;
+        $this->table  = $table;
         $this->fields = $fields;
 
         $this->checkConstructorParams();
