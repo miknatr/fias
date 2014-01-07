@@ -11,38 +11,37 @@ class XmlImporter
     private $db;
     private $table;
     private $fields = array();
+    private $xmlConfig = array();
 
-    public function __construct(ConnectionInterface $db, $table, array $fields)
+    public function __construct(ConnectionInterface $db, $table, array $fields, array $xmlConfig)
     {
-        $this->db     = $db;
-        $this->table  = $table;
-        $this->fields = $fields;
+        $this->db        = $db;
+        $this->table     = $table;
+        $this->fields    = $fields;
+        $this->xmlConfig = $xmlConfig;
 
         $this->checkParams();
     }
 
-    public function import($fileName)
+    public function import($path)
     {
 
     }
 
     private function checkParams()
     {
-        $this->checkTable();
-        $this->checkFields();
-    }
-
-    private function checkTable()
-    {
-        try {
-            $this->db->execute('SELECT 1 FROM ?f LIMIT 1', array($this->table));
-        } catch ( QueryException $e ) {
-            throw new ImporterException('Некорректное имя таблицы: ' . $this->table);
+        if (!$this->table) {
+            throw new ImporterException('Не задана таблица для импорта');
         }
-    }
 
-    private function checkFields()
-    {
+        if (!$this->fields) {
+            throw new ImporterException('Не заданы поля для импорта.');
+        }
 
+        try {
+            $this->db->execute('SELECT ?i FROM ?f LIMIT 1', array($this->fields, $this->table));
+        } catch ( QueryException $e ) {
+            throw new ImporterException('Задана неверная таблица или список полей.');
+        }
     }
 }
