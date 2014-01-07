@@ -2,6 +2,7 @@
 
 namespace Fias;
 
-class FileException extends \Exception {
+class FileException extends \Exception
+{
 
 }
