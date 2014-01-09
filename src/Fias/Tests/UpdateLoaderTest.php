@@ -12,8 +12,8 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = Config::get('config');
-        $fileDirectory   = $this->config->getParam('file_directory');
+        $this->config  = Config::get('config');
+        $fileDirectory = $this->config->getParam('file_directory');
 
         if (!is_dir($fileDirectory)) {
             mkdir($fileDirectory);

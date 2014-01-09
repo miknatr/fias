@@ -11,7 +11,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileName = md5(time());
+        $this->fileName = 'configTest';
         $this->filePath = __DIR__ . '/../../../config/' . $this->fileName . '.php';
         $testConfig     = "<?php
             return array(
