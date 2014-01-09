@@ -11,19 +11,17 @@ class XmlImporter
     private $db;
     private $table;
     private $fields = array();
-    private $xmlConfig = array();
 
-    public function __construct(ConnectionInterface $db, $table, array $fields, array $xmlConfig)
+    public function __construct(ConnectionInterface $db, $table, array $fields)
     {
-        $this->db        = $db;
-        $this->table     = $table;
-        $this->fields    = $fields;
-        $this->xmlConfig = $xmlConfig;
+        $this->db     = $db;
+        $this->table  = $table;
+        $this->fields = $fields;
 
         $this->checkParams();
     }
 
-    public function import($path)
+    public function import(XMLReader $reader)
     {
 
     }
