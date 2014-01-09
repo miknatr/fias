@@ -15,9 +15,9 @@ class Dearchiver
 
     private static function checkPaths($pathToFileDirectory, $pathToFile)
     {
-        FileHelper::checkReadable($pathToFile);
-        FileHelper::checkThatIsDirectory($pathToFileDirectory);
-        FileHelper::checkWritable($pathToFileDirectory);
+        FileHelper::ensureIsReadable($pathToFile);
+        FileHelper::ensureIsDirectory($pathToFileDirectory);
+        FileHelper::ensureIsWritable($pathToFileDirectory);
     }
 
     private static function generateDirectoryName($pathToFileDirectory, $pathToFile)

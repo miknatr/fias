@@ -14,8 +14,8 @@ abstract class Loader
         $this->wsdlUrl       = $wsdlUrl;
         $this->fileDirectory = $fileDirectory;
 
-        FileHelper::checkThatIsDirectory($fileDirectory);
-        FileHelper::checkWritable($fileDirectory);
+        FileHelper::ensureIsDirectory($fileDirectory);
+        FileHelper::ensureIsWritable($fileDirectory);
     }
 
     protected function getLastFileInfo()
