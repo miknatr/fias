@@ -21,11 +21,6 @@ class XmlImporter
         $this->checkParams();
     }
 
-    public function import(XMLReader $reader)
-    {
-
-    }
-
     private function checkParams()
     {
         if (!$this->table) {
@@ -41,5 +36,28 @@ class XmlImporter
         } catch ( QueryException $e ) {
             throw new ImporterException('Задана неверная таблица или список полей.');
         }
+    }
+
+    public function import(XMLReader $reader)
+    {
+        while ($rows = $reader->getRows()) {
+            $this->db->execute($this->getQuery($rows[0]), array($rows));
+        }
+    }
+
+    private $sqlHeader;
+
+    private function getQuery($rowExample)
+    {
+        if (!$this->sqlHeader) {
+            $fields = array();
+            foreach($rowExample as $attribute => $devNull) {
+                $fields[] = $this->fields[$attribute];
+            }
+
+            $this->sqlHeader = $this->db->replacePlaceholders('INSERT INTO ?f(?i) VALUES ', array($this->table, $fields)) . ' ?v';
+        }
+
+        return $this->sqlHeader;
     }
 }
