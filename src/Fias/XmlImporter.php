@@ -55,7 +55,9 @@ class XmlImporter
                 $fields[] = $this->fields[$attribute];
             }
 
-            $this->sqlHeader = $this->db->replacePlaceholders('INSERT INTO ?f(?i) VALUES ', array($this->table, $fields)) . ' ?v';
+            $headerPart = $this->db->replacePlaceholders('INSERT INTO ?f(?i) VALUES ', array($this->table, $fields));
+
+            $this->sqlHeader = $headerPart . ' ?v';
         }
 
         return $this->sqlHeader;
