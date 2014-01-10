@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Computers>
+    <Computer id="1" madeIn="China"  title="Сервер Васи" />
+    <Mobile   id="2" madeIn="Russia" title="Мобильник Севы" />
+    <Computer id="3" madeIn="USA"    title="Мак Артёма" />
+</Computers>
