@@ -1,0 +1,12 @@
+<phpunit
+	colors                      = "true"
+	convertErrorsToExceptions   = "true"
+	convertNoticesToExceptions  = "true"
+	convertWarningsToExceptions = "true"
+	bootstrap                   = "bootstrap_test.php">
+	<testsuites>
+		<testsuite name="All tests">
+			<directory>src/Fias/Tests</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
