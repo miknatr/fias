@@ -33,7 +33,7 @@ class XmlImporter
 
         try {
             $this->db->execute('SELECT ?i FROM ?f LIMIT 1', array($this->fields, $this->table));
-        } catch ( QueryException $e ) {
+        } catch (QueryException $e) {
             throw new ImporterException('Задана неверная таблица или список полей.');
         }
     }
@@ -51,7 +51,7 @@ class XmlImporter
     {
         if (!$this->sqlHeader) {
             $fields = array();
-            foreach($rowExample as $attribute => $devNull) {
+            foreach ($rowExample as $attribute => $devNull) {
                 $fields[] = $this->fields[$attribute];
             }
 
