@@ -18,6 +18,9 @@ class XmlReaderTest extends \PHPUnit_Framework_TestCase
                 'id',
                 'madeIn',
                 'fakeAttribute'
+            ),
+            array(
+                'available' => 1,
         ));
     }
 

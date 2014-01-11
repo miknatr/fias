@@ -11,4 +11,20 @@ return array(
         'user'     => 'postgres',
         'password' => '1',
     ),
+	'import'         => array(
+		'address_objects' => array(
+			'node_name' => 'Object',
+			'fields'  => array(
+				'AOGUID'     => 'id',
+				'PARENTGUID' => 'parent_id',
+				'FORMALNAME' => 'title',
+				'OFFNAME'    => 'official_title',
+				'POSTALCODE' => 'postal_code',
+				'SHORTNAME'  => 'prefix',
+			),
+			'filters' => array(
+				'ACTSTATUS' => 1,
+			),
+		),
+	),
 );

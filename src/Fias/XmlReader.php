@@ -8,11 +8,13 @@ class XmlReader
     private $reader;
     private $nodeName;
     private $attributes = array();
+    private $filters    = array();
 
-    public function __construct($pathToFile, $nodeName, array $attributes)
+    public function __construct($pathToFile, $nodeName, array $attributes, array $filters = array())
     {
         $this->nodeName   = $nodeName;
         $this->attributes = $attributes;
+        $this->filters    = $filters;
 
         $this->initializeReader($pathToFile);
     }
@@ -39,13 +41,28 @@ class XmlReader
         $count  = 0;
 
         while ($this->reader->read() && ($count < $maxCount)) {
-            if ($this->reader->name == $this->nodeName) {
+            if ($this->checkIsNodeAccepted($this->reader->name)) {
                 $result[] = $this->getRowAttributes();
                 ++$count;
             }
         }
 
         return $result;
+    }
+
+    private function checkIsNodeAccepted($node)
+    {
+        if ($node != $this->nodeName) {
+            return false;
+        }
+
+        foreach ($this->filters as $attribute => $value) {
+            if ($this->reader->getAttribute($attribute) != $value) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function getRowAttributes()
