@@ -40,7 +40,7 @@ class XmlReader
         $result = array();
         $count  = 0;
 
-        while ($this->reader->read() && ($count < $maxCount)) {
+        while (($count < $maxCount) && $this->reader->read()) {
             if ($this->checkIsNodeAccepted($this->reader->name)) {
                 $result[] = $this->getRowAttributes();
                 ++$count;
