@@ -10,4 +10,9 @@ CREATE INDEX "address_objects_parent_id_fkey_idx"
     USING BTREE ("parent_id")
 ;
 
+CREATE INDEX "houses_parent_id_fkey_idx"
+    ON "houses"
+    USING BTREE ("parent_id")
+;
+
 COMMIT;

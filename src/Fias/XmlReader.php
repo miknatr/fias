@@ -2,7 +2,7 @@
 
 namespace Fias;
 
-class XmlReader
+class XmlReader implements Reader
 {
     /** @var \XMLReader */
     private $reader;
@@ -33,9 +33,7 @@ class XmlReader
 
     public function getRows($maxCount = 1000)
     {
-        if ($maxCount < 1) {
-            throw new \LogicException('Неверное значение максимального количества строк: ' . $maxCount);
-        }
+        $this->ensureMaxCountIsValid($maxCount);
 
         $result = array();
         $count  = 0;
@@ -48,6 +46,13 @@ class XmlReader
         }
 
         return $result;
+    }
+
+    private function ensureMaxCountIsValid($maxCount)
+    {
+        if ($maxCount < 1) {
+            throw new \LogicException('Неверное значение максимального количества строк: ' . $maxCount);
+        }
     }
 
     private function checkIsNodeAccepted($node)
