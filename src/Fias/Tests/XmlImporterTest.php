@@ -12,25 +12,11 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
     /** @var ConnectionInterface */
     private $db;
     private $table;
-    private $fields = array();
 
     protected function setUp()
     {
         $this->db     = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
         $this->table  = 'xml_importer_test_table';
-        $this->fields = array('one', 'two', 'three');
-
-        $this->db->execute('DROP TABLE IF EXISTS xml_importer_test_table');
-        $this->db->execute('CREATE TEMP TABLE xml_importer_test_table(one varchar, two varchar, three varchar)');
-    }
-
-    /**
-     * @expectedException \Fias\ImporterException
-     * @expectedExceptionMessage таблица или список
-     */
-    public function testBadParams()
-    {
-        new XmlImporter($this->db, 'bad_table', $this->fields, array());
     }
 
     /**
@@ -39,7 +25,7 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyTable()
     {
-        new XmlImporter($this->db, '', $this->fields, array());
+        new XmlImporter($this->db, '', array('one', 'two', 'three'), array());
     }
 
     /**
@@ -48,7 +34,7 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyFields()
     {
-        new XmlImporter($this->db, $this->table, array());
+        new XmlImporter($this->db, 'some_table_name', array());
     }
 
     public function testImport()
@@ -68,27 +54,27 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
 
         $reader = Helper::getReaderMock($this, $results);
         $fields = array(
-            'madeIn' => 'two',
-            'id'     => 'one',
-            'title'  => 'three',
+            'madeIn' => array('name' => 'two'),
+            'id'     => array('name' => 'one'),
+            'title'  => array('name' => 'three'),
         );
 
-        $importer = new XmlImporter($this->db, $this->table, $fields);
-        $importer->import($reader);
+        $importer  = new XmlImporter($this->db, $this->table, $fields);
+        $tableName = $importer->import($reader);
 
         $this->assertEquals(
             6,
-            $this->db->execute('SELECT COUNT(*) as count FROM ?F', array($this->table))->fetchOneOrFalse()['count']
+            $this->db->execute('SELECT COUNT(*) as count FROM ?F', array($tableName))->fetchOneOrFalse()['count']
         );
 
         $this->assertEquals(
             'USA',
-            $this->db->execute("SELECT two FROM ?F WHERE one = '2'", array($this->table))->fetchOneOrFalse()['two']
+            $this->db->execute("SELECT two FROM ?F WHERE one = '2'", array($tableName))->fetchOneOrFalse()['two']
         );
 
         $this->assertEquals(
             'Tulip',
-            $this->db->execute("SELECT three FROM ?F WHERE one = '6'", array($this->table))->fetchOneOrFalse()['three']
+            $this->db->execute("SELECT three FROM ?F WHERE one = '6'", array($tableName))->fetchOneOrFalse()['three']
         );
     }
 }

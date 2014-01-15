@@ -3,39 +3,29 @@
 namespace Fias;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\Exception\QueryException;
 
 class XmlImporter
 {
     /** @var ConnectionInterface */
     private $db;
-    private $table;
     private $fields = array();
+    private $table;
 
     public function __construct(ConnectionInterface $db, $table, array $fields)
     {
-        $this->db     = $db;
-        $this->table  = $table;
-        $this->fields = $fields;
-
-        $this->checkParams();
-    }
-
-    private function checkParams()
-    {
-        if (!$this->table) {
+        if (!$table) {
             throw new ImporterException('Не задана таблица для импорта');
         }
 
-        if (!$this->fields) {
+        if (!$fields) {
             throw new ImporterException('Не заданы поля для импорта.');
         }
 
-        try {
-            $this->db->execute('SELECT ?i FROM ?f LIMIT 1', array($this->fields, $this->table));
-        } catch (QueryException $e) {
-            throw new ImporterException('Задана неверная таблица или список полей.');
-        }
+        $this->db     = $db;
+        $this->fields = $fields;
+        $this->table  = $table . '_xml_importer';
+
+        DbHelper::createTable($this->db, $this->table, $this->fields);
     }
 
     public function import(XMLReader $reader)
@@ -43,6 +33,8 @@ class XmlImporter
         while ($rows = $reader->getRows()) {
             $this->db->execute($this->getQuery($rows[0]), array($rows));
         }
+
+        return $this->table;
     }
 
     private $sqlHeader;
@@ -52,7 +44,7 @@ class XmlImporter
         if (!$this->sqlHeader) {
             $fields = array();
             foreach ($rowExample as $attribute => $devNull) {
-                $fields[] = $this->fields[$attribute];
+                $fields[] = $this->fields[$attribute]['name'];
             }
 
             $headerPart = $this->db->replacePlaceholders('INSERT INTO ?f(?i) VALUES ', array($this->table, $fields));
