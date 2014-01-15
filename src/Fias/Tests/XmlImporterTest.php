@@ -53,7 +53,20 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
 
     public function testImport()
     {
-        $reader = $this->getReaderMock();
+        $results = array(
+            array(
+                array('id' => 1, 'madeIn' => 'China', 'title' => 'Phone'),
+                array('id' => 2, 'madeIn' => 'USA', 'title' => 'Chicken wings'),
+                array('id' => 3, 'madeIn' => 'Russia', 'title' => 'Topol-M'),
+            ),
+            array(
+                array('id' => 4, 'madeIn' => 'France', 'title' => 'Wine'),
+                array('id' => 5, 'madeIn' => 'Germany', 'title' => 'Audi'),
+                array('id' => 6, 'madeIn' => 'Denmark', 'title' => 'Tulip'),
+            ),
+        );
+
+        $reader = Helper::getReaderMock($this, $results);
         $fields = array(
             'madeIn' => 'two',
             'id'     => 'one',
@@ -77,33 +90,5 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
             'Tulip',
             $this->db->execute("SELECT three FROM ?F WHERE one = '6'", array($this->table))->fetchOneOrFalse()['three']
         );
-    }
-
-    private function getReaderMock()
-    {
-        $result1 = array(
-            array('id' => 1, 'madeIn' => 'China', 'title' => 'Phone'),
-            array('id' => 2, 'madeIn' => 'USA', 'title' => 'Chicken wings'),
-            array('id' => 3, 'madeIn' => 'Russia', 'title' => 'Topol-M'),
-        );
-
-        $result2 = array(
-            array('id' => 4, 'madeIn' => 'France', 'title' => 'Wine'),
-            array('id' => 5, 'madeIn' => 'Germany', 'title' => 'Audi'),
-            array('id' => 6, 'madeIn' => 'Denmark', 'title' => 'Tulip'),
-        );
-
-        $result = $this->onConsecutiveCalls($result1, $result2, array());
-        $reader = $this->getMockBuilder('\Fias\XmlReader')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        $reader->expects($this->any())
-            ->method('getRows')
-            ->will($result)
-        ;
-
-        return $reader;
     }
 }

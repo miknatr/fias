@@ -33,15 +33,17 @@ class IntervalGenerator implements Reader
         $result = array();
         $count  = 0;
 
-        // Получать строки мы хотим по указанному количеству,
-        // но это накладывается на интервалы, поэтому все сложнее чем в Reader.
-        while (($count < $maxCount) || !$this->currentRow) {
-            if ($this->currentPosition != $this->endPosition) {
-                $result = array_merge($result, $this->getRowsFromInterval($maxCount - $count));
+        // Получать строки мы хотим по указанному количеству.
+        // но это накладывается на интервалы, поэтому все несколько сложнее чем в Reader.
+        do {
+            if (($this->currentPosition <= $this->endPosition) && $this->currentRow) {
+                $resultPart = $this->getRowsFromInterval($maxCount - $count);
+                $count += count($resultPart);
+                $result = array_merge($result, $resultPart);
             } else {
                 $this->setCurrentRow();
             }
-        }
+        } while (($count < $maxCount) && $this->currentRow);
 
         return $result;
     }
@@ -85,12 +87,17 @@ class IntervalGenerator implements Reader
 
     private function setCurrentRow()
     {
-        $this->currentRow      = $this->reader->getRows(1);
+        $tmpResult = $this->reader->getRows(1);
+        if (!$tmpResult) {
+            $this->currentRow = null;
+        }
+
+        $this->currentRow = array_shift($tmpResult);
         $this->startPosition   = $this->currentRow[$this->startAttribute];
         $this->currentPosition = $this->currentRow[$this->startAttribute];
         $this->endPosition     = $this->currentRow[$this->endAttribute];
 
-        if ($this->startPosition >= $this->endPosition) {
+        if ($this->startPosition > $this->endPosition) {
             throw new \Exception('Начало интервала не может быть больше его окончания');
         }
     }

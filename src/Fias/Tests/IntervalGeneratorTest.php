@@ -11,8 +11,19 @@ class IntervalGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $mock = $this->getMock('Fias\\XmlReader');
-        $this->reader = new IntervalGenerator($mock, 'start', 'end', 'type', 'result');
+        $results = array(
+            array(
+                array('title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1),
+            ),
+            array(
+                array('title' => 'Title 2', 'start' => 10, 'end' => 14, 'type' => 2),
+            ),
+            array(
+                array('title' => 'Title 3', 'start' => 15, 'end' => 19, 'type' => 3),
+            ),
+        );
+
+        $this->reader = new IntervalGenerator(Helper::getReaderMock($this, $results), 'start', 'end', 'type', 'result');
     }
 
     public function testRead()
