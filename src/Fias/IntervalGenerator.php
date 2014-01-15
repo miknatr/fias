@@ -12,6 +12,7 @@ class IntervalGenerator implements Reader
     private $startAttribute;
     private $endAttribute;
     private $typeAttribute;
+    private $resultAttribute;
 
     public function __construct(XmlReader $reader, $startAttribute, $endAttribute, $typeAttribute, $resultAttribute)
     {
@@ -30,11 +31,12 @@ class IntervalGenerator implements Reader
 
     public function getRows($maxCount = 1000)
     {
-        $result = array();
-        $count  = 0;
+        $this->ensureMaxCountIsValid($maxCount);
 
-        // Получать строки мы хотим по указанному количеству.
-        // но это накладывается на интервалы, поэтому все несколько сложнее чем в Reader.
+        $count  = 0;
+        $result = array();
+
+        // Первый раз $this->currentRow гарантировано равна null. Поэтому do - while.
         do {
             if (($this->currentPosition <= $this->endPosition) && $this->currentRow) {
                 $resultPart = $this->getRowsFromInterval($maxCount - $count);
@@ -48,10 +50,15 @@ class IntervalGenerator implements Reader
         return $result;
     }
 
+    private function ensureMaxCountIsValid($maxCount)
+    {
+        if ($maxCount < 1) {
+            throw new \LogicException('Неверное значение максимального количества строк: ' . $maxCount);
+        }
+    }
+
     private function getRowsFromInterval($maxCount)
     {
-        $this->ensureMaxCountIsValid($maxCount);
-
         $result = array();
         $count  = 0;
 
@@ -62,27 +69,23 @@ class IntervalGenerator implements Reader
                     break;
                 case static::EVEN_TYPE:
                     $value                 = ($this->currentPosition % 2) == 0 ? $this->currentPosition : $this->currentPosition + 1;
-                    $this->currentPosition = ($this->currentPosition % 2) == 0 ? $this->currentPosition + 2 : $this->currentPosition + 1;
+                    $this->currentPosition = ($this->currentPosition % 2) == 0 ? $this->currentPosition + 2 : $this->currentPosition + 3;
                     break;
                 case static::ODD_TYPE:
                     $value                 = ($this->currentPosition % 2) == 1 ? $this->currentPosition : $this->currentPosition + 1;
-                    $this->currentPosition = ($this->currentPosition % 2) == 1 ? $this->currentPosition + 2 : $this->currentPosition + 1;
+                    $this->currentPosition = ($this->currentPosition % 2) == 1 ? $this->currentPosition + 2 : $this->currentPosition + 3;
                     break;
                 default:
                     throw new \Exception('Задан неверный тип работы.');
             }
 
-            $result[] = $this->currentRow[$this->resultAttribute] = $value;
+            $this->currentRow[$this->resultAttribute] = $value;
+
+            $result[] = $this->currentRow;
+            ++$count;
         }
 
         return $result;
-    }
-
-    private function ensureMaxCountIsValid($maxCount)
-    {
-        if ($maxCount < 1) {
-            throw new \LogicException('Неверное значение максимального количества строк: ' . $maxCount);
-        }
     }
 
     private function setCurrentRow()
@@ -90,9 +93,10 @@ class IntervalGenerator implements Reader
         $tmpResult = $this->reader->getRows(1);
         if (!$tmpResult) {
             $this->currentRow = null;
+            return;
         }
 
-        $this->currentRow = array_shift($tmpResult);
+        $this->currentRow      = array_shift($tmpResult);
         $this->startPosition   = $this->currentRow[$this->startAttribute];
         $this->currentPosition = $this->currentRow[$this->startAttribute];
         $this->endPosition     = $this->currentRow[$this->endAttribute];

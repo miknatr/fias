@@ -2,6 +2,7 @@
 
 namespace Fias\Tests;
 
+use Fias\XmlReader;
 use PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls;
 
 class Helper extends \PHPUnit_Framework_TestCase
@@ -16,16 +17,23 @@ class Helper extends \PHPUnit_Framework_TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
+    /**
+     * @param \PHPUnit_Framework_TestCase $testCase
+     * @param array $results
+     * @return XmlReader
+     */
     public static function getReaderMock(\PHPUnit_Framework_TestCase $testCase, array $results)
     {
         $result = new PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls(array_merge($results, array()));
         $reader = $testCase->getMockBuilder('\Fias\XmlReader')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
 
         $reader->expects(static::any())
             ->method('getRows')
-            ->will($result);
+            ->will($result)
+        ;
 
         return $reader;
     }
