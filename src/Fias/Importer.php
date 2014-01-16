@@ -2,10 +2,10 @@
 
 namespace Fias;
 
-use Fias\DataSource\Xml;
+use Fias\DataSource\DataSource;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class XmlImporter
+class Importer
 {
     /** @var ConnectionInterface */
     private $db;
@@ -29,7 +29,7 @@ class XmlImporter
         DbHelper::createTable($this->db, $this->table, $this->fields);
     }
 
-    public function import(Xml $reader)
+    public function import(DataSource $reader)
     {
         while ($rows = $reader->getRows()) {
             $this->db->execute($this->getQuery($rows[0]), array($rows));

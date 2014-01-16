@@ -3,11 +3,11 @@
 namespace Fias\Tests;
 
 use Fias\Config;
-use Fias\XmlImporter;
+use Fias\Importer;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
 
-class XmlImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ConnectionInterface */
     private $db;
@@ -25,7 +25,7 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyTable()
     {
-        new XmlImporter($this->db, '', array('one', 'two', 'three'), array());
+        new Importer($this->db, '', array('one', 'two', 'three'), array());
     }
 
     /**
@@ -34,7 +34,7 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyFields()
     {
-        new XmlImporter($this->db, 'some_table_name', array());
+        new Importer($this->db, 'some_table_name', array());
     }
 
     public function testImport()
@@ -59,7 +59,7 @@ class XmlImporterTest extends \PHPUnit_Framework_TestCase
             'title'  => array('name' => 'three'),
         );
 
-        $importer  = new XmlImporter($this->db, $this->table, $fields);
+        $importer  = new Importer($this->db, $this->table, $fields);
         $tableName = $importer->import($reader);
 
         $this->assertEquals(
