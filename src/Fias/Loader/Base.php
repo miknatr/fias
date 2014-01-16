@@ -1,8 +1,10 @@
 <?php
 
-namespace Fias;
+namespace Fias\Loader;
 
-abstract class Loader
+use Fias\FileHelper;
+
+abstract class Base
 {
     abstract public function loadFile();
 
@@ -23,7 +25,7 @@ abstract class Loader
         $client    = new \SoapClient($this->wsdlUrl);
         $rawResult = $client->__soapCall('GetLastDownloadFileInfo', array());
 
-        return new SoapInfoResultWrapper($rawResult);
+        return new SoapResultWrapper($rawResult);
     }
 
     protected function loadFileFromUrl($fileName, $url)

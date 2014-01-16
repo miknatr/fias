@@ -1,22 +1,22 @@
 <?php
 
-namespace Fias;
+namespace Fias\DataSource;
 
-class IntervalGenerator implements Reader
+class IntervalGenerator implements DataSource
 {
     const BASE_TYPE = 1;
     const EVEN_TYPE = 2;
     const ODD_TYPE  = 3;
 
-    private $reader;
+    private $dataSource;
     private $startAttribute;
     private $endAttribute;
     private $typeAttribute;
     private $resultAttribute;
 
-    public function __construct(XmlReader $reader, $startAttribute, $endAttribute, $typeAttribute, $resultAttribute)
+    public function __construct(DataSource $dataSource, $startAttribute, $endAttribute, $typeAttribute, $resultAttribute)
     {
-        $this->reader = $reader;
+        $this->dataSource = $dataSource;
 
         $this->startAttribute  = $startAttribute;
         $this->endAttribute    = $endAttribute;
@@ -90,7 +90,7 @@ class IntervalGenerator implements Reader
 
     private function setCurrentRow()
     {
-        $tmpResult = $this->reader->getRows(1);
+        $tmpResult = $this->dataSource->getRows(1);
         if (!$tmpResult) {
             $this->currentRow = null;
             return;

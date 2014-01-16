@@ -2,7 +2,7 @@
 
 namespace Fias\Tests;
 
-use Fias\IntervalGenerator;
+use Fias\DataSource\IntervalGenerator;
 
 class IntervalGeneratorTest extends \PHPUnit_Framework_TestCase
 {

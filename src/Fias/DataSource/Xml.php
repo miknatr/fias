@@ -1,8 +1,11 @@
 <?php
 
-namespace Fias;
+namespace Fias\DataSource;
 
-class XmlReader implements Reader
+use Fias\FileHelper;
+use Fias\ImporterException;
+
+class Xml implements DataSource
 {
     /** @var \XMLReader */
     private $reader;

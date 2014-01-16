@@ -1,8 +1,8 @@
 <?php
 
-namespace Fias;
+namespace Fias\Loader;
 
-class UpdateLoader extends Loader
+class UpdateLoader extends Base
 {
     public function loadFile()
     {

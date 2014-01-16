@@ -1,8 +1,8 @@
 <?php
 
-namespace Fias;
+namespace Fias\DataSource;
 
-interface Reader
+interface DataSource
 {
     public function getRows($maxCount = 1000);
 }

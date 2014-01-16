@@ -2,7 +2,7 @@
 
 namespace Fias\Tests;
 
-use Fias\UpdateLoader;
+use Fias\Loader\UpdateLoader;
 use Fias\Config;
 
 class UpdateLoaderTest extends \PHPUnit_Framework_TestCase

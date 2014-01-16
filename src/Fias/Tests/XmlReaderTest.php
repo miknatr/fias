@@ -2,16 +2,16 @@
 
 namespace Fias\Tests;
 
-use Fias\XmlReader;
+use Fias\DataSource\Xml;
 
 class XmlReaderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var XMLReader */
+    /** @var Xml */
     private $reader;
 
     protected function setUp()
     {
-        $this->reader = new XMLReader(
+        $this->reader = new Xml(
             __DIR__ . '/resources/readerTest.xml',
             'Computer',
             array(
