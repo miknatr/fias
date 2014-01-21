@@ -24,7 +24,7 @@ class DbHelper
             $sql .= ', ?f ' . $type;
         }
 
-        $sql = 'CREATE TEMP TABLE ?f ( ' . substr($sql, 2) . ')';
+        $sql = 'CREATE TABLE ?f ( ' . substr($sql, 2) . ')';
 
         $db->execute($sql, $params);
     }

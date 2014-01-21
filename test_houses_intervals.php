@@ -2,6 +2,7 @@
 
 namespace Fias;
 
+use Fias\DataSource\IntervalGenerator;
 use Fias\DataSource\Xml;
 use Grace\DBAL\ConnectionFactory;
 
@@ -15,11 +16,12 @@ $db->execute('DROP TABLE IF EXISTS house_intervals_xml_importer');
 
 $importConfig = $config->getParam('import')['house_intervals'];
 $importer     = new Importer($db, 'house_intervals', $importConfig['fields']);
-$reader       = new Xml(
-    '/home/dallone/Downloads/house_big.xml',
+$generator = new IntervalGenerator((new Xml(
+    '/home/dallone/Downloads/house_int.xml',
     $importConfig['node_name'],
     array_keys($importConfig['fields']),
     array()
-);
-$importer->import($reader);
+)), 'INTSTART', 'INTEND', 'INTSTATUS', 'HOUSENUM');
+
+$importer->import($generator);
 
