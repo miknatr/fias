@@ -16,7 +16,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->db     = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
-        $this->table  = 'xml_importer_test_table';
+        $this->table  = 'test_table';
     }
 
     /**

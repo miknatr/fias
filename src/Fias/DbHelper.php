@@ -8,7 +8,7 @@ class DbHelper
 {
     private static $dataTypes = array('varchar', 'integer', 'uuid');
 
-    public static function createTable(ConnectionInterface $db, $name, $fields)
+    public static function createTable(ConnectionInterface $db, $name, $fields, $isTemp = true)
     {
         $sql    = '';
         $params = array($name);
@@ -24,7 +24,12 @@ class DbHelper
             $sql .= ', ?f ' . $type;
         }
 
-        $sql = 'CREATE TABLE ?f ( ' . substr($sql, 2) . ')';
+        $sql = 'CREATE '
+            . ($isTemp ? 'TEMP ' : '')
+            . 'TABLE ?f ( '
+            . substr($sql, 2)
+            . ')'
+        ;
 
         $db->execute($sql, $params);
     }

@@ -4,7 +4,7 @@ namespace Fias\Tests;
 
 use Fias\DataSource\Xml;
 
-class XmlReaderTest extends \PHPUnit_Framework_TestCase
+class XmlTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Xml */
     private $reader;
@@ -21,6 +21,8 @@ class XmlReaderTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'available' => 1,
+                'madeIn'    => array('USA', 'China'),
+                'title'     => array(),
         ));
     }
 

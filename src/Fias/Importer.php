@@ -10,9 +10,10 @@ class Importer
     /** @var ConnectionInterface */
     private $db;
     private $fields = array();
-    private $table;
 
-    public function __construct(ConnectionInterface $db, $table, array $fields)
+    protected $table;
+
+    public function __construct(ConnectionInterface $db, $table, array $fields, $isTemp = true)
     {
         if (!$table) {
             throw new ImporterException('Не задана таблица для импорта');
@@ -24,9 +25,12 @@ class Importer
 
         $this->db     = $db;
         $this->fields = $fields;
-        $this->table  = $table . '_xml_importer';
+        $this->table  = $table;
 
-        DbHelper::createTable($this->db, $this->table, $this->fields);
+        if ($isTemp) {
+            $this->table .= '_xml_importer';
+            DbHelper::createTable($this->db, $this->table, $this->fields, $isTemp);
+        }
     }
 
     public function import(DataSource $reader)

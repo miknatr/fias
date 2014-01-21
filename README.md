@@ -6,5 +6,3 @@ FIAS
 Зависимости, помимо указанных в composer:
 1. rar
 2. unrar
-3. uuid-ossp для postgresql.
-
