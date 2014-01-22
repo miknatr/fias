@@ -33,4 +33,17 @@ class DbHelper
 
         $db->execute($sql, $params);
     }
+
+    public static function runFile($db, $path)
+    {
+        FileHelper::ensureIsReadable($path);
+        $path = escapeshellarg($path);
+        $db   = escapeshellarg($db);
+
+        exec('psql -f ' . $path . ' ' . $db . ' 2>&1', $output, $result);
+
+        if ($result !== 0) {
+            throw new \Exception('Ошибка выполнения SQL файла: ' . implode("\n", $output));
+        }
+    }
 }

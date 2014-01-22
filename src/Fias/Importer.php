@@ -7,10 +7,10 @@ use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Importer
 {
-    /** @var ConnectionInterface */
-    private $db;
     private $fields = array();
 
+    /** @var ConnectionInterface */
+    protected $db;
     protected $table;
 
     public function __construct(ConnectionInterface $db, $table, array $fields, $isTemp = true)
@@ -30,6 +30,8 @@ class Importer
         if ($isTemp) {
             $this->table .= '_xml_importer';
             DbHelper::createTable($this->db, $this->table, $this->fields, $isTemp);
+            echo 'yep we are here';
+            die();
         }
     }
 

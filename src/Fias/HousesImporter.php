@@ -4,7 +4,7 @@ namespace Fias;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class AddressObjectsImporter extends Importer
+class HousesImporter extends Importer
 {
 
     public function __construct(ConnectionInterface $db, $table, array $fields)

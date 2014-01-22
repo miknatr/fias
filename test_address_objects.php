@@ -9,16 +9,20 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $config = Config::get('config');
 $db     = ConnectionFactory::getConnection($config->getParam('database'));
-$db->execute('DROP TABLE IF EXISTS address_objects_xml_importer');
 
-$importConfig = $config->getParam('import')['address_objects'];
-$importer     = new AddressObjectsImporter($db, 'address_objects', $importConfig['fields']);
-$reader       = new Xml(
+DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/01_tables.sql');
+
+$addressObjectsConfig = $config->getParam('import')['address_objects'];
+$addressObjects       = new AddressObjectsImporter($db, 'address_objects', $addressObjectsConfig['fields']);
+$reader = new Xml(
     '/home/dallone/Downloads/big_objects.xml',
-    $importConfig['node_name'],
-    array_keys($importConfig['fields']),
-    $importConfig['filters']
+    $addressObjectsConfig['node_name'],
+    array_keys($addressObjectsConfig['fields']),
+    $addressObjectsConfig['filters']
 );
 
-$importer->import($reader);
-$importer->modifyDataAfterImport();
+$addressObjects->import($reader);
+
+
+
+$addressObjects->modifyDataAfterImport();
