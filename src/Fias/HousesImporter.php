@@ -25,15 +25,17 @@ class HousesImporter extends Importer
             array($this->table)
         );
 
+        // STOPPER работает паршиво перенести на фильтры при загрузке в БД
         $this->db->execute(
-            "UPDATE houses_xml_importer SET
+            "UPDATE ?f SET
                 number    = lower(number),
-                building  = lower(building),
-                structure = lower(structure)
+                building  = CASE WHEN building  IN ('нет', '-') THEN NULL ELSE lower(building)  END,
+                structure = CASE WHEN structure IN ('нет', '-') THEN NULL ELSE lower(structure) END
             WHERE number ~ '[^0-9]+'
                 OR building  ~ '[^0-9]+'
                 OR structure ~ '[^0-9]+'
-            "
+            ",
+            array($this->table)
         );
 
         // Убираем ложные данные по корпусам и строениям ("1а" и в корпусе и в номере, например)
