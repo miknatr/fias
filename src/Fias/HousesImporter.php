@@ -27,8 +27,8 @@ class HousesImporter extends Importer
 
         $this->db->execute(
             "UPDATE houses_xml_importer SET
-                number    = lower(number)
-                building  = lower(building)
+                number    = lower(number),
+                building  = lower(building),
                 structure = lower(structure)
             WHERE number ~ '[^0-9]+'
                 OR building  ~ '[^0-9]+'
