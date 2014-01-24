@@ -23,8 +23,20 @@ $reader = new Xml(
 
 $addressObjects->import($reader);
 
+$housesConfig = $config->getParam('import')['houses'];
+$houses = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
+$reader = new Xml(
+    '/home/dallone/Downloads/house_big.xml',
+    $housesConfig['node_name'],
+    array_keys($housesConfig['fields']),
+    array()
+);
+$houses->import($reader);
+
+
 DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/02_indexes.sql');
 
 $addressObjects->modifyDataAfterImport();
+$houses->modifyDataAfterImport();
 
 DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/03_constraints.sql');

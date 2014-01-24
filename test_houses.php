@@ -9,10 +9,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $config = Config::get('config');
 $db     = ConnectionFactory::getConnection($config->getParam('database'));
-$db->execute('DROP TABLE IF EXISTS houses_xml_importer');
+$db->execute('TRUNCATE TABLE houses');
 
 $importConfig = $config->getParam('import')['houses'];
-$importer     = new Importer($db, 'houses', $importConfig['fields']);
+$importer     = new HousesImporter($db, $importConfig['table_name'], $importConfig['fields']);
 $reader       = new Xml(
     '/home/dallone/Downloads/house_big.xml',
     $importConfig['node_name'],

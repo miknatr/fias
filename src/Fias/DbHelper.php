@@ -45,5 +45,13 @@ class DbHelper
         if ($result !== 0) {
             throw new \Exception('Ошибка выполнения SQL файла: ' . implode("\n", $output));
         }
+
+        if ($output) {
+            foreach($output as $line) {
+                if (preg_match('/psql:(.*)ERROR:/', $line)) {
+                    throw new \Exception('Ошибка выполнения SQL файла: ' . implode("\n", $output));
+                }
+            }
+        }
     }
 }

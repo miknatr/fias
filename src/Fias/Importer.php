@@ -30,8 +30,6 @@ class Importer
         if ($isTemp) {
             $this->table .= '_xml_importer';
             DbHelper::createTable($this->db, $this->table, $this->fields, $isTemp);
-            echo 'yep we are here';
-            die();
         }
     }
 
