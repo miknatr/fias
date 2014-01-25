@@ -20,10 +20,12 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'fakeAttribute'
             ),
             array(
-                'available' => 1,
-                'madeIn'    => array('USA', 'China'),
-                'title'     => array(),
-        ));
+                array('field' => 'available', 'type' => 'eq', 'value' => 1),
+                array('field' => 'madeIn', 'type' => 'in', 'value' => array('USA', 'China')),
+                array('field' => 'title', 'type' => 'in', 'value' => array()),
+                array('field' => 'id', 'type' => 'nin', 'value' => array(6)),
+            )
+        );
     }
 
     public function testRead()

@@ -64,15 +64,25 @@ class Xml implements DataSource
             return false;
         }
 
-        foreach ($this->filters as $attribute => $filterValue) {
-            $value = $this->reader->getAttribute($attribute);
+        foreach ($this->filters as $filter) {
+            $value = $this->reader->getAttribute($filter['field']);
 
-            if (is_scalar($filterValue) && $value != $filterValue) {
-                return false;
-            }
-
-            if (is_array($filterValue) && $filterValue && !in_array($value, $filterValue)) {
-                return false;
+            switch ($filter['type']) {
+                case 'in':
+                    if ($filter['value'] && !in_array($value, $filter['value'])) {
+                        return false;
+                    }
+                    break;
+                case 'nin':
+                    if($filter['value'] && in_array($value, $filter['value'])) {
+                        return false;
+                    }
+                    break;
+                case 'eq':
+                default :
+                    if ($filter['value'] != $value) {
+                        return false;
+                    }
             }
         }
 
