@@ -4,10 +4,15 @@ namespace Fias\Loader;
 
 class UpdateLoader extends Base
 {
-    public function loadFile()
+    /**
+     * @return \Fias\Directory
+     */
+    public function load()
     {
         $filesInfo = $this->getLastFileInfo();
 
-        return $this->loadFileFromUrl($filesInfo->getUpdateFileName(), $filesInfo->getUpdateFileUrl());
+        return $this->wrap(
+            $this->loadFile($filesInfo->getUpdateFileName(), $filesInfo->getUpdateFileUrl())
+        );
     }
 }

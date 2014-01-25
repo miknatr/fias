@@ -35,21 +35,7 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unlink($this->testRarFile);
-        unlink($this->testTxtFile);
-
-        if ($this->extractedFiles) {
-            $files = scandir($this->extractedFiles);
-            foreach ($files as $file) {
-                if ($file == '.' || $file == '..') {
-                    continue;
-                }
-
-                unlink($this->extractedFiles . '/' . $file);
-            }
-
-            rmdir($this->extractedFiles);
-        }
+        Helper::cleanUpFileDirectory();
     }
 
     /** @expectedException \Fias\FileException */

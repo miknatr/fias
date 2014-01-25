@@ -53,5 +53,15 @@ class HousesImporter extends Importer
                 )",
             array($this->table)
         );
+
+        // нормализуем адрес по яндексу
+        $this->db->execute(
+            "UPDATE houses_xml_importer
+                SET full_number = COALESCE(number, '')
+                    ||COALESCE('к'||building, '')
+                    ||COALESCE('с'||structure, '')
+            ",
+            array($this->table)
+        );
     }
 }

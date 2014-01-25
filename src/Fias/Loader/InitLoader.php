@@ -4,10 +4,12 @@ namespace Fias\Loader;
 
 class InitLoader extends Base
 {
-    public function loadFile()
+    public function load()
     {
         $filesInfo = $this->getLastFileInfo();
 
-        return $this->loadFileFromUrl($filesInfo->getInitFileName(), $filesInfo->getInitFileUrl());
+        return $this->wrap(
+            $this->loadFile($filesInfo->getInitFileName(), $filesInfo->getInitFileUrl())
+        );
     }
 }

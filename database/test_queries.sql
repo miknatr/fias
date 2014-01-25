@@ -151,3 +151,6 @@ select * from houses_xml_importer where number ~ '[^0-9]+';
 
 select * from houses_xml_importer where number ~ '[^0-9]+';
 select '|'||building||'|', count(*) from houses_xml_importer group by 1 order by 2 desc;
+
+UPDATE houses_xml_importer
+SET full_number = COALESCE(number, '')||COALESCE('к'||building, '')||COALESCE('с'||structure, '');

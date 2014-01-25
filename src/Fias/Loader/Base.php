@@ -2,11 +2,14 @@
 
 namespace Fias\Loader;
 
+use Fias\Dearchiver;
+use Fias\Directory;
 use Fias\FileHelper;
 
 abstract class Base
 {
-    abstract public function loadFile();
+    /** @return \Fias\Directory */
+    abstract public function load();
 
     protected $wsdlUrl;
     protected $fileDirectory;
@@ -28,7 +31,7 @@ abstract class Base
         return new SoapResultWrapper($rawResult);
     }
 
-    protected function loadFileFromUrl($fileName, $url)
+    protected function loadFile($fileName, $url)
     {
         $filePath = $this->fileDirectory . '/' . $fileName;
         if (file_exists($filePath)) {
@@ -50,6 +53,11 @@ abstract class Base
         fclose($fp);
 
         return $filePath;
+    }
+
+    protected function wrap($path)
+    {
+        return new Directory(Dearchiver::extract($this->fileDirectory, $path));
     }
 
     protected function fileIsCorrect($filePath, $url)

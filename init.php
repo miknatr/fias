@@ -13,7 +13,7 @@ $db     = ConnectionFactory::getConnection($config->getParam('database'));
 DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/01_tables.sql');
 
 $addressObjectsConfig = $config->getParam('import')['address_objects'];
-$addressObjects       = new AddressObjectsImporter($db, 'address_objects', $addressObjectsConfig['fields']);
+$addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
 $reader = new Xml(
     '/home/dallone/Downloads/big_objects.xml',
     $addressObjectsConfig['node_name'],

@@ -7,6 +7,30 @@ use PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls;
 
 class Helper extends \PHPUnit_Framework_TestCase
 {
+    public static function cleanUpFileDirectory()
+    {
+        static::removeFilesInDirectory(__DIR__ . '/file_directory');
+    }
+
+    private static function removeFilesInDirectory($directoryPath)
+    {
+        $files = scandir($directoryPath);
+        foreach ($files as $file) {
+            if ($file == '.' || $file == '..') {
+                continue;
+            }
+
+            $filePath = $directoryPath . '/' . $file;
+
+            if (is_dir($filePath)) {
+                static::removeFilesInDirectory($filePath);
+                rmdir($filePath);
+            } else {
+                unlink($filePath);
+            }
+        }
+    }
+
     public static function invokeMethod($object, $methodName, array $parameters = array())
     {
         $reflection = new \ReflectionClass(get_class($object));
