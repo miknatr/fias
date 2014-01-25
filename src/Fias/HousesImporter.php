@@ -25,17 +25,19 @@ class HousesImporter extends Importer
             array($this->table)
         );
 
-        // STOPPER работает паршиво перенести на фильтры при загрузке в БД
+        $inCorrectValues = array('нет', '-', 'стр.', 'стр1');
+
+        // Если будем импортировать больше половины регионов из фиаса, перенести на сторону PHP.
         $this->db->execute(
             "UPDATE ?f SET
                 number    = lower(number),
-                building  = CASE WHEN building  IN ('нет', '-') THEN NULL ELSE lower(building)  END,
-                structure = CASE WHEN structure IN ('нет', '-') THEN NULL ELSE lower(structure) END
+                building  = CASE WHEN building  IN (?l) THEN NULL ELSE lower(building)  END,
+                structure = CASE WHEN structure IN (?l) THEN NULL ELSE lower(structure) END
             WHERE number ~ '[^0-9]+'
                 OR building  ~ '[^0-9]+'
                 OR structure ~ '[^0-9]+'
             ",
-            array($this->table)
+            array($this->table, $inCorrectValues)
         );
 
         // Убираем ложные данные по корпусам и строениям ("1а" и в корпусе и в номере, например)

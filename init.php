@@ -9,7 +9,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $config = Config::get('config');
 $db     = ConnectionFactory::getConnection($config->getParam('database'));
-//STOPPER ошибки не падают в STDERR
+
 DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/01_tables.sql');
 
 $addressObjectsConfig = $config->getParam('import')['address_objects'];
@@ -40,3 +40,5 @@ $addressObjects->modifyDataAfterImport();
 $houses->modifyDataAfterImport();
 
 DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/03_constraints.sql');
+
+// STOPPER чистки

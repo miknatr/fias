@@ -91,7 +91,7 @@ WITH RECURSIVE required_addresses(level, address_id, title) AS (
 WHERE tmp.address_id = ao.address_id;
 
 delete from houses_xml_importer as h where not exists(select address_id from address_objects as ao where ao.address_id = h.address_id)
-QUERY PLAN
+--QUERY PLAN
 ----------------------------------------------------------------------------------------------
 Delete on houses_xml_importer h  (cost=6917.81..967663.59 rows=12526196 width=12)
 ->  Hash Anti Join  (cost=6917.81..967663.59 rows=12526196 width=12)
@@ -99,12 +99,12 @@ Hash Cond: (h.address_id = ao.address_id)
 ->  Seq Scan on houses_xml_importer h  (cost=0.00..444313.82 rows=21876782 width=22)
 ->  Hash  (cost=5088.36..5088.36 rows=99636 width=22)
 ->  Seq Scan on address_objects ao  (cost=0.00..5088.36 rows=99636 width=22)
-(6 rows)
-Time: 288465.809 ms
+(6 rows);
+--Time: 288465.809 ms;
 
 
 DELETE FROM houses_xml_importer as h USING (SELECT h.id FROM houses_xml_importer as h left join address_objects as ao on ao.address_id = h.address_id where ao.id is null) AS toDel WHERE toDel.id = h.id;
-QUERY PLAN
+--QUERY PLAN
 --------------------------------------------------------------------------------------------------------------------
 Delete on houses_xml_importer h  (cost=7112.81..1106316.72 rows=1 width=18)
 ->  Nested Loop  (cost=7112.81..1106316.72 rows=1 width=18)
@@ -115,21 +115,21 @@ Filter: (ao.id IS NULL)
 ->  Hash  (cost=5088.36..5088.36 rows=99636 width=38)
 ->  Seq Scan on address_objects ao  (cost=0.00..5088.36 rows=99636 width=38)
 ->  Index Scan using houses_xml_importer_pkey on houses_xml_importer h  (cost=0.00..11.39 rows=1 width=22)
-Index Cond: (id = h.id)
-(10 rows)
-Time: 444060.063 ms
+Index Cond: (id = h.id);
+--(10 rows)
+--Time: 444060.063 ms
 
 DELETE FROM houses_xml_importer WHERE address_id NOT IN (select address_id from address_objects);
-QUERY PLAN
+--QUERY PLAN
 -------------------------------------------------------------------------------------------
 Delete on houses_xml_importer  (cost=0.00..69159898094.11 rows=10938391 width=6)
 ->  Seq Scan on houses_xml_importer  (cost=0.00..69159898094.11 rows=10938391 width=6)
 Filter: (NOT (SubPlan 1))
 SubPlan 1
 ->  Materialize  (cost=0.00..6073.54 rows=99636 width=16)
-->  Seq Scan on address_objects  (cost=0.00..5088.36 rows=99636 width=16)
-(6 rows)
-Time > 1 hour.
+->  Seq Scan on address_objects  (cost=0.00..5088.36 rows=99636 width=16);
+--(6 rows)
+--Time > 1 hour.
 
 
 select h.*, ao.full_title from houses_xml_importer h
@@ -147,6 +147,7 @@ OR
 );
 
 
-select * from houses_xml_importer where number ~ '[^0-9]+'
+select * from houses_xml_importer where number ~ '[^0-9]+';
 
-select * from houses_xml_importer where number ~ '[^0-9]+'
+select * from houses_xml_importer where number ~ '[^0-9]+';
+select '|'||building||'|', count(*) from houses_xml_importer group by 1 order by 2 desc;
