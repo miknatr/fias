@@ -12,7 +12,7 @@ return array(
         'password' => '1',
     ),
     'import'         => array(
-        'address_objects'      => array(
+        'address_objects' => array(
             'table_name' => 'address_objects',
             'node_name'  => 'Object',
             'fields'     => array(
@@ -23,12 +23,12 @@ return array(
                 'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
                 'SHORTNAME'  => array('name' => 'prefix')
             ),
-            'filters'   => array(
+            'filters'    => array(
                 array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),
-                array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47,50,77,78)),
+                array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47, 50, 77, 78)),
             ),
         ),
-        'houses'               => array(
+        'houses'          => array(
             'table_name' => 'houses',
             'node_name'  => 'House',
             'fields'     => array(
