@@ -11,6 +11,18 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $filters = array(
+            array('field' => 'available', 'type' => 'eq', 'value' => 1),
+            array('field' => 'madeIn', 'type' => 'in', 'value' => array('USA', 'China', 'Germany', 'Rwanda')),
+            array('field' => 'title', 'type' => 'in', 'value' => array()),
+            array('field' => 'id', 'type' => 'nin', 'value' => array(6)),
+            array(
+                'field' => 'id',
+                'type'  => 'hash',
+                'value' => array(1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true, 7 => false)
+            ),
+        );
+
         $this->reader = new Xml(
             __DIR__ . '/resources/readerTest.xml',
             'Computer',
@@ -19,12 +31,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
                 'madeIn',
                 'fakeAttribute'
             ),
-            array(
-                array('field' => 'available', 'type' => 'eq', 'value' => 1),
-                array('field' => 'madeIn', 'type' => 'in', 'value' => array('USA', 'China')),
-                array('field' => 'title', 'type' => 'in', 'value' => array()),
-                array('field' => 'id', 'type' => 'nin', 'value' => array(6)),
-            )
+            $filters
         );
     }
 

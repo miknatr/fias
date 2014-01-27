@@ -78,7 +78,13 @@ class Xml implements DataSource
                         return false;
                     }
                     break;
+                case 'hash':
+                    if ($filter['value'] && empty($filter['value'][$value])) {
+                        return false;
+                    }
+                    break;
                 case 'eq':
+                    // no break
                 default :
                     if ($filter['value'] != $value) {
                         return false;
