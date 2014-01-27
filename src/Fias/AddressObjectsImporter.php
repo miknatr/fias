@@ -37,4 +37,6 @@ SQL;
 
         $this->db->execute($sql);
     }
+
+    protected $rowsPerInsert = 10000;
 }

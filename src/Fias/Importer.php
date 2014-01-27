@@ -33,9 +33,11 @@ class Importer
         }
     }
 
+    protected $rowsPerInsert = 1000;
+
     public function import(DataSource $reader)
     {
-        while ($rows = $reader->getRows()) {
+        while ($rows = $reader->getRows($this->rowsPerInsert)) {
             $this->db->execute($this->getQuery($rows[0]), array($rows));
         }
 

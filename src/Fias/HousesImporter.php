@@ -14,17 +14,6 @@ class HousesImporter extends Importer
 
     public function modifyDataAfterImport()
     {
-/*        // Чистим левые записи из левых регинов. БЫСТРЕЕ чем NOT IN и DELETE .. USING
-        $this->db->execute(
-            'DELETE FROM ?f h
-                WHERE NOT EXISTS (
-                    SELECT address_id
-                    FROM address_objects ao
-                    WHERE ao.address_id = h.address_id
-                )',
-            array($this->table)
-        );*/
-
         $inCorrectValues = array('нет', '-', 'стр.', 'стр1');
 
         // Если будем импортировать больше половины регионов из фиаса, перенести на сторону PHP.
@@ -64,4 +53,6 @@ class HousesImporter extends Importer
             array($this->table)
         );
     }
+
+    protected $rowsPerInsert = 10000;
 }

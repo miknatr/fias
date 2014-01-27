@@ -16,12 +16,12 @@ class Directory
 
     public function getAddressObjectFile()
     {
-        return $this->find('AS_ADDROBJ');
+        return $this->directoryPath . '/' . $this->find('AS_ADDROBJ');
     }
 
     public function getHousesFile()
     {
-        return $this->find('AS_HOUSE');
+        return $this->directoryPath . '/' . $this->find('AS_HOUSE_');
     }
 
     public function getPath()

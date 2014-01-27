@@ -17,12 +17,12 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $this->assertEquals(
-            'AS_ADDROBJ_20131221_5316e71a-a8d8-49df-b17c-66d3a981906a.XML',
+            $this->directory->getPath() . '/AS_ADDROBJ_20131221_5316e71a-a8d8-49df-b17c-66d3a981906a.XML',
             $this->directory->getAddressObjectFile()
         );
 
         $this->assertEquals(
-            'AS_HOUSE_20131221_bccfd0d0-af7a-49db-8401-df23dc3d2efa.XML',
+            $this->directory->getPath() . '/AS_HOUSE_20131221_bccfd0d0-af7a-49db-8401-df23dc3d2efa.XML',
             $this->directory->getHousesFile()
         );
     }
