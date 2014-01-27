@@ -14,16 +14,16 @@ class HousesImporter extends Importer
 
     public function modifyDataAfterImport()
     {
-        // Чистим левые записи из левых регинов. БЫСТРЕЕ чем NOT IN и DELETE .. USING
+/*        // Чистим левые записи из левых регинов. БЫСТРЕЕ чем NOT IN и DELETE .. USING
         $this->db->execute(
             'DELETE FROM ?f h
                 WHERE NOT EXISTS (
                     SELECT address_id
-                    FROM address_objects as ao
+                    FROM address_objects ao
                     WHERE ao.address_id = h.address_id
                 )',
             array($this->table)
-        );
+        );*/
 
         $inCorrectValues = array('нет', '-', 'стр.', 'стр1');
 
@@ -37,7 +37,7 @@ class HousesImporter extends Importer
                 OR building  ~ '[^0-9]+'
                 OR structure ~ '[^0-9]+'
             ",
-            array($this->table, $inCorrectValues)
+            array($this->table, $inCorrectValues, $inCorrectValues)
         );
 
         // Убираем ложные данные по корпусам и строениям ("1а" и в корпусе и в номере, например)
@@ -56,7 +56,7 @@ class HousesImporter extends Importer
 
         // нормализуем адрес по яндексу
         $this->db->execute(
-            "UPDATE houses_xml_importer
+            "UPDATE ?f
                 SET full_number = COALESCE(number, '')
                     ||COALESCE('к'||building, '')
                     ||COALESCE('с'||structure, '')

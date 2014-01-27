@@ -14,8 +14,13 @@ class IntervalGenerator implements DataSource
     private $typeAttribute;
     private $resultAttribute;
 
-    public function __construct(DataSource $dataSource, $startAttribute, $endAttribute, $typeAttribute, $resultAttribute)
-    {
+    public function __construct(
+        DataSource $dataSource,
+        $startAttribute,
+        $endAttribute,
+        $typeAttribute,
+        $resultAttribute
+    ) {
         $this->dataSource = $dataSource;
 
         $this->startAttribute  = $startAttribute;

@@ -43,7 +43,7 @@ class Helper extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \PHPUnit_Framework_TestCase $testCase
-     * @param array $results
+     * @param array                       $results
      * @return Xml
      */
     public static function getReaderMock(\PHPUnit_Framework_TestCase $testCase, array $results)

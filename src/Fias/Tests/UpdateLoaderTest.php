@@ -13,7 +13,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config  = Config::get('config');
+        $this->config        = Config::get('config');
         $this->fileDirectory = __DIR__ . '/file_directory';
 
         if (!is_dir($this->fileDirectory)) {
@@ -46,7 +46,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
             . '_fias_delta_xml.rar'
         ;
 
-        file_put_contents($filePath,$message);
+        file_put_contents($filePath, $message);
 
         $loader = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
         $loader->load();
@@ -86,9 +86,11 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
             $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
 
             $ch = curl_init($filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl);
+
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HEADER, true);
             curl_setopt($ch, CURLOPT_NOBODY, true);
+
             curl_exec($ch);
 
             $this->updateInformation = array(

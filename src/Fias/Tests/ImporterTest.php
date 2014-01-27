@@ -15,8 +15,8 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db     = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
-        $this->table  = 'test_table';
+        $this->db    = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
+        $this->table = 'test_table';
     }
 
     /**
@@ -64,7 +64,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             6,
-            $this->db->execute('SELECT COUNT(*) as count FROM ?F', array($tableName))->fetchOneOrFalse()['count']
+            $this->db->execute('SELECT COUNT(*) count FROM ?F', array($tableName))->fetchOneOrFalse()['count']
         );
 
         $this->assertEquals(

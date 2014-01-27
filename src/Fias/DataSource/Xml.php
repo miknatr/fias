@@ -74,7 +74,7 @@ class Xml implements DataSource
                     }
                     break;
                 case 'nin':
-                    if($filter['value'] && in_array($value, $filter['value'])) {
+                    if ($filter['value'] && in_array($value, $filter['value'])) {
                         return false;
                     }
                     break;

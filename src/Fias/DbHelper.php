@@ -47,7 +47,7 @@ class DbHelper
         }
 
         if ($output) {
-            foreach($output as $line) {
+            foreach ($output as $line) {
                 if (preg_match('/psql:(.*)ERROR:/', $line)) {
                     throw new \Exception('Ошибка выполнения SQL файла: ' . implode("\n", $output));
                 }

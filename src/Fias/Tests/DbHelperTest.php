@@ -11,6 +11,7 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ConnectionInterface */
     private $db;
+
     protected function setUp()
     {
         $config   = Config::get('config');

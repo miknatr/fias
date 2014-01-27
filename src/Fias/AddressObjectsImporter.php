@@ -14,8 +14,9 @@ class AddressObjectsImporter extends Importer
 
     public function modifyDataAfterImport()
     {
+        // Формируем полный заголовок
         $sql = <<<SQL
-            UPDATE address_objects AS ao SET
+            UPDATE address_objects ao SET
                 level      = tmp.level,
                 full_title = tmp.title
             FROM (
@@ -25,12 +26,12 @@ class AddressObjectsImporter extends Importer
                     WHERE parent_id IS NULL
                 UNION ALL
                     SELECT ra.level + 1, ar.address_id, ra.title || ', ' || "prefix" || ' ' || ar.title
-                    FROM address_objects_xml_importer AS ar
-                    INNER JOIN required_addresses AS ra
-                    ON ra.address_id = ar.parent_id
+                    FROM address_objects_xml_importer ar
+                    INNER JOIN required_addresses ra
+                        ON ra.address_id = ar.parent_id
                 )
                 SELECT * FROM required_addresses
-            ) AS tmp
+            ) tmp
             WHERE tmp.address_id = ao.address_id;
 SQL;
 

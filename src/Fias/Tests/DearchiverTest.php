@@ -26,6 +26,7 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
             . escapeshellarg($this->testTxtFile)
             . ' 2>&1'
         ;
+
         exec($cmd, $output, $result);
 
         if ($result !== 0) {

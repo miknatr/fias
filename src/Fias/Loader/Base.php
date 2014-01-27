@@ -47,6 +47,7 @@ abstract class Base
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
         curl_exec($ch);
 
         curl_close($ch);
@@ -63,9 +64,11 @@ abstract class Base
     protected function fileIsCorrect($filePath, $url)
     {
         $ch = curl_init($url);
+
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_NOBODY, true);
+
         curl_exec($ch);
 
         $correctSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);

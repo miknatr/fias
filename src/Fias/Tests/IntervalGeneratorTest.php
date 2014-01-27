@@ -18,9 +18,11 @@ class IntervalGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGeneratedRow()
     {
-        $reader = $this->getGenerator(array(
+        $reader = $this->getGenerator(
+            array(
                 array(array('title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1)),
-        ));
+            )
+        );
 
         $rows = $reader->getRows();
 
@@ -32,11 +34,13 @@ class IntervalGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRowsWithCount()
     {
-        $reader = $this->getGenerator(array(
-            array(array('title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1)),
-            array(array('title' => 'Title 2', 'start' => 10, 'end' => 14, 'type' => 2)),
-            array(array('title' => 'Title 3', 'start' => 15, 'end' => 20, 'type' => 3)),
-        ));
+        $reader = $this->getGenerator(
+            array(
+                array(array('title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1)),
+                array(array('title' => 'Title 2', 'start' => 10, 'end' => 14, 'type' => 2)),
+                array(array('title' => 'Title 3', 'start' => 15, 'end' => 20, 'type' => 3)),
+            )
+        );
 
         // Выборка прервана на getRowsFromInterval
         $result1 = $reader->getRows(3);

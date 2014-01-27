@@ -15,9 +15,29 @@ CREATE INDEX "address_objects_full_title_lower_idx"
     USING BTREE (lower("full_title"))
 ;
 
-CREATE INDEX "houses_parent_id_fkey_idx"
+CREATE INDEX "houses_address_id_fkey_idx"
     ON "houses"
     USING BTREE ("address_id")
+;
+
+CREATE INDEX "houses_full_number_id_fkey_idx"
+    ON "houses"
+    USING BTREE ("full_number")
+;
+
+CREATE INDEX "tmp_houses_number_id_fkey_idx"
+    ON "houses"
+    USING BTREE ("number")
+;
+
+CREATE INDEX "tmp_houses_building_id_fkey_idx"
+    ON "houses"
+    USING BTREE ("building")
+;
+
+CREATE INDEX "tmp_houses_structure_fkey_idx"
+    ON "houses"
+    USING BTREE ("structure")
 ;
 
 COMMIT;
