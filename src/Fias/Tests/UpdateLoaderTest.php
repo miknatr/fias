@@ -2,51 +2,68 @@
 
 namespace Fias\Tests;
 
-use Fias\UpdateLoader;
+use Fias\Loader\UpdateLoader;
 use Fias\Config;
 
 class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Config */
     private $config;
+    private $fileDirectory;
 
     protected function setUp()
     {
-        $this->config  = Config::get('config');
-        $fileDirectory = $this->config->getParam('file_directory');
+        $this->config        = Config::get('config');
+        $this->fileDirectory = __DIR__ . '/file_directory';
 
-        if (!is_dir($fileDirectory)) {
-            mkdir($fileDirectory);
+        if (!is_dir($this->fileDirectory)) {
+            mkdir($this->fileDirectory);
         }
 
         $information = $this->getInformationAboutCurrentUpdateFile();
-        @unlink($fileDirectory . '/' . $information['version'] . '_fias_delta_xml.rar');
+        @unlink($this->fileDirectory . '/' . $information['version'] . '_fias_delta_xml.rar');
+    }
+
+    protected function tearDown()
+    {
+        Helper::cleanUpFileDirectory();
     }
 
     public function testLoad()
     {
-        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_directory');
-        $this->assertEquals($this->getInformationAboutCurrentUpdateFile()['file_size'], filesize($loader->loadFile()));
+        $loader     = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
+        $filesCount = count(scandir($loader->load()->getPath()));
+
+        $this->assertEquals(17, $filesCount);
     }
 
     public function testReWritingBadFile()
     {
-        file_put_contents(
-            $this->config->getParam('file_directory')
+        $message  = 'Really bad file';
+        $filePath = $this->fileDirectory
             . '/'
             . $this->getInformationAboutCurrentUpdateFile()['version']
-            . '_fias_delta_xml.rar',
-            'Really bad file'
-        );
+            . '_fias_delta_xml.rar'
+        ;
 
-        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_directory');
-        $this->assertEquals($this->getInformationAboutCurrentUpdateFile()['file_size'], filesize($loader->loadFile()));
+        file_put_contents($filePath, $message);
+
+        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
+        $loader->load();
+
+        $this->assertTrue(strlen($message) != filesize($filePath));
     }
 
     public function testNoRewritingGoodFile()
     {
-        $loader   = new UpdateLoader($this->config->getParam('wsdl_url'), __DIR__ . '/file_directory');
-        $filePath = $loader->loadFile();
+        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
+        $loader->load();
+
+        $filePath = $this->fileDirectory
+            . '/'
+            . $this->getInformationAboutCurrentUpdateFile()['version']
+            . '_fias_delta_xml.rar'
+        ;
 
         $this->assertTrue(
             Helper::invokeMethod(
@@ -69,9 +86,11 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
             $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
 
             $ch = curl_init($filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl);
+
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HEADER, true);
             curl_setopt($ch, CURLOPT_NOBODY, true);
+
             curl_exec($ch);
 
             $this->updateInformation = array(

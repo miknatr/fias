@@ -1,10 +1,15 @@
 <?php
 
-namespace Fias;
+namespace Fias\Loader;
 
-abstract class Loader
+use Fias\Dearchiver;
+use Fias\Directory;
+use Fias\FileHelper;
+
+abstract class Base
 {
-    abstract public function loadFile();
+    /** @return Directory */
+    abstract public function load();
 
     protected $wsdlUrl;
     protected $fileDirectory;
@@ -23,10 +28,10 @@ abstract class Loader
         $client    = new \SoapClient($this->wsdlUrl);
         $rawResult = $client->__soapCall('GetLastDownloadFileInfo', array());
 
-        return new SoapInfoResultWrapper($rawResult);
+        return new SoapResultWrapper($rawResult);
     }
 
-    protected function loadFileFromUrl($fileName, $url)
+    protected function loadFile($fileName, $url)
     {
         $filePath = $this->fileDirectory . '/' . $fileName;
         if (file_exists($filePath)) {
@@ -42,6 +47,7 @@ abstract class Loader
 
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
         curl_exec($ch);
 
         curl_close($ch);
@@ -50,12 +56,19 @@ abstract class Loader
         return $filePath;
     }
 
+    protected function wrap($path)
+    {
+        return new Directory(Dearchiver::extract($this->fileDirectory, $path));
+    }
+
     protected function fileIsCorrect($filePath, $url)
     {
         $ch = curl_init($url);
+
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_NOBODY, true);
+
         curl_exec($ch);
 
         $correctSize = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);

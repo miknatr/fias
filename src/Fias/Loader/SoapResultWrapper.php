@@ -1,8 +1,8 @@
 <?php
 
-namespace Fias;
+namespace Fias\Loader;
 
-class SoapInfoResultWrapper
+class SoapResultWrapper
 {
     private $versionId;
     private $updateFileUrl;

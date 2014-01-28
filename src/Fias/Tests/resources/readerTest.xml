@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Computers>
+    <Computer id="1" available="1" madeIn="China"   title="Сервер Васи"/>
+    <Mobile   id="2" available="1" madeIn="Russia"  title="Мобильник Севы"/>
+    <Computer id="3" available="0" madeIn="China"   title="Ноут Коли"/>
+    <Computer id="4" available="1" madeIn="USA"     title="Мак Артёма"/>
+    <Computer id="5" available="1" madeIn="France"  title="Планшет Николя"/>
+    <Computer id="6" available="1" madeIn="Rwanda"  title="Нетбук Туликулико Франсуа"/>
+    <Computer id="7" available="1" madeIn="Germany" title="Dendy Яна"/>
+    <Computer id="8" available="1" madeIn="Turkey"  title="Тетрис Абдурахмана"/>
+</Computers>
