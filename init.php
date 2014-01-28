@@ -12,7 +12,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $config = Config::get('config');
 $db     = ConnectionFactory::getConnection($config->getParam('database'));
-$log    = new Logger('general');
+$log    = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . 'logs/cli.log'));
 
 try {
