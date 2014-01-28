@@ -2,10 +2,12 @@
 
 namespace Fias\Loader;
 
+use Fias\Directory;
+
 class UpdateLoader extends Base
 {
     /**
-     * @return \Fias\Directory
+     * @return Directory
      */
     public function load()
     {

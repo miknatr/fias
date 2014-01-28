@@ -8,7 +8,7 @@ use Fias\FileHelper;
 
 abstract class Base
 {
-    /** @return \Fias\Directory */
+    /** @return Directory */
     abstract public function load();
 
     protected $wsdlUrl;
