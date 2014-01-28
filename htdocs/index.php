@@ -3,6 +3,8 @@
 namespace Fias;
 
 use Grace\DBAL\ConnectionFactory;
+use Fias\Action\Exception;
+use Fias\Action\Handler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -15,8 +17,8 @@ $log->pushHandler(new StreamHandler(__DIR__ . 'logs/http.log'));
 
 
 try {
-    ActionHandler::handle($_SERVER['REQUEST_URI'], $db);
-} catch (HttpException $e) {
+    Handler::handle($_SERVER['REQUEST_URI'], $db);
+} catch (Exception $e) {
     switch ($e->getCode()) {
         case 404:
             header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found', true, 404);
