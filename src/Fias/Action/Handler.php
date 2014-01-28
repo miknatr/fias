@@ -51,5 +51,6 @@ class Handler
     private static function validate($params, ConnectionInterface $db)
     {
         $request = new Validate($params['address'], $db);
+        return $request->run();
     }
 }
