@@ -8,8 +8,9 @@ use Grace\DBAL\ConnectionFactory;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$config = Config::get('config');
-$db     = ConnectionFactory::getConnection($config->getParam('database'));
+$config       = Config::get('config');
+$importConfig = Config::get('import');
+$db           = ConnectionFactory::getConnection($config->getParam('database'));
 
 if ($argc == 2) {
     $path = $argv['1'];
@@ -26,7 +27,7 @@ if ($argc == 2) {
 
 DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/01_tables.sql');
 
-$addressObjectsConfig = $config->getParam('import')['address_objects'];
+$addressObjectsConfig = $importConfig->getParam('address_objects');
 $addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
 $reader               = new Xml(
     $directory->getAddressObjectFile(),
@@ -37,7 +38,7 @@ $reader               = new Xml(
 
 $addressObjects->import($reader);
 
-$housesConfig = $config->getParam('import')['houses'];
+$housesConfig = $importConfig->getParam('houses');
 $houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
 // Если не отсекать записи исходя из региона придется грузить 21 млн записей вместо полутора.
