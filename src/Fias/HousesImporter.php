@@ -39,7 +39,8 @@ class HousesImporter extends Importer
                     (structure ~ '[^0-9]+' AND number = structure)
                     OR
                     (building ~ '[^0-9]+' AND number = building)
-                )",
+                )
+            ",
             array($this->table)
         );
 
@@ -49,6 +50,19 @@ class HousesImporter extends Importer
                 SET full_number = COALESCE(number, '')
                     ||COALESCE('к'||building, '')
                     ||COALESCE('с'||structure, '')
+            ",
+            array($this->table)
+        );
+
+        // прописываем данные по домам в address_objects
+        $this->db->execute(
+            "UPDATE address_objects ao
+                SET house_count = tmp.count
+            FROM (
+                SELECT address_id, count(*) as count
+                FROM houses GROUP BY 1
+            ) tmp
+            WHERE tmp.address_id = ao.address_id
             ",
             array($this->table)
         );

@@ -9,7 +9,8 @@ CREATE TABLE "houses" (
     full_number VARCHAR,
     building    VARCHAR,
     structure   VARCHAR,
-    postal_code INTEGER
+    postal_code INTEGER,
+    house_count INTEGER
 );
 COMMENT ON TABLE  houses             IS 'данные по домам';
 COMMENT ON COLUMN houses.id          IS 'идентификационный код записи';
@@ -19,6 +20,7 @@ COMMENT ON COLUMN houses.number      IS 'номер дома';
 COMMENT ON COLUMN houses.building    IS 'корпус';
 COMMENT ON COLUMN houses.structure   IS 'строение';
 COMMENT ON COLUMN houses.postal_code IS 'индекс';
+COMMENT ON COLUMN houses.house_count IS 'количество домов';
 
 DROP TABLE IF EXISTS address_objects;
 CREATE TABLE address_objects (

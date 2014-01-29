@@ -4,7 +4,7 @@ namespace Fias\Action;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class Validate
+class Validate implements Action
 {
     /** @var ConnectionInterface */
     private $db;
