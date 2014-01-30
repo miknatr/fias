@@ -23,10 +23,6 @@ try {
     echo json_encode($result);
 } catch (Exception $e) {
     switch ($e->getCode()) {
-        case 320:
-            $message = 'Location: ' . $e->getMessage();
-            break;
-
         case 400:
             $message = $_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request';
             break;
