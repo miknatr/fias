@@ -12,12 +12,12 @@ class Handler
     {
         $params = static::parseUri($uri);
 
-        return static::$params['action']($params, $db);
+        return static::$params['action']($db, $params);
     }
 
     private static function parseUri($uri)
     {
-        $tmp = explode('/', $uri);
+        $tmp = explode('/', urldecode($uri));
 
         if (count($tmp) < 3) {
             throw new Exception('Bad Request', 400);
@@ -31,26 +31,31 @@ class Handler
         $result['address'] = $tmp[2];
 
         if ($result['action'] == 'complete') {
-            if (!empty($tmp[3])) {
-                $result['parent_id'] = $tmp[3];
-            }
+            $result['parent_id'] = !empty($tmp[3])
+                ? $tmp[3]
+                : null
+            ;
 
-            if (!empty($tmp[4])) {
-                $result['limit'] = $tmp[4];
-            }
+            $result['limit'] = !empty($tmp[4])
+                ? $tmp[4]
+                : 50
+            ;
         }
 
         return $result;
     }
 
-    private static function complete($params, ConnectionInterface $db)
+    private static function complete(ConnectionInterface $db, $params)
     {
+        $request = new Completion($db, $params['address'], $params['parent_id'], $params['limit']);
 
+        return $request->run();
     }
 
-    private static function validate($params, ConnectionInterface $db)
+    private static function validate(ConnectionInterface $db, $params)
     {
-        $request = new Validate($params['address'], $db);
+        $request = new Validation($db, $params['address']);
+
         return $request->run();
     }
 }

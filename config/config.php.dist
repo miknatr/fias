@@ -33,7 +33,7 @@ return array(
             'node_name'  => 'House',
             'fields'     => array(
                 'HOUSEID'   => array('name' => 'id', 'type' => 'uuid'),
-                'HOUSEGUID' => array('name' => 'home_id', 'type' => 'uuid'),
+                'HOUSEGUID' => array('name' => 'house_id', 'type' => 'uuid'),
                 'AOGUID'    => array('name' => 'address_id', 'type' => 'uuid'),
                 'HOUSENUM'  => array('name' => 'number'),
                 'BUILDNUM'  => array('name' => 'building'),

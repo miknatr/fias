@@ -59,7 +59,7 @@ class HousesImporter extends Importer
             "UPDATE address_objects ao
                 SET house_count = tmp.count
             FROM (
-                SELECT address_id, count(*) as count
+                SELECT address_id, count(*) count
                 FROM houses GROUP BY 1
             ) tmp
             WHERE tmp.address_id = ao.address_id
