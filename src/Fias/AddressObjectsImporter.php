@@ -22,11 +22,11 @@ class AddressObjectsImporter extends Importer
             FROM (
                 WITH RECURSIVE required_addresses(level, address_id, title) AS (
                     SELECT DISTINCT 0, address_id, "prefix" || ' ' || title
-                    FROM address_objects_xml_importer
+                    FROM address_objects
                     WHERE parent_id IS NULL
                 UNION ALL
                     SELECT ra.level + 1, ar.address_id, ra.title || ', ' || "prefix" || ' ' || ar.title
-                    FROM address_objects_xml_importer ar
+                    FROM address_objects ar
                     INNER JOIN required_addresses ra
                         ON ra.address_id = ar.parent_id
                 )

@@ -4,13 +4,13 @@ namespace Fias\Action;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class Validate implements Action
+class Validation implements Action
 {
     /** @var ConnectionInterface */
     private $db;
     private $address;
 
-    public function __construct($address, $db)
+    public function __construct(ConnectionInterface $db, $address)
     {
         $this->db      = $db;
         $this->address = $address;
@@ -37,7 +37,6 @@ class Validate implements Action
     private function find($address)
     {
         $result = array(
-            'is_valid'    => false,
             'is_complete' => false,
             'id'          => null,
         );
@@ -48,7 +47,6 @@ class Validate implements Action
             if ($addressId) {
                 $houseId = $this->findHouse($addressId, $address['house']);
                 if ($houseId) {
-                    $result['is_valid']    = true;
                     $result['is_complete'] = true;
                     $result['id']          = $houseId;
 
@@ -59,8 +57,7 @@ class Validate implements Action
 
         $incompleteAddressId = $this->findAddress($this->address, $address['level'] + 1);
         if ($incompleteAddressId) {
-            $result['is_valid'] = true;
-            $result['id']       = $incompleteAddressId;
+            $result['id'] = $incompleteAddressId;
 
             return $result;
         }
@@ -84,7 +81,7 @@ class Validate implements Action
 
     private function findHouse($addressId, $house)
     {
-        $sql = 'SELECT home_id
+        $sql = 'SELECT house_id
                 FROM houses
                 WHERE address_id = ?q
                     AND full_number = lower(?q)'
@@ -92,6 +89,6 @@ class Validate implements Action
 
         $result = $this->db->execute($sql, array($addressId, $house))->fetchOneOrFalse();
 
-        return $result ? $result['home_id'] : false;
+        return $result ? $result['house_id'] : false;
     }
 }

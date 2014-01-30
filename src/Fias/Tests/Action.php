@@ -94,7 +94,7 @@ class Action extends \PHPUnit_Framework_TestCase
 
         $this->db->execute('
             CREATE TEMP TABLE houses(
-                home_id uuid,
+                house_id uuid,
                 address_id uuid,
                 full_number varchar
             )
@@ -103,22 +103,22 @@ class Action extends \PHPUnit_Framework_TestCase
         $rows = array(
             array(
                 'full_number' => '16с17',
-                'home_id'     => '841254dc-0074-41fe-99ba-0c8501526c04',
+                'house_id'    => '841254dc-0074-41fe-99ba-0c8501526c04',
                 'address_id'  => '77303f7c-452b-4e73-b2b0-cbc59fe636c2'
             ),
             array(
                 'full_number' => '16с18',
-                'home_id'     => '841254dc-0074-41fe-99ba-0c8501526c05',
+                'house_id'    => '841254dc-0074-41fe-99ba-0c8501526c05',
                 'address_id'  => '77303f7c-452b-4e73-b2b0-cbc59fe636c2'
             ),
             array(
                 'full_number' => '23',
-                'home_id'     => '841254dc-0074-41fe-99ba-0c8501526c06',
+                'house_id'    => '841254dc-0074-41fe-99ba-0c8501526c06',
                 'address_id'  => '77303f7c-452b-4e73-b2b0-cbc59fe636c2'
             ),
             array(
                 'full_number' => '1к1',
-                'home_id'     => '841254dc-0074-41fe-99ba-0c8501526c07',
+                'house_id'    => '841254dc-0074-41fe-99ba-0c8501526c07',
                 'address_id'  => '77303f7c-452b-4e73-b2b0-cbc59fe636c2'
             ),
         );
