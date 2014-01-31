@@ -33,7 +33,7 @@ class Validation implements Action
         }
 
         $incompleteAddress = AddressHelper::findAddress($this->db, $this->address);
-        if($incompleteAddress) {
+        if ($incompleteAddress) {
             $result['is_valid'] = true;
 
             return $result;
