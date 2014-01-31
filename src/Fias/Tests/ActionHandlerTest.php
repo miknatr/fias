@@ -20,7 +20,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Fias\Action\Exception
+     * @expectedException \Fias\Action\HttpException
      * @expectedExceptionCode 404
      */
     public function testNotFound()
@@ -29,7 +29,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Fias\Action\Exception
+     * @expectedException \Fias\Action\HttpException
      * @expectedExceptionCode 400
      */
     public function testBadParams()

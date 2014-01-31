@@ -20,12 +20,12 @@ class Handler
         $tmp = explode('/', urldecode($uri));
 
         if (count($tmp) < 3) {
-            throw new Exception('Bad Request', 400);
+            throw new HttpException('Bad Request', 400);
         }
 
         $result = array('action' => $tmp[1]);
         if (!in_array($result['action'], static::$actions)) {
-            throw new Exception('Not Found', 404);
+            throw new HttpException('Not Found', 404);
         }
 
         $result['address'] = $tmp[2];
