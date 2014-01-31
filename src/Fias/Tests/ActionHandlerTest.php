@@ -25,7 +25,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotFound()
     {
-        Handler::handle('/wrong/destination', $this->db);
+        Handler::handle('/api/wrong/destination', $this->db);
     }
 
     /**

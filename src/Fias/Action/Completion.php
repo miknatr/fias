@@ -2,32 +2,39 @@
 
 namespace Fias\Action;
 
+use Fias\AddressHelper;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Completion implements Action
 {
+    const MAX_LIMIT = 50;
+
     /** @var ConnectionInterface */
     private $db;
     private $address;
     private $parentId;
     private $limit;
 
-    public function __construct(ConnectionInterface $db, $address, $parentId, $limit)
+    public function __construct(ConnectionInterface $db, $address, $limit)
     {
-        $this->db       = $db;
-        $this->address  = $address;
-        $this->parentId = $parentId;
-        $this->limit    = (int)$limit;
+        $this->db      = $db;
+        $this->address = $address;
+        $this->limit   = (int)$limit;
+
+        if ($this->limit > static::MAX_LIMIT) {
+            $this->limit = static::MAX_LIMIT;
+        }
     }
 
     public function run()
     {
-        $pattern = $this->getPartForCompletion();
+        $addressParts   = $this->splitAddress();
+        $this->parentId = AddressHelper::findAddress($this->db, $addressParts['address']);
 
         if ($this->getHousesCount()) {
-            $rows = $this->findHouses($pattern);
+            $rows = $this->findHouses($addressParts['pattern']);
         } else {
-            $rows = $this->findAddresses($pattern);
+            $rows = $this->findAddresses($addressParts['pattern']);
         }
 
         return array(
@@ -48,16 +55,18 @@ class Completion implements Action
         return $result ? $result['house_count'] : null;
     }
 
-    private function getPartForCompletion()
+    private function splitAddress()
     {
         $tmp = explode(',', $this->address);
-
-        return trim(array_pop($tmp));
+        return array(
+            'pattern' => trim(array_pop($tmp)),
+            'address' => implode(',', $tmp),
+        );
     }
 
     private function findAddresses($pattern)
     {
-        $sql    = "SELECT address_id id, prefix||' '||title title, 0 is_complete
+        $sql = "SELECT full_title
             FROM address_objects ao
             WHERE ?p
                 AND title ilike  '?e%'
@@ -72,20 +81,22 @@ class Completion implements Action
 
         $values = array($parentPart, $pattern, $this->limit);
 
-        return $this->db->execute($sql, $values)->fetchAll();
+        return $this->db->execute($sql, $values)->fetchColumn();
     }
 
     private function findHouses($pattern)
     {
-        $sql    = "SELECT house_id id, full_number title, 1 is_complete
-            FROM houses
-            WHERE address_id = ?q
+        $sql    = "SELECT full_title||', '||full_number
+            FROM houses h
+            INNER JOIN address_objects ao
+                ON ao.address_id = h.address_id
+            WHERE h.address_id = ?q
                 AND full_number ilike  '?e%'
             ORDER BY (regexp_matches(full_number, '^[0-9]+', 'g'))[1]
             LIMIT ?e"
         ;
         $values = array($this->parentId, $pattern, $this->limit);
 
-        return $this->db->execute($sql, $values)->fetchAll();
+        return $this->db->execute($sql, $values)->fetchColumn();
     }
 }
