@@ -3,7 +3,7 @@
 namespace Fias;
 
 use Grace\DBAL\ConnectionFactory;
-use Fias\Action\Exception;
+use Fias\Action\HttpException;
 use Fias\Action\Handler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -21,7 +21,7 @@ try {
 
     header('Content-type: application/json');
     echo json_encode($result);
-} catch (Exception $e) {
+} catch (HttpException $e) {
     switch ($e->getCode()) {
         case 400:
             $message = $_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request';
