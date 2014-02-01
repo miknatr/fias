@@ -31,4 +31,13 @@ class ActionCompletionTest extends Action
         $this->assertEquals(2, $result['count']);
         $this->assertEquals('г Москва, ул Стахановская, 1к1', $result['rows'][0]);
     }
+
+    /**
+     * @expectedException \Fias\Action\HttpException
+     * @expectedExceptionCode 400
+     */
+    public function testLimitOverflow()
+    {
+        new Completion($this->db, 'г Москва, ул Стахановская, 1', Completion::MAX_LIMIT+1);
+    }
 }

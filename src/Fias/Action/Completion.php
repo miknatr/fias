@@ -22,7 +22,7 @@ class Completion implements Action
         $this->limit   = (int)$limit;
 
         if ($this->limit > static::MAX_LIMIT) {
-            $this->limit = static::MAX_LIMIT;
+            throw new HttpException('Превышен лимит.', 400);
         }
     }
 
