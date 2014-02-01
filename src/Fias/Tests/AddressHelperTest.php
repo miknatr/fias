@@ -1,6 +1,6 @@
 <?php
 
-namespace FIas\Tests;
+namespace Fias\Tests;
 
 use Fias\AddressHelper;
 
