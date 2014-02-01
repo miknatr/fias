@@ -2,7 +2,7 @@
 
 namespace Fias;
 
-use Fias\DataSource\Xml;
+use Fias\DataSource\XmlReader;
 use Fias\Loader\InitLoader;
 use Grace\DBAL\ConnectionFactory;
 use Monolog\Handler\StreamHandler;
@@ -36,7 +36,7 @@ try {
 
     $addressObjectsConfig = $config->getParam('import')['address_objects'];
     $addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
-    $reader               = new Xml(
+    $reader               = new XmlReader(
         $directory->getAddressObjectFile(),
         $addressObjectsConfig['node_name'],
         array_keys($addressObjectsConfig['fields']),
@@ -58,7 +58,7 @@ try {
             'value' => $addresses
         )
     );
-    $reader    = new Xml(
+    $reader    = new XmlReader(
         $directory->getHousesFile(),
         $housesConfig['node_name'],
         array_keys($housesConfig['fields']),
