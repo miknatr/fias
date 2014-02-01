@@ -11,7 +11,7 @@ class ActionCompletionTest extends Action
         $complete = new Completion($this->db, 'Нави, Главная б', null, 50);
         $result   = $complete->run();
 
-        $this->assertEquals(0, $result['count']);
+        $this->assertCount(0, $result);
     }
 
     public function testAddressCompletion()
@@ -19,8 +19,9 @@ class ActionCompletionTest extends Action
         $complete = new Completion($this->db, 'г Москва, Ста', 50);
         $result   = $complete->run();
 
-        $this->assertEquals(4, $result['count']);
-        $this->assertEquals('г Москва, пр Ставропольский', $result['rows'][0]);
+        $this->assertCount(4, $result);
+        $this->assertEquals('г Москва, пр Ставропольский', $result[0]['title']);
+        $this->assertEquals(0, $result[0]['is_complete']);
     }
 
     public function testHomeCompletion()
@@ -28,8 +29,9 @@ class ActionCompletionTest extends Action
         $complete = new Completion($this->db, 'г Москва, ул Стахановская, 1', 2);
         $result   = $complete->run();
 
-        $this->assertEquals(2, $result['count']);
-        $this->assertEquals('г Москва, ул Стахановская, 1к1', $result['rows'][0]);
+        $this->assertCount(2, $result);
+        $this->assertEquals('г Москва, ул Стахановская, 1к1', $result[0]['title']);
+        $this->assertEquals(1, $result[0]['is_complete']);
     }
 
     /**

@@ -37,10 +37,7 @@ class Completion implements Action
             $rows = $this->findAddresses($addressParts['pattern']);
         }
 
-        return array(
-            'count' => count($rows),
-            'rows'  => $rows
-        );
+        return $rows;
     }
 
     private function getHousesCount()
@@ -58,6 +55,7 @@ class Completion implements Action
     private function splitAddress()
     {
         $tmp = explode(',', $this->address);
+
         return array(
             'pattern' => trim(array_pop($tmp)),
             'address' => implode(',', $tmp),
@@ -66,7 +64,7 @@ class Completion implements Action
 
     private function findAddresses($pattern)
     {
-        $sql = "SELECT full_title
+        $sql = "SELECT full_title title, 0 is_complete
             FROM address_objects ao
             WHERE ?p
                 AND title ilike  '?e%'
@@ -81,12 +79,12 @@ class Completion implements Action
 
         $values = array($parentPart, $pattern, $this->limit);
 
-        return $this->db->execute($sql, $values)->fetchColumn();
+        return $this->db->execute($sql, $values)->fetchAll();
     }
 
     private function findHouses($pattern)
     {
-        $sql    = "SELECT full_title||', '||full_number
+        $sql    = "SELECT full_title||', '||full_number title, 1 is_complete
             FROM houses h
             INNER JOIN address_objects ao
                 ON ao.address_id = h.address_id
@@ -97,6 +95,6 @@ class Completion implements Action
         ;
         $values = array($this->parentId, $pattern, $this->limit);
 
-        return $this->db->execute($sql, $values)->fetchColumn();
+        return $this->db->execute($sql, $values)->fetchAll();
     }
 }
