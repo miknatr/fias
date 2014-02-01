@@ -4,7 +4,7 @@ namespace FIas\Tests;
 
 use Fias\AddressHelper;
 
-class AddressHelperTest extends Action
+class AddressHelperTest extends ActionTest
 {
     public function testFindAddress()
     {

@@ -4,7 +4,7 @@ namespace Fias\Tests;
 
 use Fias\Action\Validation;
 
-class ActionValidationTest extends Action
+class ActionValidationTest extends ActionTest
 {
     public function testNotFound()
     {

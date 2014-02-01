@@ -4,7 +4,7 @@ namespace Fias\Tests;
 
 use Fias\Action\Completion;
 
-class ActionCompletionTest extends Action
+class ActionCompletionTest extends ActionTest
 {
     public function testNotFound()
     {

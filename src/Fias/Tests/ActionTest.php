@@ -6,7 +6,7 @@ use Fias\Config;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
 
-class Action extends \PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ConnectionInterface
