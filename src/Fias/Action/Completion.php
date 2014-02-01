@@ -19,7 +19,7 @@ class Completion implements Action
     {
         $this->db      = $db;
         $this->address = $address;
-        $this->limit   = (int)$limit;
+        $this->limit   = (int) $limit;
 
         if ($this->limit > static::MAX_LIMIT) {
             throw new HttpException('Превышен лимит.', 400);
