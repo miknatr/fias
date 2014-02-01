@@ -12,6 +12,9 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $config = Config::get('config');
 $db     = ConnectionFactory::getConnection($config->getParam('database'));
+
+$dataBaseName = $config->getParam('database')['database'];
+
 $log    = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . '/logs/cli.log'));
 
@@ -29,7 +32,7 @@ try {
         $directory = $loader->load();
     }
 
-    DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/01_tables.sql');
+    DbHelper::runFile($dataBaseName, __DIR__ . '/database/01_tables.sql');
 
     $addressObjectsConfig = $config->getParam('import')['address_objects'];
     $addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
@@ -64,14 +67,13 @@ try {
 
     $houses->import($reader);
 
-
-    DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/02_indexes.sql');
+    DbHelper::runFile($dataBaseName, __DIR__ . '/database/02_indexes.sql');
 
     $addressObjects->modifyDataAfterImport();
     $houses->modifyDataAfterImport();
 
-    DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/03_constraints.sql');
-    DbHelper::runFile($config->getParam('database')['database'], __DIR__ . '/database/04_clean_up.sql');
+    DbHelper::runFile($dataBaseName, __DIR__ . '/database/03_constraints.sql');
+    DbHelper::runFile($dataBaseName, __DIR__ . '/database/04_clean_up.sql');
 } catch (\Exception $e) {
     $log->addError($e->getMessage());
     echo "В процессе инициализации произошла ошибка.\n";
