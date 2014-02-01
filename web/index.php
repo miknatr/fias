@@ -17,7 +17,7 @@ $log    = new Logger('http');
 $log->pushHandler(new StreamHandler(__DIR__ . '/../logs/http.log'));
 
 try {
-    $result = Handler::handle($_SERVER['REQUEST_URI'], $db);
+    $result = Handler::handle($_SERVER['REQUEST_URI'], $_GET, $db);
 
     header('Content-type: application/json');
     echo json_encode($result);

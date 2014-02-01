@@ -6,49 +6,41 @@ use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Handler
 {
-    private static $actions = array('complete', 'validate');
-
-    public static function handle($uri, ConnectionInterface $db)
+    public static function handle($uri, $params, ConnectionInterface $db)
     {
-        $params = static::parseUri($uri);
-
-        return static::$params['action']($db, $params);
+        $action = static::getAction($uri);
+        switch($action) {
+            case 'complete':
+                return static::complete($db, $params);
+                break;
+            case 'validate':
+                return static::validate($db, $params);
+                break;
+            default:
+                throw new HttpException('Not Found', 404);
+                break;
+        }
     }
 
-    private static function parseUri($uri)
+    private static function getAction($uri)
     {
-        $tmp = explode('/', explode('?', $uri)[0]);
+        $tmp = explode('/', explode('?', $uri, 0)[0], 3);
 
         if ((count($tmp) < 2) || ($tmp[1] != 'api')) {
             throw new HttpException('Bad Request', 400);
         }
 
-        $result = array('action' => $tmp[2]);
-        if (!in_array($result['action'], static::$actions)) {
-            throw new HttpException('Not Found', 404);
-        }
+        $action = $tmp[2];
 
-        if ($result['action'] == 'complete') {
-            $result['limit'] = static::getParam('limit', 50);
-        }
-
-        $result['address'] = static::getParam('address');
-
-        return $result;
-    }
-
-    private static function getParam($name, $default = null)
-    {
-        return !empty($_GET[$name])
-            ? $_GET[$name]
-            : $default
-        ;
+        return $action;
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
     private static function complete(ConnectionInterface $db, $params)
     {
-        $request = new Completion($db, $params['address'], $params['limit']);
+        $address = !empty($params['address']) ? $params['address'] : null;
+        $limit   = !empty($params['limit']) ? $params['address'] : 50;
+        $request = new Completion($db, $address, $limit);
 
         return $request->run();
     }
@@ -56,7 +48,8 @@ class Handler
     /** @noinspection PhpUnusedPrivateMethodInspection */
     private static function validate(ConnectionInterface $db, $params)
     {
-        $request = new Validation($db, $params['address']);
+        $address = !empty($params['address']) ? $params['address'] : null;
+        $request = new Validation($db, $address);
 
         return $request->run();
     }
