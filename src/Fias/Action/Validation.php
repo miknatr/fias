@@ -1,11 +1,11 @@
 <?php
 
-namespace Fias\Action;
+namespace Fias\ApiAction;
 
 use Fias\AddressHelper;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class Validation implements Action
+class Validation implements ApiActionInterface
 {
     /** @var ConnectionInterface */
     private $db;

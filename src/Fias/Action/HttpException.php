@@ -1,6 +1,6 @@
 <?php
 
-namespace Fias\Action;
+namespace Fias\ApiAction;
 
 class HttpException extends \Exception
 {

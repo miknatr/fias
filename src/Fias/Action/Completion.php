@@ -1,11 +1,11 @@
 <?php
 
-namespace Fias\Action;
+namespace Fias\ApiAction;
 
 use Fias\AddressHelper;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class Completion implements Action
+class Completion implements ApiActionInterface
 {
     const MAX_LIMIT = 50;
 

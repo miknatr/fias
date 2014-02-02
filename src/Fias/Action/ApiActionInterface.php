@@ -1,8 +1,8 @@
 <?php
 
-namespace Fias\Action;
+namespace Fias\ApiAction;
 
-interface Action
+interface ApiActionInterface
 {
     /**
      * @return array

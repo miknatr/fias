@@ -1,6 +1,6 @@
 <?php
 
-namespace Fias\Action;
+namespace Fias\ApiAction;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 

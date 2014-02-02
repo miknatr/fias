@@ -2,7 +2,7 @@
 
 namespace Fias\Tests;
 
-use Fias\Action\Validation;
+use Fias\ApiAction\Validation;
 
 class ActionValidationTest extends ActionTest
 {

@@ -2,7 +2,7 @@
 
 namespace Fias\Tests;
 
-use Fias\Action\Completion;
+use Fias\ApiAction\Completion;
 
 class ActionCompletionTest extends ActionTest
 {
@@ -35,7 +35,7 @@ class ActionCompletionTest extends ActionTest
     }
 
     /**
-     * @expectedException \Fias\Action\HttpException
+     * @expectedException \Fias\ApiAction\HttpException
      * @expectedExceptionCode 400
      */
     public function testLimitOverflow()

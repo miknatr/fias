@@ -3,8 +3,8 @@
 namespace Fias;
 
 use Grace\DBAL\ConnectionFactory;
-use Fias\Action\HttpException;
-use Fias\Action\Handler;
+use Fias\ApiAction\HttpException;
+use Fias\ApiAction\Handler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 

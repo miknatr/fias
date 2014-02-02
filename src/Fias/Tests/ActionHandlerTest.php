@@ -3,7 +3,7 @@
 namespace Fias\Tests;
 
 use Fias\Config;
-use Fias\Action\Handler;
+use Fias\ApiAction\Handler;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
 
@@ -20,7 +20,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Fias\Action\HttpException
+     * @expectedException \Fias\ApiAction\HttpException
      * @expectedExceptionCode 404
      */
     public function testNotFound()
@@ -29,7 +29,7 @@ class ActionHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Fias\Action\HttpException
+     * @expectedException \Fias\ApiAction\HttpException
      * @expectedExceptionCode 400
      */
     public function testBadParams()
