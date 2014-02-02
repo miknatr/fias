@@ -4,8 +4,8 @@ namespace Fias\ApiAction;
 
 class HttpException extends \Exception
 {
-    public function __construct($httpCode)
+    public function __construct($httpStatusCode)
     {
-        parent::__construct('', $httpCode);
+        parent::__construct('', $httpStatusCode);
     }
 }
