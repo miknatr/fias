@@ -17,6 +17,16 @@ $dataBaseName = $config->getParam('database')['database'];
 
 $log    = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . '/logs/cli.log'));
+set_error_handler(
+    function ($errNo, $errStr, $errFile, $errLine)
+    {
+        $message = $errNo . "::"
+            . $errStr . "\n"
+            . $errFile . "::"
+            . $errLine . "\n";
+        throw new \Exception($message);
+    }
+);
 
 try {
     if ($argc == 2) {
@@ -77,5 +87,5 @@ try {
 } catch (\Exception $e) {
     $log->addError($e->getMessage());
     echo "В процессе инициализации произошла ошибка.\n";
+    exit(1);
 }
-

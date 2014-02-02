@@ -15,6 +15,16 @@ $db     = ConnectionFactory::getConnection($config->getParam('database'));
 $log    = new Logger('http');
 
 $log->pushHandler(new StreamHandler(__DIR__ . '/../logs/http.log'));
+set_error_handler(
+    function ($errNo, $errStr, $errFile, $errLine)
+    {
+        $message = $errNo . "::"
+            . $errStr . "\n"
+            . $errFile . "::"
+            . $errLine . "\n";
+        throw new \Exception($message);
+    }
+);
 
 try {
     $result = Handler::handle($_SERVER['REQUEST_URI'], $_GET, $db);
