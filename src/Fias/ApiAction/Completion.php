@@ -22,7 +22,7 @@ class Completion implements ApiActionInterface
         $this->limit   = (int) $limit;
 
         if ($this->limit > static::MAX_LIMIT) {
-            throw new HttpException('Превышен лимит.', 400);
+            throw new HttpException(400);
         }
     }
 

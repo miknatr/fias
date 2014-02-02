@@ -17,7 +17,7 @@ class Handler
                 return static::validate($db, $params);
                 break;
             default:
-                throw new HttpException('Not Found', 404);
+                throw new HttpException(404);
                 break;
         }
     }
@@ -27,7 +27,7 @@ class Handler
         $tmp = explode('/', explode('?', $uri, 0)[0], 3);
 
         if ((count($tmp) < 2) || ($tmp[1] != 'api')) {
-            throw new HttpException('Bad Request', 400);
+            throw new HttpException(400);
         }
 
         $action = $tmp[2];
