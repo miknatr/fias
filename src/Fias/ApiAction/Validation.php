@@ -2,7 +2,7 @@
 
 namespace Fias\ApiAction;
 
-use Fias\AddressHelper;
+use Fias\AddressStorage;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Validation implements ApiActionInterface
@@ -19,27 +19,19 @@ class Validation implements ApiActionInterface
 
     public function run()
     {
-        $result = array(
-            'is_complete' => false,
-            'is_valid'    => false,
-        );
+        $storage = new AddressStorage($this->db);
 
-        $completeAddress = AddressHelper::findHouse($this->db, $this->address);
+        $completeAddress = $storage->findHouse($this->address);
         if ($completeAddress) {
-            $result['is_complete'] = true;
-            $result['is_valid']    = true;
-
-            return $result;
+            return array('is_complete' => true, 'is_valid' => true);
         }
 
-        $incompleteAddress = AddressHelper::findAddress($this->db, $this->address);
+        $incompleteAddress = $storage->findAddress($this->address);
         if ($incompleteAddress) {
-            $result['is_valid'] = true;
-
-            return $result;
+            return array('is_complete' => false, 'is_valid' => true);
         }
 
         // Ничего не нашлось
-        return $result;
+        return array('is_complete' => false, 'is_valid' => false);
     }
 }

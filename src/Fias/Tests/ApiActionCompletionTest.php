@@ -4,7 +4,7 @@ namespace Fias\Tests;
 
 use Fias\ApiAction\Completion;
 
-class ActionCompletionTest extends ActionTest
+class ApiActionCompletionTest extends MockDatabaseTest
 {
     public function testNotFound()
     {

@@ -7,7 +7,7 @@ use Fias\ApiAction\Handler;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
 
-class ActionHandlerTest extends \PHPUnit_Framework_TestCase
+class ApiActionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ConnectionInterface

@@ -4,9 +4,17 @@ namespace Fias;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class AddressHelper
+class AddressStorage
 {
-    public static function findAddress(ConnectionInterface $db, $address)
+    /** @var ConnectionInterface */
+    private $db;
+
+    public function __construct(ConnectionInterface $db)
+    {
+        $this->db = $db;
+    }
+
+    public function findAddress($address)
     {
         $level = count(explode(',', $address)) - 1;
         $sql   = 'SELECT address_id
@@ -15,17 +23,17 @@ class AddressHelper
                       AND lower(full_title) = lower(?q)'
         ;
 
-        $result = $db->execute($sql, array($level, $address))->fetchOneOrFalse();
+        $result = $this->db->execute($sql, array($level, $address))->fetchOneOrFalse();
 
         return $result ? $result['address_id'] : null;
     }
 
-    public static function findHouse(ConnectionInterface $db, $address)
+    public function findHouse($address)
     {
         $tmp   = explode(',', $address);
         $house = trim(array_pop($tmp));
 
-        $addressId = static::findAddress($db, implode(',', $tmp));
+        $addressId = $this->findAddress(implode(',', $tmp));
         if ($addressId) {
             $sql = 'SELECT house_id
                     FROM houses
@@ -33,7 +41,7 @@ class AddressHelper
                         AND full_number = lower(?q)'
             ;
 
-            $result = $db->execute($sql, array($addressId, $house))->fetchOneOrFalse();
+            $result = $this->db->execute($sql, array($addressId, $house))->fetchOneOrFalse();
             if ($result) {
                 return $result['house_id'];
             }

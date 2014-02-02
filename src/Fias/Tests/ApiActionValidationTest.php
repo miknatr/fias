@@ -4,7 +4,7 @@ namespace Fias\Tests;
 
 use Fias\ApiAction\Validation;
 
-class ActionValidationTest extends ActionTest
+class ApiActionValidationTest extends MockDatabaseTest
 {
     public function testNotFound()
     {

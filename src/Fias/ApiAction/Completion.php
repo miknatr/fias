@@ -2,7 +2,7 @@
 
 namespace Fias\ApiAction;
 
-use Fias\AddressHelper;
+use Fias\AddressStorage;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Completion implements ApiActionInterface
@@ -28,8 +28,9 @@ class Completion implements ApiActionInterface
 
     public function run()
     {
+        $storage        = new AddressStorage($this->db);
         $addressParts   = $this->splitAddress();
-        $this->parentId = AddressHelper::findAddress($this->db, $addressParts['address']);
+        $this->parentId = $storage->findAddress($addressParts['address']);
 
         if ($this->getHousesCount()) {
             $rows = $this->findHouses($addressParts['pattern']);
