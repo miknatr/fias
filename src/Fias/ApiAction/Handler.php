@@ -8,7 +8,11 @@ class Handler
 {
     public static function handleRequest($uri, $params, ConnectionInterface $db)
     {
-        $uri = rtrim($uri, '/');
+        if (!preg_match('/^[^\?]+(|\/)/', $uri, $uri)) {
+            throw new HttpException(404);
+        }
+
+        $uri = rtrim(array_shift($uri), '/');
         switch ($uri) {
             case '/api/complete':
                 return static::complete($db, $params);
