@@ -8,9 +8,7 @@ class Handler
 {
     public static function handleRequest($uri, $params, ConnectionInterface $db)
     {
-        $tmp    = explode('?', $uri, 2);
-        $action = rtrim(array_shift($tmp), '/');
-
+        $action = rtrim(explode('?', $uri, 2)[0], '/');
         switch ($action) {
             case '/api/complete':
                 return (new Completion($db, $params))->run();

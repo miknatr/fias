@@ -15,7 +15,7 @@ class Completion implements ApiActionInterface
     private $parentId;
     private $limit;
 
-    public function __construct(ConnectionInterface $db, $params)
+    public function __construct(ConnectionInterface $db, array $params)
     {
 
         $this->db      = $db;
