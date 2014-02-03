@@ -29,7 +29,7 @@ class Completion implements ApiActionInterface
     public function run()
     {
         $storage        = new AddressStorage($this->db);
-        $addressParts   = $this->splitAddress();
+        $addressParts   = static::splitAddress($this->address);
         $this->parentId = $storage->findAddress($addressParts['address']);
 
         if ($this->getHousesCount()) {
@@ -51,16 +51,6 @@ class Completion implements ApiActionInterface
         $result = $this->db->execute($sql, array($this->parentId))->fetchOneOrFalse();
 
         return $result ? $result['house_count'] : null;
-    }
-
-    private function splitAddress()
-    {
-        $tmp = explode(',', $this->address);
-
-        return array(
-            'pattern' => trim(array_pop($tmp)),
-            'address' => implode(',', $tmp),
-        );
     }
 
     private function findAddresses($pattern)
@@ -97,5 +87,15 @@ class Completion implements ApiActionInterface
         $values = array($this->parentId, $pattern, $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
+    }
+
+    private static function splitAddress($address)
+    {
+        $tmp = explode(',', $address);
+
+        return array(
+            'pattern' => trim(array_pop($tmp)),
+            'address' => implode(',', $tmp),
+        );
     }
 }

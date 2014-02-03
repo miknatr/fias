@@ -25,7 +25,7 @@ class ApiActionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotFound()
     {
-        Handler::handle('/api/wrong/destination', array(), $this->db);
+        Handler::handleRequest('/api/wrong/destination', array(), $this->db);
     }
 
     /**
@@ -34,7 +34,7 @@ class ApiActionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParams()
     {
-        Handler::handle('/complete', array(), $this->db);
+        Handler::handleRequest('/complete', array(), $this->db);
     }
 
 }

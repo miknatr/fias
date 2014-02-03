@@ -6,7 +6,7 @@ use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Handler
 {
-    public static function handle($uri, $params, ConnectionInterface $db)
+    public static function handleRequest($uri, $params, ConnectionInterface $db)
     {
         $action = static::getAction($uri);
         switch($action) {

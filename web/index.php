@@ -27,7 +27,7 @@ set_error_handler(
 );
 
 try {
-    $result = Handler::handle($_SERVER['REQUEST_URI'], $_GET, $db);
+    $result = Handler::handleRequest($_SERVER['REQUEST_URI'], $_GET, $db);
 
     header('Content-type: application/json');
     echo json_encode($result);
