@@ -11,10 +11,14 @@ class Validation implements ApiActionInterface
     private $db;
     private $address;
 
-    public function __construct(ConnectionInterface $db, $address)
+    public function __construct(ConnectionInterface $db, $params)
     {
+        if (empty($params['address'])) {
+            throw new HttpException(400);
+        }
+
+        $this->address = $params['address'];
         $this->db      = $db;
-        $this->address = $address;
     }
 
     public function run()

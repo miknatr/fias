@@ -8,40 +8,19 @@ class Handler
 {
     public static function handleRequest($uri, $params, ConnectionInterface $db)
     {
-        if (!preg_match('/^[^\?]+(|\/)/', $uri, $uri)) {
-            throw new HttpException(404);
-        }
+        $tmp    = explode('?', $uri, 2);
+        $action = rtrim(array_shift($tmp), '/');
 
-        $uri = rtrim(array_shift($uri), '/');
-        switch ($uri) {
+        switch ($action) {
             case '/api/complete':
-                return static::complete($db, $params);
+                return (new Completion($db, $params))->run();
                 break;
             case '/api/validate':
-                return static::validate($db, $params);
+                return (new Validation($db, $params))->run();
                 break;
             default:
                 throw new HttpException(404);
                 break;
         }
-    }
-
-    /** @noinspection PhpUnusedPrivateMethodInspection */
-    private static function complete(ConnectionInterface $db, $params)
-    {
-        $address = !empty($params['address']) ? $params['address'] : null;
-        $limit   = !empty($params['limit']) ? $params['limit'] : 50;
-        $request = new Completion($db, $address, $limit);
-
-        return $request->run();
-    }
-
-    /** @noinspection PhpUnusedPrivateMethodInspection */
-    private static function validate(ConnectionInterface $db, $params)
-    {
-        $address = !empty($params['address']) ? $params['address'] : null;
-        $request = new Validation($db, $address);
-
-        return $request->run();
     }
 }

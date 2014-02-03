@@ -16,7 +16,7 @@ $db           = ConnectionFactory::getConnection($config->getParam('database'));
 
 $dataBaseName = $config->getParam('database')['database'];
 
-$log    = new Logger('cli');
+$log = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . '/logs/cli.log'));
 set_error_handler(
     function ($errNo, $errStr, $errFile, $errLine)

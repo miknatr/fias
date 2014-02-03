@@ -15,11 +15,12 @@ class Completion implements ApiActionInterface
     private $parentId;
     private $limit;
 
-    public function __construct(ConnectionInterface $db, $address, $limit)
+    public function __construct(ConnectionInterface $db, $params)
     {
+
         $this->db      = $db;
-        $this->address = $address;
-        $this->limit   = (int) $limit;
+        $this->address = !empty($params['address']) ? $params['address'] : null;
+        $this->limit   = !empty($params['limit']) ? (int) $params['limit'] : 50;
 
         if ($this->limit > static::MAX_LIMIT) {
             throw new HttpException(400);
@@ -38,7 +39,7 @@ class Completion implements ApiActionInterface
             $rows = $this->findAddresses($addressParts['pattern']);
         }
 
-        return $rows;
+        return array('addresses' => $rows);
     }
 
     private function getHousesCount()
