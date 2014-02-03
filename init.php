@@ -58,7 +58,7 @@ try {
     $housesConfig = $config->getParam('import')['houses'];
     $houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
-// Если не отсекать записи исходя из региона придется грузить 21 млн записей вместо полутора.
+    // Если не отсекать записи исходя из региона придется грузить 21 млн записей вместо полутора.
     $addresses = $db->execute('SELECT address_id FROM address_objects')->fetchColumn();
     $addresses = array_combine($addresses, $addresses);
     $filters   = array(
