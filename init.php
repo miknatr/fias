@@ -33,7 +33,6 @@ set_error_handler(
 try {
     if ($argc == 2) {
         $path = $argv['1'];
-
         if (!is_dir($path)) {
             $path = Dearchiver::extract($config->getParam('file_directory'), $path);
         }
