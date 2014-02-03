@@ -10,9 +10,14 @@ CREATE INDEX "address_objects_parent_id_fkey_idx"
     USING BTREE ("parent_id")
 ;
 
-CREATE INDEX "address_objects_full_title_lower_idx"
+CREATE INDEX "address_objects_level_full_title_lower_idx"
     ON "address_objects"
-    USING BTREE (lower("full_title"))
+    USING BTREE ("level", lower("full_title"))
+;
+
+CREATE INDEX "address_objects_title_lower_idx"
+    ON "address_objects"
+    USING BTREE (lower("title"))
 ;
 
 CREATE INDEX "houses_address_id_fkey_idx"

@@ -5,7 +5,7 @@ namespace Fias\DataSource;
 use Fias\FileHelper;
 use Fias\ImporterException;
 
-class Xml implements DataSource
+class XmlReader implements DataSource
 {
     /** @var \XMLReader */
     private $reader;
