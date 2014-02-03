@@ -24,7 +24,8 @@ set_error_handler(
         $message = $errNo . "::"
             . $errStr . "\n"
             . $errFile . "::"
-            . $errLine . "\n";
+            . $errLine . "\n"
+        ;
         throw new \Exception($message);
     }
 );

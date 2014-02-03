@@ -8,12 +8,12 @@ class Handler
 {
     public static function handleRequest($uri, $params, ConnectionInterface $db)
     {
-        $action = static::getAction($uri);
-        switch($action) {
-            case 'complete':
+        $uri = rtrim($uri, '/');
+        switch ($uri) {
+            case '/api/complete':
                 return static::complete($db, $params);
                 break;
-            case 'validate':
+            case '/api/validate':
                 return static::validate($db, $params);
                 break;
             default:
@@ -22,24 +22,11 @@ class Handler
         }
     }
 
-    private static function getAction($uri)
-    {
-        $tmp = explode('/', explode('?', $uri, 0)[0], 3);
-
-        if ((count($tmp) < 2) || ($tmp[1] != 'api')) {
-            throw new HttpException(400);
-        }
-
-        $action = $tmp[2];
-
-        return $action;
-    }
-
     /** @noinspection PhpUnusedPrivateMethodInspection */
     private static function complete(ConnectionInterface $db, $params)
     {
         $address = !empty($params['address']) ? $params['address'] : null;
-        $limit   = !empty($params['limit']) ? $params['address'] : 50;
+        $limit   = !empty($params['limit']) ? $params['limit'] : 50;
         $request = new Completion($db, $address, $limit);
 
         return $request->run();

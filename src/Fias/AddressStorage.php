@@ -17,10 +17,11 @@ class AddressStorage
     public function findAddress($address)
     {
         $level = count(explode(',', $address)) - 1;
-        $sql   = 'SELECT address_id
-                  FROM address_objects
-                  WHERE level = ?q
-                      AND lower(full_title) = lower(?q)'
+        $sql   = '
+            SELECT address_id
+            FROM address_objects
+            WHERE level = ?q
+                AND lower(full_title) = lower(?q)'
         ;
 
         $result = $this->db->execute($sql, array($level, $address))->fetchOneOrFalse();
@@ -35,10 +36,11 @@ class AddressStorage
 
         $addressId = $this->findAddress(implode(',', $tmp));
         if ($addressId) {
-            $sql = 'SELECT house_id
-                    FROM houses
-                    WHERE address_id = ?q
-                        AND full_number = lower(?q)'
+            $sql = '
+                SELECT house_id
+                FROM houses
+                WHERE address_id = ?q
+                    AND full_number = lower(?q)'
             ;
 
             $result = $this->db->execute($sql, array($addressId, $house))->fetchOneOrFalse();

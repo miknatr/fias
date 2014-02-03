@@ -55,7 +55,8 @@ class Completion implements ApiActionInterface
 
     private function findAddresses($pattern)
     {
-        $sql = "SELECT full_title title, 0 is_complete
+        $sql = "
+            SELECT full_title title, 0 is_complete
             FROM address_objects ao
             WHERE ?p
                 AND title ilike  '?e%'
@@ -75,12 +76,13 @@ class Completion implements ApiActionInterface
 
     private function findHouses($pattern)
     {
-        $sql    = "SELECT full_title||', '||full_number title, 1 is_complete
+        $sql    = "
+            SELECT full_title||', '||full_number title, 1 is_complete
             FROM houses h
             INNER JOIN address_objects ao
                 ON ao.address_id = h.address_id
             WHERE h.address_id = ?q
-                AND full_number ilike  '?e%'
+                AND full_number ilike '?e%'
             ORDER BY (regexp_matches(full_number, '^[0-9]+', 'g'))[1]
             LIMIT ?e"
         ;

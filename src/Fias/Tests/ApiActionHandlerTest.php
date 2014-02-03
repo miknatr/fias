@@ -34,7 +34,7 @@ class ApiActionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadParams()
     {
-        Handler::handleRequest('/complete', array(), $this->db);
+        Handler::handleRequest('/api/complete/', array('limit' => 70), $this->db);
     }
 
 }
