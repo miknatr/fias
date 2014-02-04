@@ -1,6 +1,8 @@
 <?php
 // STOPPER слить с init.php после ребеза доработки по init.php в мастер
-// STOPPER убрать лишние array_shift -- переделать на fetchResult
+// STOPPER проверки статусов
+// STOPPER тотальное дублирование кода между init.php; index.php; update.php исправить.
+// STOPPER целостность, попробовать DEFFERABLE для малого количества данных.
 namespace Fias;
 
 use Fias\DataSource\XmlReader;
@@ -16,14 +18,10 @@ $config       = Config::get('config');
 $importConfig = Config::get('import');
 $db           = ConnectionFactory::getConnection($config->getParam('database'));
 
-$dataBaseName = $config->getParam('database')['database'];
-
-// STOPPER вообще вынести в отдельный файл, поскольку используется кроме как здесь еще в init.php и index.php
-$log    = new Logger('cli');
+$log = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . '/logs/cli.log'));
 set_error_handler(
-    function ($errNo, $errStr, $errFile, $errLine)
-    {
+    function ($errNo, $errStr, $errFile, $errLine) {
         $message = $errNo . "::"
             . $errStr . "\n"
             . $errFile . "::"
@@ -33,9 +31,15 @@ set_error_handler(
     }
 );
 
+// STOPPER отладочный код, убрать. Не забыть обратно включить временные таблицы.
+$db->execute('DROP TABLE IF EXISTS address_objects_xml_importer');
+$db->execute('DROP TABLE IF EXISTS houses_xml_importer');
+
 try {
-    if ($argc == 2) {
-        $path = $argv['1'];
+    $db->start();
+
+    if ($_SERVER['argc'] == 2) {
+        $path = $_SERVER['argv']['1'];
         if (!is_dir($path)) {
             $path = Dearchiver::extract($config->getParam('file_directory'), $path);
         }
@@ -47,20 +51,22 @@ try {
     }
 
     $addressObjectsConfig = $importConfig->getParam('address_objects');
-    $addressObjects       = new AddressObjectsUpdateImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
+    $fields               = $addressObjectsConfig['fields'];
+    $fields['OPERSTATUS'] = array('name' => 'update_status', 'type' => 'integer');
+    $addressObjects       = new Importer($db, $addressObjectsConfig['table_name'], $fields);
     $reader               = new XmlReader(
         $directory->getAddressObjectFile(),
         $addressObjectsConfig['node_name'],
-        array_keys($addressObjectsConfig['fields']),
+        array_keys($fields),
         $addressObjectsConfig['filters']
     );
 
     $addressObjects->import($reader);
 
     $housesConfig = $importConfig->getParam('houses');
-    $houses       = new HousesUpdateImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
+    $houses       = new Importer($db, $housesConfig['table_name'], $housesConfig['fields']);
 
-   $reader    = new XmlReader(
+    $reader = new XmlReader(
         $directory->getHousesFile(),
         $housesConfig['node_name'],
         array_keys($housesConfig['fields']),
@@ -68,14 +74,10 @@ try {
     );
 
     $houses->import($reader);
-
-    $addressObjects->modifyDataAfterImport();
-    $houses->modifyDataAfterImport();
-
-    $db->execute('ROLLBACK');
+    $db->commit();
 } catch (\Exception $e) {
     $log->addError($e->getMessage());
-    $db->execute('ROLLBACK');
+    $db->rollback();
     echo "В процессе инициализации произошла ошибка.\n";
     exit(1);
 }
