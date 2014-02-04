@@ -24,9 +24,7 @@ class AddressStorage
                 AND lower(full_title) = lower(?q)'
         ;
 
-        $result = $this->db->execute($sql, array($level, $address))->fetchOneOrFalse();
-
-        return $result ? $result['address_id'] : null;
+        return $this->db->execute($sql, array($level, $address))->fetchResult();
     }
 
     public function findHouse($address)
@@ -43,10 +41,7 @@ class AddressStorage
                     AND full_number = lower(?q)'
             ;
 
-            $result = $this->db->execute($sql, array($addressId, $house))->fetchOneOrFalse();
-            if ($result) {
-                return $result['house_id'];
-            }
+            return $this->db->execute($sql, array($addressId, $house))->fetchResult();
         }
 
         return null;
