@@ -14,6 +14,16 @@ class Directory
         $this->directoryPath = $path;
     }
 
+    public function getDeletedAddressObjectFile()
+    {
+        return $this->directoryPath . '/' . $this->find('AS_DEL_ADDROBJ');
+    }
+
+    public function getDeletedHousesFile()
+    {
+        return $this->directoryPath . '/' . $this->find('AS_DEL_HOUSE_');
+    }
+
     public function getAddressObjectFile()
     {
         return $this->directoryPath . '/' . $this->find('AS_ADDROBJ');
