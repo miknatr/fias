@@ -33,8 +33,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader     = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
         $filesCount = count(scandir($loader->load()->getPath()));
-
-        $this->assertEquals(17, $filesCount);
+        $this->assertGreaterThan(16, $filesCount);
     }
 
     public function testReWritingBadFile()
