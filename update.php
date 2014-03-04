@@ -6,7 +6,6 @@
 namespace Fias;
 
 use Fias\DataSource\XmlReader;
-use Fias\Loader\InitLoader;
 use Fias\Loader\UpdateLoader;
 use Grace\DBAL\ConnectionFactory;
 use Monolog\Handler\StreamHandler;
@@ -30,10 +29,6 @@ set_error_handler(
         throw new \Exception($message);
     }
 );
-
-// STOPPER отладочный код, убрать. Не забыть обратно включить временные таблицы.
-$db->execute('DROP TABLE IF EXISTS address_objects_xml_importer');
-$db->execute('DROP TABLE IF EXISTS houses_xml_importer');
 
 try {
     $db->start();
@@ -78,6 +73,6 @@ try {
 } catch (\Exception $e) {
     $log->addError($e->getMessage());
     $db->rollback();
-    echo "В процессе инициализации произошла ошибка.\n";
+    fwrite(STDERR, "В процессе обновления произошла ошибка.\n");
     exit(1);
 }
