@@ -2,7 +2,6 @@
 
 namespace Fias\Tests;
 
-use Fias\Config;
 use Fias\DbHelper;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
@@ -14,8 +13,7 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $config   = Config::get('config');
-        $this->db = ConnectionFactory::getConnection($config->getParam('database'));
+        $this->db = ConnectionFactory::getConnection(Helper::getConfig()->getParam('database'));
     }
 
     /**

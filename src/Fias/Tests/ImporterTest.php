@@ -2,7 +2,6 @@
 
 namespace Fias\Tests;
 
-use Fias\Config;
 use Fias\Importer;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
@@ -15,7 +14,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db    = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
+        $this->db    = ConnectionFactory::getConnection(Helper::getConfig()->getParam('database'));
         $this->table = 'test_table';
     }
 

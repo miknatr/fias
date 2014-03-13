@@ -27,11 +27,8 @@ class Config
     /** @var Config[] */
     private static $configCaches = array();
 
-    public static function get($name)
+    public static function get($pathToFile)
     {
-        $name       = basename($name);
-        $pathToFile = __DIR__ . '/../../config/' . $name . '.php';
-
         if (!isset(static::$configCaches[$pathToFile])) {
             if (!is_file($pathToFile)) {
                 throw new FileException('Файл не найден: ' . $pathToFile);

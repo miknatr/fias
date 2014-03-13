@@ -13,7 +13,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config        = Config::get('config');
+        $this->config        = Helper::getConfig();
         $this->fileDirectory = __DIR__ . '/file_directory';
 
         if (!is_dir($this->fileDirectory)) {
