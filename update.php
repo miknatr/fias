@@ -3,6 +3,7 @@
 // STOPPER проверки статусов
 // STOPPER тотальное дублирование кода между init.php; index.php; update.php исправить.
 // STOPPER целостность, попробовать DEFFERABLE для малого количества данных.
+// STOPPER контроль заливки апдейтов в должном порядке.
 namespace Fias;
 
 use Fias\DataSource\XmlReader;
@@ -13,8 +14,9 @@ use Monolog\Logger;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$config       = Config::get('config');
-$importConfig = Config::get('import');
+$configDir    = __DIR__ . '/config/';
+$config       = Config::get($configDir.'config.php');
+$importConfig = Config::get($configDir.'import.php');
 $db           = ConnectionFactory::getConnection($config->getParam('database'));
 
 $log = new Logger('cli');

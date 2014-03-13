@@ -10,8 +10,9 @@ use Monolog\Logger;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$config       = Config::get('config');
-$importConfig = Config::get('import');
+$configDir    = __DIR__ . '/config/';
+$config       = Config::get($configDir.'config.php');
+$importConfig = Config::get($configDir.'import.php');
 $db           = ConnectionFactory::getConnection($config->getParam('database'));
 
 $dataBaseName = $config->getParam('database')['database'];
