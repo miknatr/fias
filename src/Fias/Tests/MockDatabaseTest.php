@@ -14,7 +14,7 @@ class MockDatabaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Helper::getConfig()->getParam('database'));
+        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
 
         $this->db->execute('START TRANSACTION');
         $this->db->execute('

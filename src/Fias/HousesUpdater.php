@@ -2,7 +2,7 @@
 
 namespace Fias;
 
-class HousesUpdater
+class HousesUpdater extends Importer
 {
 
 }

@@ -11,9 +11,15 @@ class Helper extends \PHPUnit_Framework_TestCase
     /**
      * @return \Fias\Config
      */
-    public static function getConfig()
+    public static function getGeneralConfig()
     {
         $pathToConfig = __DIR__ . '/../../../config/config.php';
+        return Config::get($pathToConfig);
+    }
+
+    public static function getImportConfig()
+    {
+        $pathToConfig = __DIR__ . '/../../../config/import.php';
         return Config::get($pathToConfig);
     }
 
