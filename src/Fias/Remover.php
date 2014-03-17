@@ -30,13 +30,14 @@ class Remover
     {
         $ids = array();
 
-        foreach($rows as $row) {
+        foreach ($rows as $row) {
             if (empty($row[$this->keyField])) {
                 throw new \LogicException('Не найдено поле: ' . $this->keyField);
             }
 
             $ids[] = $row[$this->keyField];
         }
-        // STOPPER отсюда и до обеда.
+
+        $this->db->execute('DELETE FROM ?f WHERE ?f IN (?l)', array($this->table, $this->keyField, $ids));
     }
 }
