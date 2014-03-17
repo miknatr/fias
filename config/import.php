@@ -17,10 +17,11 @@ return array(
             array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47, 50, 77, 78)),
         ),
     ),
-    'houses'          => array(
-        'table_name' => 'houses',
-        'node_name'  => 'House',
-        'fields'     => array(
+    'houses' => array(
+        'table_name'  => 'houses',
+        'node_name'   => 'House',
+        'primary_key' => 'HOUSEID',
+        'fields'      => array(
             'HOUSEID'   => array('name' => 'id', 'type' => 'uuid'),
             'HOUSEGUID' => array('name' => 'house_id', 'type' => 'uuid'),
             'AOGUID'    => array('name' => 'address_id', 'type' => 'uuid'),
