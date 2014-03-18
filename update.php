@@ -1,7 +1,5 @@
 <?php
-// STOPPER слить с init.php после ребеза доработки по init.php в мастер
 // STOPPER проверки статусов
-// STOPPER тотальное дублирование кода между init.php; index.php; update.php исправить.
 // STOPPER проверить производительность DEFFERABLE на бОльшем объеме данных
 // STOPPER контроль заливки апдейтов в должном порядке.
 namespace Fias;
@@ -72,25 +70,23 @@ try {
         )
     );
 
-    $fields               = $addressObjectsConfig['fields'];
-    $fields['OPERSTATUS'] = array('name' => 'update_status', 'type' => 'integer');
-    $addressObjects       = new Importer($db, $addressObjectsConfig['table_name'], $fields);
-    $reader               = new XmlReader(
+    $addressObjectFields   = $addressObjectsConfig['fields'];
+    $addressObjectsUpdater = new AddressObjectsUpdater($this->db, $addressObjectsConfig['table_name'], $addressObjectFields);
+    $addressObjectsUpdater->update(new XmlReader(
         $directory->getAddressObjectFile(),
         $addressObjectsConfig['node_name'],
-        array_keys($fields),
+        array_keys($addressObjectFields),
         $addressObjectsConfig['filters']
-    );
-    $addressObjects->import($reader);
+    ));
 
-    $houses = new Importer($db, $housesConfig['table_name'], $housesConfig['fields']);
-    $reader = new XmlReader(
-        $directory->getHousesFile(),
+    $houseFields   = $housesConfig['fields'];
+    $housesUpdater = new AddressObjectsUpdater($this->db, $housesConfig['table_name'], $houseFields);
+    $housesUpdater->update(new XmlReader(
+        $directory->getAddressObjectFile(),
         $housesConfig['node_name'],
-        array_keys($housesConfig['fields']),
-        array()
-    );
-    $houses->import($reader);
+        array_keys($houseFields),
+        $housesConfig['filters']
+    ));
 
     $db->commit();
 } catch (\Exception $e) {
