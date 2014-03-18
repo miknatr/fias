@@ -14,6 +14,12 @@ class Directory
         $this->directoryPath = $path;
     }
 
+    public function getVersionId()
+    {
+        $prefix = 'VERSION_ID_';
+        return str_replace($prefix, '', $this->find($prefix));
+    }
+
     public function getDeletedAddressObjectFile()
     {
         return $this->directoryPath . '/' . $this->find('AS_DEL_ADDROBJ');

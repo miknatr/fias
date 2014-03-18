@@ -44,6 +44,11 @@ CREATE INDEX "tmp_houses_structure_fkey_idx"
     ON "houses"
     USING BTREE ("structure")
 ;
+
+CREATE UNIQUE INDEX "update_log_version_id_idx"
+    ON "update_log"
+    USING BTREE ("version_id")
+;
 -- Что бы если заглючит оптимизатор,он планы составил исходя из индексов все равно в момент массовой правки
 ANALYZE;
 

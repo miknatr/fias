@@ -88,6 +88,8 @@ try {
 
     DbHelper::runFile($dataBaseName, __DIR__ . '/database/03_constraints.sql');
     DbHelper::runFile($dataBaseName, __DIR__ . '/database/04_clean_up.sql');
+
+    UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());
 } catch (\Exception $e) {
     $log->addError($e->getMessage());
     fwrite(STDERR, "В процессе инициализации произошла ошибка.\n");
