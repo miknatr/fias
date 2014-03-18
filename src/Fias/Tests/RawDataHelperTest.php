@@ -26,17 +26,19 @@ class RawDataHelperTest extends \PHPUnit_Framework_TestCase
         $addressObjectFields['level']      = array('name' => 'level', 'type' => 'integer');
         $addressObjectFields['full_title'] = array('name' => 'full_title');
 
-
         DbHelper::createTable(
             $this->db,
             $this->addressObjectTable,
             $addressObjectFields
         );
 
+        $housesFields                = $importConfig->getParam('houses')['fields'];
+        $housesFields['full_number'] = array('name' => 'full_number');
+
         DbHelper::createTable(
             $this->db,
             $this->housesTable,
-            $importConfig->getParam('houses')['fields']
+            $housesFields
         );
 
         $addressObjects = array(
@@ -47,6 +49,16 @@ class RawDataHelperTest extends \PHPUnit_Framework_TestCase
             'INSERT INTO ?f ("id", "address_id", "parent_id", "title", "postal_code", "prefix")
             VALUES ?v',
             array($this->addressObjectTable, $addressObjects)
+        );
+
+        $houses = array(
+            array( 'a64330e3-7a41-41ee-a8a2-41db8693c584', 'a64330e3-7a41-41ee-a8a2-41db8693c584', 'afdda482-42ae-45d3-9af1-61ac6da41105', '02', '1', 'нет'),
+            array( 'b3ace9e8-dead-4e2c-9c56-e524aef28082', '4fd3b082-34bf-4ad9-8f27-c5c92952554c', 'afdda482-42ae-45d3-9af1-61ac6da41105', '02a', '02a', null),
+        );
+        $this->db->execute(
+            'INSERT INTO ?f ("id", "house_id", "address_id", "number", "structure", "building")
+            VALUES ?v',
+            array($this->housesTable, $houses)
         );
     }
 
@@ -88,6 +100,35 @@ class RawDataHelperTest extends \PHPUnit_Framework_TestCase
             $this->db->execute(
                 "SELECT level FROM ?f WHERE id = 'afdda482-42ae-45d3-9af1-61ac6da41105'",
                 array($this->addressObjectTable)
+            )->fetchResult()
+        );
+    }
+
+    public function testCleanHouses()
+    {
+        RawDataHelper::cleanHouses($this->db, $this->housesTable);
+
+        $this->assertEquals(
+            1,
+            $this->db->execute(
+                'SELECT COUNT(*) FROM ?f WHERE building IS NULL AND id = ?q',
+                array($this->housesTable, 'a64330e3-7a41-41ee-a8a2-41db8693c584')
+            )->fetchResult()
+        );
+
+        $this->assertEquals(
+            1,
+            $this->db->execute(
+                'SELECT COUNT(*) FROM ?f WHERE building IS NULL AND structure IS NULL AND id = ?q',
+                array($this->housesTable, 'b3ace9e8-dead-4e2c-9c56-e524aef28082')
+            )->fetchResult()
+        );
+
+        $this->assertEquals(
+            1,
+            $this->db->execute(
+                'SELECT COUNT(*) FROM ?f WHERE full_number = ?q  AND id = ?q',
+                array($this->housesTable, '02с1', 'a64330e3-7a41-41ee-a8a2-41db8693c584')
             )->fetchResult()
         );
     }
