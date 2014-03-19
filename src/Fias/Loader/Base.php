@@ -26,7 +26,7 @@ abstract class Base
     /** @var SoapResultWrapper */
     private $fileInfoResult = null;
 
-    protected function getLastFileInfo()
+    public function getLastFileInfo()
     {
         if (!$this->fileInfoResult) {
             $this->fileInfoResult = $this->getLastFileInfoRaw();
