@@ -1,6 +1,5 @@
 <?php
-// STOPPER проверить производительность DEFFERABLE на бОльшем объеме данных.
-// STOPPER полное тестирование сборки на реальных данных.
+
 namespace Fias;
 
 use Fias\DataSource\XmlReader;
@@ -56,42 +55,62 @@ try {
     $housesConfig         = $importConfig->getParam('houses');
     $addressObjectsConfig = $importConfig->getParam('address_objects');
 
-    $houseRemover = new Remover($db, $housesConfig['table_name'], $housesConfig('primary_key'));
-    $houseRemover->remove(
-        new XmlReader(
-            $directory->getDeletedHousesFile(),
-            $housesConfig['node_name'],
-            array($housesConfig['primary_key']),
-            array()
-        )
-    );
+    $deletedHouseFile = $directory->getDeletedHouseFile();
+    if ($deletedHouseFile) {
+        $houseRemover = new Remover(
+            $db,
+            $housesConfig['table_name'],
+            $housesConfig['xml_key'],
+            $housesConfig['database_key']
+        );
+        $houseRemover->remove(
+            new XmlReader(
+                $deletedHouseFile,
+                $housesConfig['node_name'],
+                array($housesConfig['primary_key']),
+                array()
+            )
+        );
+    }
 
-    $addressObjectsRemover = new Remover($db, $addressObjectsConfig['table_name'], $addressObjectsConfig('primary_key'));
-    $addressObjectsRemover->remove(
+    $deletedAddressObjectsFile = $directory->getDeletedAddressObjectFile();
+    if ($deletedAddressObjectsFile) {
+        $addressObjectsRemover = new Remover(
+            $db,
+            $addressObjectsConfig['table_name'],
+            $addressObjectsConfig['xml_key'],
+            $addressObjectsConfig['database_key']
+        );
+        $addressObjectsRemover->remove(
+            new XmlReader(
+                $deletedAddressObjectsFile,
+                $addressObjectsConfig['node_name'],
+                array($addressObjectsConfig['xml_key']),
+                array()
+            )
+        );
+    }
+
+    $addressObjectFields           = $addressObjectsConfig['fields'];
+    $addressObjectFields['PREVID'] = array('name' => 'previous_id', 'type' => 'uuid');
+    $addressObjectsUpdater         = new AddressObjectsUpdater($db, $addressObjectsConfig['table_name'], $addressObjectFields);
+    $addressObjectsUpdater->update(
         new XmlReader(
-            $directory->getDeletedHousesFile(),
+            $directory->getAddressObjectFile(),
             $addressObjectsConfig['node_name'],
-            array($addressObjectsConfig['primary_key']),
-            array()
+            array_keys($addressObjectFields),
+            $addressObjectsConfig['filters']
         )
     );
 
-    $addressObjectFields   = $addressObjectsConfig['fields'];
-    $addressObjectsUpdater = new AddressObjectsUpdater($this->db, $addressObjectsConfig['table_name'], $addressObjectFields);
-    $addressObjectsUpdater->update(new XmlReader(
-        $directory->getAddressObjectFile(),
-        $addressObjectsConfig['node_name'],
-        array_keys($addressObjectFields),
-        $addressObjectsConfig['filters']
-    ));
-
-    $houseFields   = $housesConfig['fields'];
-    $housesUpdater = new AddressObjectsUpdater($this->db, $housesConfig['table_name'], $houseFields);
+    $houseFields           = $housesConfig['fields'];
+    $houseFields['PREVID'] = array('name' => 'previous_id', 'type' => 'uuid');
+    $housesUpdater         = new HousesUpdater($db, $housesConfig['table_name'], $houseFields);
     $housesUpdater->update(new XmlReader(
-        $directory->getAddressObjectFile(),
+        $directory->getHousesFile(),
         $housesConfig['node_name'],
         array_keys($houseFields),
-        $housesConfig['filters']
+        array()
     ));
 
     UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());

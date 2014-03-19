@@ -2,9 +2,11 @@
 
 return array(
     'address_objects' => array(
-        'table_name' => 'address_objects',
-        'node_name'  => 'Object',
-        'fields'     => array(
+        'table_name'   => 'address_objects',
+        'node_name'    => 'Object',
+        'xml_key'      => 'AOID',
+        'database_key' => 'id',
+        'fields'       => array(
             'AOID'       => array('name' => 'id', 'type' => 'uuid'),
             'AOGUID'     => array('name' => 'address_id', 'type' => 'uuid'),
             'PARENTGUID' => array('name' => 'parent_id', 'type' => 'uuid'),
@@ -12,16 +14,17 @@ return array(
             'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
             'SHORTNAME'  => array('name' => 'prefix')
         ),
-        'filters'    => array(
+        'filters'      => array(
             array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),
             array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47, 50, 77, 78)),
         ),
     ),
     'houses' => array(
-        'table_name'  => 'houses',
-        'node_name'   => 'House',
-        'primary_key' => 'HOUSEID',
-        'fields'      => array(
+        'table_name'   => 'houses',
+        'node_name'    => 'House',
+        'xml_key'      => 'HOUSEID',
+        'database_key' => 'id',
+        'fields'       => array(
             'HOUSEID'   => array('name' => 'id', 'type' => 'uuid'),
             'HOUSEGUID' => array('name' => 'house_id', 'type' => 'uuid'),
             'AOGUID'    => array('name' => 'address_id', 'type' => 'uuid'),

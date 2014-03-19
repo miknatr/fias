@@ -22,12 +22,14 @@ class Directory
 
     public function getDeletedAddressObjectFile()
     {
-        return $this->directoryPath . '/' . $this->find('AS_DEL_ADDROBJ');
+        $fileName = $this->find('AS_DEL_ADDROBJ', false);
+        return $fileName ? $this->directoryPath . '/' . $fileName : null;
     }
 
-    public function getDeletedHousesFile()
+    public function getDeletedHouseFile()
     {
-        return $this->directoryPath . '/' . $this->find('AS_DEL_HOUSE_');
+        $fileName = $this->find('AS_DEL_HOUSE_', false);
+        return $fileName ? $this->directoryPath . '/' . $fileName : null;
     }
 
     public function getAddressObjectFile()
@@ -45,7 +47,7 @@ class Directory
         return $this->directoryPath;
     }
 
-    private function find($prefix)
+    private function find($prefix, $isIndispensable = true)
     {
         $files = scandir($this->directoryPath);
         foreach ($files as $file) {
@@ -58,6 +60,10 @@ class Directory
             }
         }
 
-        throw new FileException('Файл с префиксом ' . $prefix . ' не найден в директории: ' . $this->directoryPath);
+        if ($isIndispensable) {
+            throw new FileException('Файл с префиксом ' . $prefix . ' не найден в директории: ' . $this->directoryPath);
+        }
+
+        return null;
     }
 }

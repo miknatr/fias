@@ -10,13 +10,15 @@ class Remover
     /** @var ConnectionInterface */
     private $db;
     private $table;
-    private $keyField;
+    private $keyFieldXml;
+    private $keyFieldDatabase;
 
-    public function __construct(ConnectionInterface $db, $table, $keyField)
+    public function __construct(ConnectionInterface $db, $table, $keyFieldXml, $keyFieldDatabase)
     {
-        $this->db       = $db;
-        $this->table    = $table;
-        $this->keyField = $keyField;
+        $this->db               = $db;
+        $this->table            = $table;
+        $this->keyFieldXml      = $keyFieldXml;
+        $this->keyFieldDatabase = $keyFieldDatabase;
     }
 
     public function remove(DataSource $reader)
@@ -31,13 +33,13 @@ class Remover
         $ids = array();
 
         foreach ($rows as $row) {
-            if (empty($row[$this->keyField])) {
-                throw new \LogicException('Не найдено поле: ' . $this->keyField);
+            if (empty($row[$this->keyFieldXml])) {
+                throw new \LogicException('Не найдено поле: ' . $this->keyFieldXml);
             }
 
-            $ids[] = $row[$this->keyField];
+            $ids[] = $row[$this->keyFieldXml];
         }
 
-        $this->db->execute('DELETE FROM ?f WHERE ?f IN (?l)', array($this->table, $this->keyField, $ids));
+        $this->db->execute('DELETE FROM ?f WHERE ?f IN (?l)', array($this->table, $this->keyFieldDatabase, $ids));
     }
 }

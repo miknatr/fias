@@ -35,7 +35,7 @@ class AddressObjectsUpdater extends Importer
                  prefix = ao_new.prefix,
                  parent_id = ao_new.parent_id
             FROM ?f ao_new
-            WHERE ao_old.id = ao_new.id
+            WHERE (ao_old.address_id = ao_new.address_id OR ao_old.id = ao_new.previous_id)
             AND (
                 COALESCE(ao_old.title, '') != COALESCE(ao_new.title, '')
                 OR COALESCE(ao_old.postal_code, 0) != COALESCE(ao_new.postal_code, 0)
@@ -53,7 +53,7 @@ class AddressObjectsUpdater extends Importer
             SELECT ao_new.id, ao_new.address_id, ao_new.parent_id, ao_new.title, ao_new.postal_code, ao_new.prefix
             FROM ?f ao_new
             LEFT JOIN address_objects ao_old
-                ON ao_old.id = ao_new.id
+                ON (ao_old.address_id = ao_new.address_id OR ao_old.id = ao_new.previous_id)
             WHERE ao_old.id IS NULL
             ',
             array($this->table)

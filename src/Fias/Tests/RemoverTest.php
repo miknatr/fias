@@ -22,7 +22,7 @@ class RemoverTest extends \PHPUnit_Framework_TestCase
 
         $results = array();
         for ($i = 1; $i < 200; ++$i) {
-            $results[] = array('id' => $i);
+            $results[] = array('xmlId' => $i);
         }
         $this->reader = Helper::getReaderMock($this, array($results));
 
@@ -41,7 +41,7 @@ class RemoverTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveWithBadParams()
     {
-        $remover = new Remover($this->db, $this->table, 'fakeKey');
+        $remover = new Remover($this->db, $this->table, 'fakeKey', 'keyFake');
         $remover->remove($this->reader);
     }
 
@@ -49,7 +49,7 @@ class RemoverTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('500', $this->db->execute('SELECT COUNT(*) FROM ?f', array($this->table))->fetchResult());
 
-        $remover = new Remover($this->db, $this->table, 'id');
+        $remover = new Remover($this->db, $this->table, 'xmlId', 'id');
         $remover->remove($this->reader);
 
         $this->assertEquals('301', $this->db->execute('SELECT COUNT(*) FROM ?f', array($this->table))->fetchResult());

@@ -33,7 +33,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->directory->getPath() . '/AS_DEL_HOUSE_20131221_ea93b12d-129d-46a0-9cfb-429b64a28873.XML',
-            $this->directory->getDeletedHousesFile()
+            $this->directory->getDeletedHouseFile()
         );
     }
 

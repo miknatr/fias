@@ -21,31 +21,35 @@ class HousesUpdater extends Importer
 
     public function modifyDataAfterImport()
     {
+        $this->createTemporaryIndexes();
+
         RawDataHelper::cleanHouses($this->db, $this->table);
 
-        $this->updateOldRecords();
+        $this->removeOldRecords();
         $this->addNewRecords();
 
         RawDataHelper::updateHousesCount($this->db);
     }
 
-    private function updateOldRecords()
+    private function removeOldRecords()
     {
         $this->db->execute(
-            "UPDATE houses h_old
-                SET number = h_new.number,
-                 building = h_new.building,
-                 structure = h_new.structure,
-                 address_id = h_new.address_id,
-                 full_number = h_new.full_number
-            FROM ?f h_new
-            WHERE h_old.id = h_new.id
-            AND (
-                COALESCE(h_old.number, '') != COALESCE(h_new.number, '')
-                OR COALESCE(h_old.building, '') != COALESCE(h_new.building, '')
-                OR COALESCE(h_old.structure, '') != COALESCE(h_new.structure, '')
-                OR COALESCE(h_old.address_id, '00000000-0000-0000-0000-000000000000') != COALESCE(h_new.address_id, '00000000-0000-0000-0000-000000000000')
-            )",
+            "DELETE FROM ?f:temp_table: h
+            USING (
+                SELECT DISTINCT h.address_id
+                FROM ?f:temp_table: h
+                LEFT JOIN address_objects ao
+                    ON ao.address_id = h.address_id
+                WHERE ao.id IS NULL
+            ) a
+            WHERE a.address_id = h.address_id",
+            array('temp_table' => $this->table)
+        );
+
+        $this->db->execute(
+            "DELETE FROM houses h_old
+            USING ?f h_new
+            WHERE (h_old.house_id = h_new.house_id OR h_old.id = h_new.previous_id)",
             array($this->table)
         );
     }
@@ -56,11 +60,23 @@ class HousesUpdater extends Importer
             'INSERT INTO houses(id, house_id, address_id, number, building, structure, full_number)
             SELECT h_new.id, h_new.house_id, h_new.address_id, h_new.number, h_new.building, h_new.structure, h_new.full_number
             FROM ?f h_new
-            LEFT JOIN houses h_old
-                ON h_old.id = h_new.id
-            WHERE h_old.id IS NULL
             ',
             array($this->table)
         );
+    }
+
+    private function createTemporaryIndexes()
+    {
+        $sql = 'CREATE INDEX tmp_'  . rand() . '_idx ON ?f USING BTREE(building)';
+        $this->db->execute($sql, array($this->table));
+
+        $sql = 'CREATE INDEX tmp_2' . rand() . '_idx ON ?f USING BTREE(structure)';
+        $this->db->execute($sql, array($this->table));
+
+        $sql = 'CREATE INDEX tmp_3' . rand() . '_idx ON ?f USING BTREE(house_id)';
+        $this->db->execute($sql, array($this->table));
+
+        $sql = 'CREATE INDEX tmp_4' . rand() . '_idx ON ?f USING BTREE(previous_id)';
+        $this->db->execute($sql, array($this->table));
     }
 }
