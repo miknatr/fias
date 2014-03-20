@@ -79,7 +79,7 @@ abstract class Base
     private function addVersionId($pathToDirectory)
     {
         $versionId = $this->getLastFileInfo()->getVersionId();
-        file_put_contents($pathToDirectory . '/VERSION_ID' . $versionId, 'Версия: ' . $versionId);
+        file_put_contents($pathToDirectory . '/VERSION_ID_' . $versionId, 'Версия: ' . $versionId);
     }
 
     protected function fileIsCorrect($filePath, $url)
