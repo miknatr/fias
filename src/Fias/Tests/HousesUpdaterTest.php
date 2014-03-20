@@ -21,20 +21,22 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
 
         $results = array(
             array(
-                'HOUSEID'   => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
-                'HOUSEGUID' => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
-                'AOGUID'    => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
-                'HOUSENUM'  => '02',
-                'BUILDNUM'  => '123',
-                'STRUCNUM'  => 'нет'
+                'HOUSEID'    => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
+                'HOUSEGUID'  => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
+                'PREVIOUSID' => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
+                'AOGUID'     => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+                'HOUSENUM'   => '02',
+                'BUILDNUM'   => '123',
+                'STRUCNUM'   => 'нет'
             ),
             array(
-                'HOUSEID'   => '00000000-0000-0000-0000-000000000000',
-                'HOUSEGUID' => '00000000-0000-0000-0000-000000000000',
-                'AOGUID'    => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
-                'HOUSENUM'  => '1',
-                'BUILDNUM'  => '2',
-                'STRUCNUM'  => '3'
+                'HOUSEID'    => '00000000-0000-0000-0000-000000000000',
+                'HOUSEGUID'  => '00000000-0000-0000-0000-000000000000',
+                'PREVIOUSID' => '00000000-0000-0000-0000-000000000000',
+                'AOGUID'     => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+                'HOUSENUM'   => '1',
+                'BUILDNUM'   => '2',
+                'STRUCNUM'   => '3'
             ),
         );
 
@@ -55,7 +57,10 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
         )->fetchResult();
 
         $housesConfig = Helper::getImportConfig()->getParam('houses');
-        $updater      = new HousesUpdater($this->db, $housesConfig['table_name'], $housesConfig['fields']);
+
+        $housesConfig['fields']['PREVIOUSID'] = array('name' => 'previous_id', 'type' => 'uuid');
+
+        $updater = new HousesUpdater($this->db, $housesConfig['table_name'], $housesConfig['fields']);
         $updater->update($this->reader);
 
         $this->assertEquals(

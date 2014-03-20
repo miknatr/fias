@@ -34,7 +34,7 @@ class HousesUpdater extends Importer
     private function removeOldRecords()
     {
         $this->db->execute(
-            "DELETE FROM ?f:temp_table: h
+            'DELETE FROM ?f:temp_table: h
             USING (
                 SELECT DISTINCT h.address_id
                 FROM ?f:temp_table: h
@@ -42,14 +42,16 @@ class HousesUpdater extends Importer
                     ON ao.address_id = h.address_id
                 WHERE ao.id IS NULL
             ) a
-            WHERE a.address_id = h.address_id",
+            WHERE a.address_id = h.address_id
+            ',
             array('temp_table' => $this->table)
         );
 
         $this->db->execute(
-            "DELETE FROM houses h_old
+            'DELETE FROM houses h_old
             USING ?f h_new
-            WHERE (h_old.house_id = h_new.house_id OR h_old.id = h_new.previous_id)",
+            WHERE (h_old.house_id = h_new.house_id OR h_old.id = h_new.previous_id)
+            ',
             array($this->table)
         );
     }

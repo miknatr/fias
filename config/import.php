@@ -14,7 +14,7 @@ return array(
             'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
             'SHORTNAME'  => array('name' => 'prefix')
         ),
-        'filters'      => array(
+        'filters' => array(
             array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),
             array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47, 50, 77, 78)),
         ),
