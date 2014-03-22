@@ -2,7 +2,6 @@
 
 namespace Fias\Tests;
 
-use Fias\Config;
 use Fias\Importer;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
@@ -15,7 +14,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db    = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
+        $this->db    = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
         $this->table = 'test_table';
     }
 
@@ -64,17 +63,17 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             6,
-            $this->db->execute('SELECT COUNT(*) count FROM ?F', array($tableName))->fetchOneOrFalse()['count']
+            $this->db->execute('SELECT COUNT(*) count FROM ?F', array($tableName))->fetchResult()
         );
 
         $this->assertEquals(
             'USA',
-            $this->db->execute("SELECT two FROM ?F WHERE one = '2'", array($tableName))->fetchOneOrFalse()['two']
+            $this->db->execute("SELECT two FROM ?F WHERE one = '2'", array($tableName))->fetchResult()
         );
 
         $this->assertEquals(
             'Tulip',
-            $this->db->execute("SELECT three FROM ?F WHERE one = '6'", array($tableName))->fetchOneOrFalse()['three']
+            $this->db->execute("SELECT three FROM ?F WHERE one = '6'", array($tableName))->fetchResult()
         );
     }
 }

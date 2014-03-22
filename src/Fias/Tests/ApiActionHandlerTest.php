@@ -2,7 +2,6 @@
 
 namespace Fias\Tests;
 
-use Fias\Config;
 use Fias\ApiAction\Handler;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use Grace\DBAL\ConnectionFactory;
@@ -16,7 +15,7 @@ class ApiActionHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Config::get('config')->getParam('database'));
+        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
     }
 
     /**

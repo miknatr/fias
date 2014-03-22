@@ -48,10 +48,9 @@ class Completion implements ApiActionInterface
             return null;
         }
 
-        $sql    = 'SELECT house_count FROM address_objects WHERE address_id = ?q';
-        $result = $this->db->execute($sql, array($this->parentId))->fetchOneOrFalse();
+        $sql = 'SELECT house_count FROM address_objects WHERE address_id = ?q';
 
-        return $result ? $result['house_count'] : null;
+        return $this->db->execute($sql, array($this->parentId))->fetchResult();
     }
 
     private function findAddresses($pattern)

@@ -25,6 +25,16 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
             $this->directory->getPath() . '/AS_HOUSE_20131221_bccfd0d0-af7a-49db-8401-df23dc3d2efa.XML',
             $this->directory->getHousesFile()
         );
+
+        $this->assertEquals(
+            $this->directory->getPath() . '/AS_DEL_ADDROBJ_20131221_8a0076a7-1f52-4423-8fc6-58dec367832b.XML',
+            $this->directory->getDeletedAddressObjectFile()
+        );
+
+        $this->assertEquals(
+            $this->directory->getPath() . '/AS_DEL_HOUSE_20131221_ea93b12d-129d-46a0-9cfb-429b64a28873.XML',
+            $this->directory->getDeletedHouseFile()
+        );
     }
 
     /**

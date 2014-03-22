@@ -3,10 +3,26 @@
 namespace Fias\Tests;
 
 use Fias\DataSource\XmlReader;
+use Fias\Config;
 use PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls;
 
 class Helper extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return \Fias\Config
+     */
+    public static function getGeneralConfig()
+    {
+        $pathToConfig = __DIR__ . '/../../../config/config.php';
+        return Config::get($pathToConfig);
+    }
+
+    public static function getImportConfig()
+    {
+        $pathToConfig = __DIR__ . '/../../../config/import.php';
+        return Config::get($pathToConfig);
+    }
+
     public static function cleanUpFileDirectory()
     {
         static::removeFilesInDirectory(__DIR__ . '/file_directory');

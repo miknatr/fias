@@ -6,13 +6,11 @@ use Fias\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    private $fileName;
     private $filePath;
 
     protected function setUp()
     {
-        $this->fileName = 'configTest';
-        $this->filePath = __DIR__ . '/../../../config/' . $this->fileName . '.php';
+        $this->filePath = __DIR__ . '/resources/configTest.php';
         $testConfig     = "<?php
             return array(
                 'string' => 'someString',
@@ -35,12 +33,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->assertEquals('someString', Config::get($this->fileName)->getParam('string'));
+        $this->assertEquals('someString', Config::get($this->filePath)->getParam('string'));
     }
 
     /** @expectedException \Fias\ConfigException */
     public function testGetException()
     {
-        Config::get($this->fileName)->getParam('fakeKey');
+        Config::get($this->filePath)->getParam('fakeKey');
     }
 }

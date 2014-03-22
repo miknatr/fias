@@ -10,8 +10,9 @@ use Monolog\Logger;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$config       = Config::get('config');
-$importConfig = Config::get('import');
+$configDir    = __DIR__ . '/config/';
+$config       = Config::get($configDir.'config.php');
+$importConfig = Config::get($configDir.'import.php');
 $db           = ConnectionFactory::getConnection($config->getParam('database'));
 
 $dataBaseName = $config->getParam('database')['database'];
@@ -31,8 +32,10 @@ set_error_handler(
 );
 
 try {
-    if ($argc == 2) {
-        $path = $argv['1'];
+    set_time_limit(0);
+
+    if ($_SERVER['argc'] == 2) {
+        $path = $_SERVER['argv']['1'];
         if (!is_dir($path)) {
             $path = Dearchiver::extract($config->getParam('file_directory'), $path);
         }
@@ -66,7 +69,7 @@ try {
         array(
             'field' => 'AOGUID',
             'type'  => 'hash',
-            'value' => $addresses
+            'value' => $addresses,
         )
     );
     $reader    = new XmlReader(
@@ -85,8 +88,10 @@ try {
 
     DbHelper::runFile($dataBaseName, __DIR__ . '/database/03_constraints.sql');
     DbHelper::runFile($dataBaseName, __DIR__ . '/database/04_clean_up.sql');
+
+    UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());
 } catch (\Exception $e) {
     $log->addError($e->getMessage());
-    echo "В процессе инициализации произошла ошибка.\n";
+    fwrite(STDERR, "В процессе инициализации произошла ошибка.\n");
     exit(1);
 }

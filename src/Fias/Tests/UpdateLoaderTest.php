@@ -13,7 +13,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config        = Config::get('config');
+        $this->config        = Helper::getGeneralConfig();
         $this->fileDirectory = __DIR__ . '/file_directory';
 
         if (!is_dir($this->fileDirectory)) {
@@ -33,8 +33,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $loader     = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
         $filesCount = count(scandir($loader->load()->getPath()));
-
-        $this->assertEquals(17, $filesCount);
+        $this->assertGreaterThan(16, $filesCount);
     }
 
     public function testReWritingBadFile()

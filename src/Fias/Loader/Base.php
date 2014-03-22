@@ -23,7 +23,19 @@ abstract class Base
         FileHelper::ensureIsWritable($fileDirectory);
     }
 
-    protected function getLastFileInfo()
+    /** @var SoapResultWrapper */
+    private $fileInfoResult = null;
+
+    public function getLastFileInfo()
+    {
+        if (!$this->fileInfoResult) {
+            $this->fileInfoResult = $this->getLastFileInfoRaw();
+        }
+
+        return $this->fileInfoResult;
+    }
+
+    private function getLastFileInfoRaw()
     {
         $client    = new \SoapClient($this->wsdlUrl);
         $rawResult = $client->__soapCall('GetLastDownloadFileInfo', array());
@@ -58,7 +70,16 @@ abstract class Base
 
     protected function wrap($path)
     {
-        return new Directory(Dearchiver::extract($this->fileDirectory, $path));
+        $pathToDirectory = Dearchiver::extract($this->fileDirectory, $path);
+        $this->addVersionId($pathToDirectory);
+
+        return new Directory($pathToDirectory);
+    }
+
+    private function addVersionId($pathToDirectory)
+    {
+        $versionId = $this->getLastFileInfo()->getVersionId();
+        file_put_contents($pathToDirectory . '/VERSION_ID_' . $versionId, 'Версия: ' . $versionId);
     }
 
     protected function fileIsCorrect($filePath, $url)

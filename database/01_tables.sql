@@ -42,4 +42,11 @@ COMMENT ON COLUMN address_objects.postal_code IS 'индекс';
 COMMENT ON COLUMN address_objects.prefix      IS 'ул., пр. и так далее';
 COMMENT ON COLUMN address_objects.house_count IS 'количество домов';
 
+DROP TABLE IF EXISTS update_log;
+CREATE TABLE update_log (
+    id SERIAL PRIMARY KEY,
+    version_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(0)
+);
+
 COMMIT;
