@@ -5,9 +5,9 @@ namespace Controller;
 use Bravicility\Http\Request;
 use Bravicility\Http\Response\JsonResponse;
 use Bravicility\Http\Response\Response;
-use Fias\ApiAction\Completion;
-use Fias\ApiAction\Validation;
-use Fias\Container;
+use ApiAction\Completion;
+use ApiAction\Validation;
+use Container;
 
 class ApiController
 {

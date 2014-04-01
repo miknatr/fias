@@ -3,3 +3,4 @@
 /vendor
 /config/config.ini
 /src/Fias/Tests/file_directory/*
+/phpunit.xml

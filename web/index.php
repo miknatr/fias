@@ -5,7 +5,6 @@ use Bravicility\Http\Request;
 use Bravicility\Http\Response\Response;
 use Bravicility\Http\Response\TextResponse;
 use Bravicility\Router\RouteNotFoundException;
-use Fias\Container;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
