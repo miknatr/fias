@@ -1,52 +1,30 @@
 <?php
 
-namespace Fias;
-
-use Grace\DBAL\ConnectionFactory;
-use Fias\ApiAction\HttpException;
-use Fias\ApiAction\Handler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Bravicility\Failure\FailureHandler;
+use Bravicility\Http\Request;
+use Bravicility\Http\Response\Response;
+use Bravicility\Http\Response\TextResponse;
+use Bravicility\Router\RouteNotFoundException;
+use Fias\Container;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$config = Config::get('config');
-$db     = ConnectionFactory::getConnection($config->getParam('database'));
-$log    = new Logger('http');
-
-$log->pushHandler(new StreamHandler(__DIR__ . '/../logs/http.log'));
-set_error_handler(
-    function ($errNo, $errStr, $errFile, $errLine)
-    {
-        $message = $errNo . "::"
-            . $errStr . "\n"
-            . $errFile . "::"
-            . $errLine . "\n"
-        ;
-        throw new \Exception($message);
-    }
-);
+$container = new Container();
+$logger    = $container->getErrorLogger();
+FailureHandler::setup(function ($error) use ($logger) {
+    (new TextResponse(500, 'Произошла ошибка сервера'))->send();
+    $logger->error($error['message'], $error);
+    exit;
+});
 
 try {
-    $result = Handler::handleRequest($_SERVER['REQUEST_URI'], $_GET, $db);
+    $request = Request::createFromGlobals();
+    $route   = $container->getRouter()->route($request->getMethod(), $request->getUrlPath());
 
-    header('Content-type: application/json');
-    echo json_encode($result);
-} catch (HttpException $e) {
-    switch ($e->getCode()) {
-        case 400:
-            $message = $_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request';
-            break;
-        case 404:
-            $message = $_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found';
-            break;
-
-        default:
-            $message = $_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error';
-    }
-
-    header($message, true, $e->getCode());
-} catch (\Exception $e) {
-    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-    $log->addError($e->getMessage());
+    /** @var Response $response */
+    $response = (new $route->class($container))->{$route->method}($request);
+} catch (RouteNotFoundException $e) {
+    $response = new Response(404);
 }
+
+$response->send();

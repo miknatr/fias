@@ -15,16 +15,11 @@ class Completion implements ApiActionInterface
     private $parentId;
     private $limit;
 
-    public function __construct(ConnectionInterface $db, array $params)
+    public function __construct(ConnectionInterface $db, $address, $limit)
     {
-
         $this->db      = $db;
-        $this->address = !empty($params['address']) ? $params['address'] : null;
-        $this->limit   = !empty($params['limit']) ? (int) $params['limit'] : 50;
-
-        if ($this->limit > static::MAX_LIMIT) {
-            throw new HttpException(400);
-        }
+        $this->address = $address ?: null;
+        $this->limit   = $limit ?: static::MAX_LIMIT;
     }
 
     public function run()

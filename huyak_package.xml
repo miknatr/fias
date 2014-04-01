@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE huyak-package SYSTEM "http://huyak.test.intertos.ru/huyak-package.dtd">
+<huyak-package version="1.0">
+    <dependencies>
+        <binary name="composer"/>
+        <binary name="psql"/>
+    </dependencies>
+
+    <resources>
+        <hostname id="host" suggestion="fias.&instance_name;"/>
+
+    </resources>
+
+    <services log-directory="logs">
+        <http id="http" host="{host}" root="web"/>
+    </services>
+
+    <build>
+        <bash title="Local directories">
+            mkdir -p logs
+        </bash>
+
+        <load-parameters>
+            <parameter-file name="config/config.php.dist" dist="config.php">
+                <parameter location="wsdl_url" value="{host}"/>
+                <parameter location="file_directory" value="{host}"/>
+                <parameter location="db.uri" value="&postgres_uri;/{core/postgres_db}"/>
+            </parameter-file>
+        </load-parameters>
+
+        <bash title="Composer">
+            composer install
+        </bash>
+    </build>
+</huyak-package>

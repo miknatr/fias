@@ -8,7 +8,7 @@ class ApiActionValidationTest extends MockDatabaseTest
 {
     public function testNotFound()
     {
-        $validate = new Validation($this->db, array('address' => 'Непонятный адрес'));
+        $validate = new Validation($this->db, 'Непонятный адрес');
         $result   = $validate->run();
 
         $this->assertFalse($result['is_valid']);
@@ -17,7 +17,7 @@ class ApiActionValidationTest extends MockDatabaseTest
 
     public function testIncomplete()
     {
-        $validate = new Validation($this->db, array('address' => 'г москва, ул стахановская'));
+        $validate = new Validation($this->db, 'г москва, ул стахановская');
         $result   = $validate->run();
 
         $this->assertFalse($result['is_complete']);
@@ -26,7 +26,7 @@ class ApiActionValidationTest extends MockDatabaseTest
 
     public function testValid()
     {
-        $validate = new Validation($this->db, array('address' => 'г москва, ул стахановская, 16с17'));
+        $validate = new Validation($this->db, 'г москва, ул стахановская, 16с17');
         $result   = $validate->run();
 
         $this->assertTrue($result['is_complete']);
@@ -35,7 +35,7 @@ class ApiActionValidationTest extends MockDatabaseTest
 
     public function testZeroLevel()
     {
-        $validate = new Validation($this->db, array('address' => 'г москва'));
+        $validate = new Validation($this->db, 'г москва');
         $result   = $validate->run();
 
         $this->assertFalse($result['is_complete']);
