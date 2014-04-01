@@ -2,25 +2,22 @@
 
 namespace Fias\Tests;
 
+use Fias\Container;
 use Fias\DataSource\XmlReader;
-use Fias\Config;
 use PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls;
 
 class Helper extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return \Fias\Config
-     */
-    public static function getGeneralConfig()
-    {
-        $pathToConfig = __DIR__ . '/../../../config/config.php';
-        return Config::get($pathToConfig);
-    }
+    /** @var Container */
+    private static $container;
 
-    public static function getImportConfig()
+    public static function getContainer()
     {
-        $pathToConfig = __DIR__ . '/../../../config/import.php';
-        return Config::get($pathToConfig);
+        if (!static::$container) {
+            static::$container = new Container();
+        }
+
+        return static::$container;
     }
 
     public static function cleanUpFileDirectory()

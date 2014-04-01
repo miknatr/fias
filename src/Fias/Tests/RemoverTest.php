@@ -5,7 +5,6 @@ namespace Fias\Tests;
 use Fias\DataSource\DataSource;
 use Fias\Remover;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class RemoverTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +16,7 @@ class RemoverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db    = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
+        $this->db    = Helper::getContainer()->getDb();
         $this->table = 'test_table';
 
         $results = array();

@@ -5,7 +5,6 @@ namespace Fias\Tests;
 use Fias\DataSource\DataSource;
 use Fias\HousesUpdater;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +15,7 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
+        $this->db = Helper::getContainer()->getDb();
         $this->db->start();
 
         $results = array(
@@ -56,7 +55,7 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
             array('0c5b2444-70a0-4932-980c-b4dc0d3f02b5')
         )->fetchResult();
 
-        $housesConfig = Helper::getImportConfig()->getParam('houses');
+        $housesConfig = Helper::getContainer()->getHousesImportConfig();
 
         $housesConfig['fields']['PREVIOUSID'] = array('name' => 'previous_id', 'type' => 'uuid');
 

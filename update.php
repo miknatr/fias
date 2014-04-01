@@ -4,16 +4,13 @@ namespace Fias;
 
 use Fias\DataSource\XmlReader;
 use Fias\Loader\UpdateLoader;
-use Grace\DBAL\ConnectionFactory;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$configDir    = __DIR__ . '/config/';
-$config       = Config::get($configDir.'config.php');
-$importConfig = Config::get($configDir.'import.php');
-$db           = ConnectionFactory::getConnection($config->getParam('database'));
+$container = new Container();
+$db        = $container->getDb();
 
 $log = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . '/logs/cli.log'));
@@ -34,12 +31,12 @@ try {
     if ($_SERVER['argc'] == 2) {
         $path = $_SERVER['argv']['1'];
         if (!is_dir($path)) {
-            $path = Dearchiver::extract($config->getParam('file_directory'), $path);
+            $path = Dearchiver::extract($container->getFileDirectory(), $path);
         }
 
         $directory = new Directory($path);
     } else {
-        $loader    = new UpdateLoader($config->getParam('wsdl_url'), $config->getParam('file_directory'));
+        $loader    = new UpdateLoader($container->getWsdlUrl(), $container->getFileDirectory());
         $directory = $loader->load();
     }
 
@@ -52,8 +49,8 @@ try {
 
     $db->execute('SET CONSTRAINTS "address_objects_parent_id_fkey", "houses_parent_id_fkey" DEFERRED');
 
-    $housesConfig         = $importConfig->getParam('houses');
-    $addressObjectsConfig = $importConfig->getParam('address_objects');
+    $housesConfig         = $container->getHousesImportConfig();
+    $addressObjectsConfig = $container->getAddressObjectsImportConfig();
 
     $deletedHouseFile = $directory->getDeletedHouseFile();
     if ($deletedHouseFile) {

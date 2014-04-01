@@ -4,7 +4,6 @@ namespace Fias\Tests;
 
 use Fias\UpdateLogHelper;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class UpdateLogHelperLogTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +12,7 @@ class UpdateLogHelperLogTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
+        $this->db = Helper::getContainer()->getDb();
         $this->db->start();
     }
 

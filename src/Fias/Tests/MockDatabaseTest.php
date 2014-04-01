@@ -3,7 +3,6 @@
 namespace Fias\Tests;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class MockDatabaseTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +13,7 @@ class MockDatabaseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
+        $this->db = Helper::getContainer()->getDb();
 
         $this->db->execute('START TRANSACTION');
         $this->db->execute('

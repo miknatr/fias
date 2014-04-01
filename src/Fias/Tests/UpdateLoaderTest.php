@@ -2,18 +2,18 @@
 
 namespace Fias\Tests;
 
+use Fias\Container;
 use Fias\Loader\UpdateLoader;
-use Fias\Config;
 
 class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Config */
-    private $config;
+    /** @var  Container */
+    private $container;
     private $fileDirectory;
 
     protected function setUp()
     {
-        $this->config        = Helper::getGeneralConfig();
+        $this->container = Helper::getContainer();
         $this->fileDirectory = __DIR__ . '/file_directory';
 
         if (!is_dir($this->fileDirectory)) {
@@ -31,7 +31,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $loader     = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
+        $loader     = new UpdateLoader($this->container->getWsdlUrl(), $this->fileDirectory);
         $filesCount = count(scandir($loader->load()->getPath()));
         $this->assertGreaterThan(16, $filesCount);
     }
@@ -47,7 +47,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
         file_put_contents($filePath, $message);
 
-        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
+        $loader = new UpdateLoader($this->container->getWsdlUrl(), $this->fileDirectory);
         $loader->load();
 
         $this->assertTrue(strlen($message) != filesize($filePath));
@@ -55,7 +55,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testNoRewritingGoodFile()
     {
-        $loader = new UpdateLoader($this->config->getParam('wsdl_url'), $this->fileDirectory);
+        $loader = new UpdateLoader($this->container->getWsdlUrl(), $this->fileDirectory);
         $loader->load();
 
         $filePath = $this->fileDirectory
@@ -81,7 +81,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
     private function getInformationAboutCurrentUpdateFile()
     {
         if (!$this->updateInformation) {
-            $client    = new \SoapClient($this->config->getParam('wsdl_url'));
+            $client    = new \SoapClient($this->container->getWsdlUrl());
             $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
 
             $ch = curl_init($filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl);

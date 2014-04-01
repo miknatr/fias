@@ -5,7 +5,6 @@ namespace Fias\Tests;
 use Fias\DbHelper;
 use Fias\RawDataHelper;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class RawDataHelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,13 +15,13 @@ class RawDataHelperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
+        $this->db = Helper::getContainer()->getDb();
 
         $this->addressObjectTable = 'raw_data_address_objects_test';
         $this->housesTable        = 'raw_data_houses_test';
-        $importConfig             = Helper::getImportConfig();
+        $container                = Helper::getContainer();
 
-        $addressObjectFields               = $importConfig->getParam('address_objects')['fields'];
+        $addressObjectFields               = $container->getAddressObjectsImportConfig()['fields'];
         $addressObjectFields['level']      = array('name' => 'level', 'type' => 'integer');
         $addressObjectFields['full_title'] = array('name' => 'full_title');
 
@@ -32,7 +31,7 @@ class RawDataHelperTest extends \PHPUnit_Framework_TestCase
             $addressObjectFields
         );
 
-        $housesFields                = $importConfig->getParam('houses')['fields'];
+        $housesFields                = $container->getHousesImportConfig()['fields'];
         $housesFields['full_number'] = array('name' => 'full_number');
 
         DbHelper::createTable(

@@ -5,7 +5,6 @@ namespace Fias\Tests;
 use Fias\AddressObjectsUpdater;
 use Fias\DataSource\DataSource;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class AddressObjectsUpdaterTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +15,7 @@ class AddressObjectsUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->db = ConnectionFactory::getConnection(Helper::getGeneralConfig()->getParam('database'));
+        $this->db = Helper::getContainer()->getDb();
         $this->db->start();
 
         $results = array(
@@ -51,7 +50,7 @@ class AddressObjectsUpdaterTest extends \PHPUnit_Framework_TestCase
     /** @group slow */
     public function testUpdater()
     {
-        $addressObjectConfig = Helper::getImportConfig()->getParam('address_objects');
+        $addressObjectConfig = Helper::getContainer()->getAddressObjectsImportConfig();
 
         $addressObjectConfig['fields']['PREVIOUSID'] = array('name' => 'previous_id', 'type' => 'uuid');
 

@@ -1,21 +1,17 @@
 <?php
-
+// STOPPER выпилить монолог
 namespace Fias;
 
 use Fias\DataSource\XmlReader;
 use Fias\Loader\InitLoader;
-use Grace\DBAL\ConnectionFactory;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$configDir    = __DIR__ . '/config/';
-$config       = Config::get($configDir.'config.php');
-$importConfig = Config::get($configDir.'import.php');
-$db           = ConnectionFactory::getConnection($config->getParam('database'));
-
-$dataBaseName = $config->getParam('database')['database'];
+$container    = new Container();
+$db           = $container->getDb();
+$dataBaseName = $container->getDatabaseName();
 
 $log = new Logger('cli');
 $log->pushHandler(new StreamHandler(__DIR__ . '/logs/cli.log'));
@@ -37,18 +33,18 @@ try {
     if ($_SERVER['argc'] == 2) {
         $path = $_SERVER['argv']['1'];
         if (!is_dir($path)) {
-            $path = Dearchiver::extract($config->getParam('file_directory'), $path);
+            $path = Dearchiver::extract($container->getFileDirectory(), $path);
         }
 
         $directory = new Directory($path);
     } else {
-        $loader    = new InitLoader($config->getParam('wsdl_url'), $config->getParam('file_directory'));
+        $loader    = new InitLoader($container->getWsdlUrl(), $container->getFileDirectory());
         $directory = $loader->load();
     }
 
     DbHelper::runFile($dataBaseName, __DIR__ . '/database/01_tables.sql');
 
-    $addressObjectsConfig = $importConfig->getParam('address_objects');
+    $addressObjectsConfig = $container->getAddressObjectsImportConfig();
     $addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
     $reader               = new XmlReader(
         $directory->getAddressObjectFile(),
@@ -59,7 +55,7 @@ try {
 
     $addressObjects->import($reader);
 
-    $housesConfig = $importConfig->getParam('houses');
+    $housesConfig = $container->getHousesImportConfig();
     $houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
     // Если не отсекать записи исходя из региона придется грузить 21 млн записей вместо полутора.
