@@ -65,7 +65,9 @@ class Container
 
     public function getDatabaseName()
     {
-        return array_pop(explode('/', $this->config['db.uri']));
+        $parts = explode('/', $this->config['db.uri']);
+
+        return array_pop($parts);
     }
 
     public function getHousesImportConfig()
