@@ -8,7 +8,6 @@
 
     <resources>
         <hostname id="host" suggestion="fias.&instance_name;"/>
-
     </resources>
 
     <services log-directory="logs">
@@ -18,13 +17,13 @@
     <build>
         <bash title="Local directories">
             mkdir -p logs
+            mkdir -p cache
         </bash>
 
         <load-parameters>
             <parameter-file name="config/config.php.dist" dist="config.php">
-                <parameter location="wsdl_url" value="{host}"/>
-                <parameter location="file_directory" value="{host}"/>
-                <parameter location="db.uri" value="&postgres_uri;/{core/postgres_db}"/>
+                <parameter location="app.host" value="{host}"/>
+                <parameter location="db.uri" value="&postgres_uri;/{postgres_db}"/>
             </parameter-file>
         </load-parameters>
 
