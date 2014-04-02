@@ -8,6 +8,7 @@
 
     <resources>
         <hostname id="host" suggestion="fias.&instance_name;"/>
+        <database id="db" type="postgres" suggestion="fias.&instance_name;"/>
     </resources>
 
     <services log-directory="logs">
@@ -21,9 +22,9 @@
         </bash>
 
         <load-parameters>
-            <parameter-file name="config/config.php.dist" dist="config.php">
+            <parameter-file name="config/config.ini" dist="config/config.ini.dist">
                 <parameter location="app.host" value="{host}"/>
-                <parameter location="db.uri" value="&postgres_uri;/{postgres_db}"/>
+                <parameter location="db.uri" value="&postgres_uri;/{db}"/>
             </parameter-file>
         </load-parameters>
 
