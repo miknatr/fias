@@ -30,5 +30,13 @@
         <bash title="Composer">
             composer install
         </bash>
+
+        <bash title="Cleaning bravicility cache">
+            rm -rf cache/*
+        </bash>
+
+        <bash title="Database rebuild">
+            php cli/init-db.php
+        </bash>
     </build>
 </huyak-package>
