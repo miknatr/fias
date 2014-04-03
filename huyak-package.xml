@@ -4,11 +4,12 @@
     <dependencies>
         <binary name="composer"/>
         <binary name="psql"/>
+        <binary name="php"/>
     </dependencies>
 
     <resources>
         <hostname id="host" suggestion="fias.&instance_name;"/>
-        <database id="db" type="postgres" suggestion="fias.&instance_name;"/>
+        <database id="db" type="postgres" suggestion="&instance_name;_fias"/>
     </resources>
 
     <services log-directory="logs">

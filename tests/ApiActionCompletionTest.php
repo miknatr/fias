@@ -2,7 +2,7 @@
 
 use ApiAction\Completion;
 
-class ApiActionCompletionTest extends MockDatabaseTest
+class ApiActionCompletionTest extends TestAbstract
 {
     public function testNotFound()
     {

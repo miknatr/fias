@@ -1,33 +1,30 @@
 <?php
 
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-
-class RawDataHelperTest extends \PHPUnit_Framework_TestCase
+class RawDataHelperTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
     private $addressObjectTable;
     private $housesTable;
 
     protected function setUp()
     {
-        $this->db = Helper::getContainer()->getDb();
+        parent::setUp();
 
         $this->addressObjectTable = 'raw_data_address_objects_test';
         $this->housesTable        = 'raw_data_houses_test';
-        $container                = Helper::getContainer();
 
-        $addressObjectFields               = $container->getAddressObjectsImportConfig()['fields'];
+        $addressObjectFields               = $this->container->getAddressObjectsImportConfig()['fields'];
         $addressObjectFields['level']      = array('name' => 'level', 'type' => 'integer');
         $addressObjectFields['full_title'] = array('name' => 'full_title');
 
+        $this->db->execute('DROP TABLE IF EXISTS ?f', array($this->addressObjectTable));
+        $this->db->execute('DROP TABLE IF EXISTS ?f', array($this->housesTable));
         DbHelper::createTable(
             $this->db,
             $this->addressObjectTable,
             $addressObjectFields
         );
 
-        $housesFields                = $container->getHousesImportConfig()['fields'];
+        $housesFields                = $this->container->getHousesImportConfig()['fields'];
         $housesFields['full_number'] = array('name' => 'full_number');
 
         DbHelper::createTable(
@@ -55,11 +52,6 @@ class RawDataHelperTest extends \PHPUnit_Framework_TestCase
             VALUES ?v',
             array($this->housesTable, $houses)
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->db->execute('DROP TABLE IF EXISTS ?f, ?f', array($this->addressObjectTable, $this->housesTable));
     }
 
     public function testCleanAddressObjects()

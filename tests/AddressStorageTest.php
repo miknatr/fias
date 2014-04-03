@@ -1,6 +1,6 @@
 <?php
 
-class AddressStorageTest extends MockDatabaseTest
+class AddressStorageTest extends TestAbstract
 {
     /** @var AddressStorage */
     private $storage;

@@ -2,15 +2,13 @@
 
 use Loader\UpdateLoader;
 
-class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
+class UpdateLoaderTest extends TestAbstract
 {
-    /** @var  Container */
-    private $container;
     private $fileDirectory;
 
     protected function setUp()
     {
-        $this->container = Helper::getContainer();
+        parent::setUp();
         $this->fileDirectory = __DIR__ . '/file_directory';
 
         if (!is_dir($this->fileDirectory)) {
@@ -23,7 +21,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        Helper::cleanUpFileDirectory();
+        $this->cleanUpFileDirectory();
     }
 
     public function testLoad()
@@ -62,7 +60,7 @@ class UpdateLoaderTest extends \PHPUnit_Framework_TestCase
         ;
 
         $this->assertTrue(
-            Helper::invokeMethod(
+            $this->invokeMethod(
                 $loader,
                 'fileIsCorrect',
                 array(

@@ -2,7 +2,7 @@
 
 use ApiAction\Validation;
 
-class ApiActionValidationTest extends MockDatabaseTest
+class ApiActionValidationTest extends TestAbstract
 {
     public function testNotFound()
     {

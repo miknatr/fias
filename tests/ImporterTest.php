@@ -1,16 +1,12 @@
 <?php
 
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-
-class ImporterTest extends \PHPUnit_Framework_TestCase
+class ImporterTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
     private $table;
 
     protected function setUp()
     {
-        $this->db    = Helper::getContainer()->getDb();
+        parent::setUp();
         $this->table = 'test_table';
     }
 
@@ -47,7 +43,7 @@ class ImporterTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $reader = Helper::getReaderMock($this, $results);
+        $reader = $this->getReaderMock($this, $results);
         $fields = array(
             'madeIn' => array('name' => 'two'),
             'id'     => array('name' => 'one'),

@@ -18,7 +18,7 @@ class Completion implements ApiActionInterface
     public function __construct(ConnectionInterface $db, $address, $limit)
     {
         $this->db      = $db;
-        $this->address = $address ?: null;
+        $this->address = $address;
         $this->limit   = $limit ?: static::MAX_LIMIT;
     }
 

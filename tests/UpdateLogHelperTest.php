@@ -1,23 +1,7 @@
 <?php
 
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-
-class UpdateLogHelperLogTest extends \PHPUnit_Framework_TestCase
+class UpdateLogHelperLogTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
-
-    protected function setUp()
-    {
-        $this->db = Helper::getContainer()->getDb();
-        $this->db->start();
-    }
-
-    protected function tearDown()
-    {
-        $this->db->rollback();
-    }
-
     public function testAddVersionIdToLog()
     {
         UpdateLogHelper::addVersionIdToLog($this->db, 100000);

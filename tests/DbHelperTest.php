@@ -1,17 +1,7 @@
 <?php
 
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-
-class DbHelperTest extends \PHPUnit_Framework_TestCase
+class DbHelperTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
-
-    protected function setUp()
-    {
-        $this->db = Helper::getContainer()->getDb();
-    }
-
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Ошибка выполнения SQL файла

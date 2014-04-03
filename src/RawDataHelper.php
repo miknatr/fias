@@ -8,17 +8,17 @@ class RawDataHelper
     {
         // Формируем полный заголовок
         $sql = <<<SQL
-            UPDATE ?f ao SET
+            UPDATE ?f:address_table: ao SET
                 level      = tmp.level,
                 full_title = tmp.title
             FROM (
                 WITH RECURSIVE required_addresses(level, address_id, title) AS (
                     SELECT DISTINCT 0, address_id, "prefix" || ' ' || title
-                    FROM address_objects
+                    FROM ?f:address_table:
                     WHERE parent_id IS NULL
                 UNION ALL
                     SELECT ra.level + 1, ar.address_id, ra.title || ', ' || "prefix" || ' ' || ar.title
-                    FROM address_objects ar
+                    FROM ?f:address_table: ar
                     INNER JOIN required_addresses ra
                         ON ra.address_id = ar.parent_id
                 )
@@ -27,7 +27,7 @@ class RawDataHelper
             WHERE tmp.address_id = ao.address_id;
 SQL;
 
-        $db->execute($sql, array($table));
+        $db->execute($sql, array('address_table' => $table));
     }
 
     public static function cleanHouses(ConnectionInterface $db, $table = 'houses')

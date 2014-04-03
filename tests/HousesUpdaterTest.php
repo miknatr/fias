@@ -1,26 +1,21 @@
 <?php
 
 use DataSource\DataSource;
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
+class HousesUpdaterTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
     /** @var DataSource */
     private $reader;
 
     protected function setUp()
     {
-        $this->db = Helper::getContainer()->getDb();
-        $this->db->start();
-
+        parent::setUp();
         $results = array(
             array(
                 'HOUSEID'    => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
                 'HOUSEGUID'  => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
                 'PREVIOUSID' => 'a64330e3-7a41-41ee-a8a2-41db8693c584',
-                'AOGUID'     => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+                'AOGUID'     => '77303f7c-452b-4e73-b2b0-cbc59fe636c5',
                 'HOUSENUM'   => '02',
                 'BUILDNUM'   => '123',
                 'STRUCNUM'   => 'нет'
@@ -29,19 +24,14 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
                 'HOUSEID'    => '00000000-0000-0000-0000-000000000000',
                 'HOUSEGUID'  => '00000000-0000-0000-0000-000000000000',
                 'PREVIOUSID' => '00000000-0000-0000-0000-000000000000',
-                'AOGUID'     => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+                'AOGUID'     => '77303f7c-452b-4e73-b2b0-cbc59fe636c5',
                 'HOUSENUM'   => '1',
                 'BUILDNUM'   => '2',
                 'STRUCNUM'   => '3'
             ),
         );
 
-        $this->reader = Helper::getReaderMock($this, array($results));
-    }
-
-    protected function tearDown()
-    {
-        $this->db->rollback();
+        $this->reader = $this->getReaderMock($this, array($results));
     }
 
     /** @group slow */
@@ -52,7 +42,7 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
             array('0c5b2444-70a0-4932-980c-b4dc0d3f02b5')
         )->fetchResult();
 
-        $housesConfig = Helper::getContainer()->getHousesImportConfig();
+        $housesConfig = $this->container->getHousesImportConfig();
 
         $housesConfig['fields']['PREVIOUSID'] = array('name' => 'previous_id', 'type' => 'uuid');
 
@@ -79,7 +69,7 @@ class HousesUpdaterTest extends \PHPUnit_Framework_TestCase
             $countBeforeUpdate + 2,
             $this->db->execute(
                 'SELECT house_count FROM address_objects WHERE address_id = ?q',
-                array('0c5b2444-70a0-4932-980c-b4dc0d3f02b5')
+                array('77303f7c-452b-4e73-b2b0-cbc59fe636c5')
             )->fetchResult()
         );
     }

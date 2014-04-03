@@ -1,19 +1,15 @@
 <?php
 
 use DataSource\DataSource;
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class AddressObjectsUpdaterTest extends \PHPUnit_Framework_TestCase
+class AddressObjectsUpdaterTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
     /** @var DataSource */
     private $reader;
 
     protected function setUp()
     {
-        $this->db = Helper::getContainer()->getDb();
-        $this->db->start();
+        parent::setUp();
 
         $results = array(
             array(
@@ -36,18 +32,13 @@ class AddressObjectsUpdaterTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->reader = Helper::getReaderMock($this, array($results));
-    }
-
-    protected function tearDown()
-    {
-        $this->db->rollback();
+        $this->reader = $this->getReaderMock($this, array($results));
     }
 
     /** @group slow */
     public function testUpdater()
     {
-        $addressObjectConfig = Helper::getContainer()->getAddressObjectsImportConfig();
+        $addressObjectConfig = $this->container->getAddressObjectsImportConfig();
 
         $addressObjectConfig['fields']['PREVIOUSID'] = array('name' => 'previous_id', 'type' => 'uuid');
 

@@ -1,34 +1,28 @@
 <?php
 
 use DataSource\DataSource;
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class RemoverTest extends \PHPUnit_Framework_TestCase
+class RemoverTest extends TestAbstract
 {
-    /** @var ConnectionInterface */
-    private $db;
     private $table;
     /** @var DataSource */
     private $reader;
 
     protected function setUp()
     {
-        $this->db    = Helper::getContainer()->getDb();
+        parent::setUp();
+        $this->db    = $this->container->getDb();
         $this->table = 'test_table';
 
         $results = array();
         for ($i = 1; $i < 200; ++$i) {
             $results[] = array('xmlId' => $i);
         }
-        $this->reader = Helper::getReaderMock($this, array($results));
+        $this->reader = $this->getReaderMock($this, array($results));
 
+        $this->db->execute('DROP TABLE IF EXISTS ?f', array($this->table));
         $this->db->execute('CREATE TEMP TABLE ?f (id integer)', array($this->table));
         $this->db->execute('INSERT INTO ?f SELECT generate_series(0,499)', array($this->table));
-    }
-
-    protected function tearDown()
-    {
-        $this->db->execute('DROP TABLE IF EXISTS ?f', array($this->table));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 use DataSource\IntervalGenerator;
 
-class IntervalGeneratorTest extends \PHPUnit_Framework_TestCase
+class IntervalGeneratorTest extends TestAbstract
 {
     /**
      * @expectedException \LogicException
@@ -100,6 +100,6 @@ class IntervalGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function getGenerator($results)
     {
-        return new IntervalGenerator(Helper::getReaderMock($this, $results), 'start', 'end', 'type', 'result');
+        return new IntervalGenerator($this->getReaderMock($this, $results), 'start', 'end', 'type', 'result');
     }
 }

@@ -3,14 +3,14 @@
 use Browser\TestBrowserTrait;
 use ApiAction\Completion;
 
-class ApiControllerTest extends MockDatabaseTest
+class ApiControllerTest extends TestAbstract
 {
     use TestBrowserTrait;
 
     public function setUp()
     {
         parent::setUp();
-        $this->prepareHttpClient('http://' . Helper::getContainer()->getHost());
+        $this->prepareHttpClient('http://' . $this->container->getHost());
     }
 
     public function testComplete()
@@ -23,7 +23,7 @@ class ApiControllerTest extends MockDatabaseTest
             ->ensureResponse(json_decode($this->curResponse->getContent())->addresses[0]->title == 'г Москва')
             ->describe('Проверяем автоподстановку для дома.')
             ->loadPage('/api/complete/?address=г Москва, ул Стахановская, 1')
-            ->ensureResponse(json_decode($this->curResponse->getContent())->addresses[0]->title == 'г Москва, ул Стахановская, 16с1')
+            ->ensureResponse(json_decode($this->curResponse->getContent())->addresses[0]->title == 'г Москва, ул Стахановская, 1к1')
         ;
     }
 
@@ -38,7 +38,7 @@ class ApiControllerTest extends MockDatabaseTest
             ->loadPage('/api/validate/?address=г Мосва', 200)
             ->ensureResponse(!json_decode($this->curResponse->getContent())->is_valid && !json_decode($this->curResponse->getContent())->is_complete)
             ->describe('Проверяем валидацию корректного дома')
-            ->loadPage('/api/validate/?address=г Москва, ул Стахановская, 16с1', 200)
+            ->loadPage('/api/validate/?address=г Москва, ул Стахановская, 1к1', 200)
             ->ensureResponse(json_decode($this->curResponse->getContent())->is_valid && json_decode($this->curResponse->getContent())->is_complete)
             ->describe('Проверяем валидацию некорректного дома')
             ->loadPage('/api/validate/?address=г Москва, ул Стахановская, 1324326с1', 200)

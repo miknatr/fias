@@ -10,8 +10,8 @@ class Container
     use RouterContainerTrait;
     use LoggingContainerTrait;
 
-    protected $config       = array();
-    protected $importConfig = array();
+    private $config       = array();
+    private $importConfig = array();
 
     public function __construct()
     {

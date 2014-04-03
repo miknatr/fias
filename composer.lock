@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6f2a9da88610f9cc8bb169c7b5ddfef1",
+    "hash": "214f3e7dccb8423e509ae98a59872298",
     "packages": [
         {
             "name": "miknatr/grace-dbal",
@@ -215,6 +215,32 @@
             "time": "2014-03-27 14:17:43"
         },
         {
+            "name": "stiffbeards/kola",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:stiffbeards/kola.git",
+                "reference": "14e5fc5e9335abdcdfdb6d7b81e75b9a5b0f39f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stiffbeards/kola/zipball/14e5fc5e9335abdcdfdb6d7b81e75b9a5b0f39f6",
+                "reference": "14e5fc5e9335abdcdfdb6d7b81e75b9a5b0f39f6",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Kola": "lib/"
+                }
+            },
+            "support": {
+                "source": "https://github.com/stiffbeards/kola/tree/master",
+                "issues": "https://github.com/stiffbeards/kola/issues"
+            },
+            "time": "2014-03-27 06:52:24"
+        },
+        {
             "name": "symfony/css-selector",
             "version": "v2.4.1",
             "target-dir": "Symfony/Component/CssSelector",
@@ -385,7 +411,8 @@
     "stability-flags": {
         "miknatr/grace-dbal": 20,
         "stiffbeards/bravicility": 20,
-        "stiffbeards/browser": 20
+        "stiffbeards/browser": 20,
+        "stiffbeards/kola": 20
     },
     "platform": {
         "php": ">=5.4.0"

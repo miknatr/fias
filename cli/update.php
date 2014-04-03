@@ -14,7 +14,7 @@ $logger    = $container->getErrorLogger();
 
 FailureHandler::setup(function ($error) use ($logger) {
     $logger->error($error['message'], $error);
-    fwrite(STDERR, "В процессе инициализации произошла ошибка.\n");
+    fwrite(STDERR, "В процессе инициализации произошла ошибка: \n{$error['message']}\n");
     exit(1);
 });
 

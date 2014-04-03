@@ -2,7 +2,7 @@
 
 use FileSystem\Dearchiver;
 
-class DearchiverTest extends \PHPUnit_Framework_TestCase
+class DearchiverTest extends TestAbstract
 {
     private $testRarFile;
     private $testTxtFile;
@@ -34,7 +34,7 @@ class DearchiverTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        Helper::cleanUpFileDirectory();
+        $this->cleanUpFileDirectory();
     }
 
     /** @expectedException \FileSystem\FileException */

@@ -6,6 +6,6 @@
 	<testsuites>
         <testsuite name="Fias Tests">
             <directory>tests</directory>
-		</testsuite>
+        </testsuite>
 	</testsuites>
 </phpunit>
