@@ -19,22 +19,64 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
         $this->db = $this->container->getDb();
     }
 
-    protected static $tempProductionDatabaseName;
+    protected static $doProductionBackupExist = false;
 
     private static function renameProductionDatabase()
     {
-        $tempProductionDatabaseName = md5('fias_' . microtime(false));
         // То что тут отдельный контейнер это хорошо и правильно. Иначе в контейнере в тесте будет не та БД.
-        $container           = new Container();
-        $currentDatabaseName = $container->getDatabaseName();
+        $container                  = new Container();
+        $currentDatabaseName        = $container->getDatabaseName();
+        $tempProductionDatabaseName = $currentDatabaseName . '_production_backup';
+        $db                         = static::getConnectionForRenaming($container);
 
-        $db = static::getConnectionForRenaming($container);
-        $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($currentDatabaseName, $tempProductionDatabaseName));
-        $db->execute('CREATE DATABASE ?f', array($currentDatabaseName));
-        static::$tempProductionDatabaseName = $tempProductionDatabaseName;
+        static::terminateConnectionsToDatabase($db, $currentDatabaseName);
+        static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
+
+        if (!static::hasProductionBeenRenamedInPreviousSession($db, $tempProductionDatabaseName)) {
+            $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($currentDatabaseName, $tempProductionDatabaseName));
+            $db->execute('CREATE DATABASE ?f', array($currentDatabaseName));
+        }
+
+        static::$doProductionBackupExist = true;
         register_shutdown_function(function () {
             static::restoreProductionDatabase();
         });
+    }
+
+    private static function hasProductionBeenRenamedInPreviousSession(ConnectionInterface $db, $dbName)
+    {
+        return $db->execute(
+            'SELECT datname
+            FROM pg_database
+            WHERE NOT datistemplate
+                AND datname = ?q
+            ', array($dbName)
+        )->fetchResult();
+    }
+
+    private static function terminateConnectionsToDatabase(ConnectionInterface $db, $dbName)
+    {
+        // Нельзя удалить базу пока к ней есть коннекты. Запрос на удаление зависит от версии постгреса.
+        $version = $db->execute('SELECT version()')->fetchResult();
+        if (strpos($version, 'PostgreSQL 9.2') !== false) {
+            $db->execute(
+                'SELECT pg_terminate_backend(pg_stat_activity.pid)
+                FROM pg_stat_activity
+                WHERE pg_stat_activity.datname = ?q
+                    AND pid <> pg_backend_pid()
+                ',
+                array($dbName)
+            );
+        } else {
+            $db->execute(
+                'SELECT pg_terminate_backend(pg_stat_activity.procpid)
+                FROM pg_stat_activity
+                WHERE pg_stat_activity.datname = ?q
+                    AND procpid <> pg_backend_pid()
+                ',
+                array($dbName)
+            );
+        }
     }
 
     /** @var ConnectionInterface */
@@ -60,7 +102,7 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
 
     private static function cleanDatabase()
     {
-        if (!static::$tempProductionDatabaseName) {
+        if (!static::$doProductionBackupExist) {
             static::renameProductionDatabase();
         }
 
@@ -69,36 +111,16 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
 
     private static function restoreProductionDatabase()
     {
-        $container           = new Container();
-        $currentDatabaseName = $container->getDatabaseName();
+        $container                  = new Container();
+        $currentDatabaseName        = $container->getDatabaseName();
+        $tempProductionDatabaseName = $currentDatabaseName . '_production_backup';
+        $db                         = static::getConnectionForRenaming($container);
 
-        $db = static::getConnectionForRenaming($container);
-
-
-        // Нельзя удалить базу пока к ней есть коннекты. Запрос на удаление зависит от версии постгреса.
-        $version = $db->execute('SELECT version()')->fetchResult();
-        if (strpos($version, 'PostgreSQL 9.2') !== null) {
-            $db->execute(
-                'SELECT pg_terminate_backend(pg_stat_activity.procpid)
-                FROM pg_stat_activity
-                WHERE pg_stat_activity.datname = ?q
-                    AND procpid <> pg_backend_pid()
-                ',
-                array($currentDatabaseName)
-            );
-        } else {
-            $db->execute(
-                'SELECT pg_terminate_backend(pg_stat_activity.pid)
-                FROM pg_stat_activity
-                WHERE pg_stat_activity.datname = ?q
-                    AND pid <> pg_backend_pid()
-                ',
-                array($currentDatabaseName)
-            );
-        }
+        static::terminateConnectionsToDatabase($db, $currentDatabaseName);
+        static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
 
         $db->execute('DROP DATABASE ?f', array($currentDatabaseName));
-        $db->execute('ALTER DATABASE ?f RENAME TO ?f', array(static::$tempProductionDatabaseName, $currentDatabaseName));
+        $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($tempProductionDatabaseName, $currentDatabaseName));
     }
 
     public static function cleanUpFileDirectory()
