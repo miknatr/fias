@@ -2,8 +2,10 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$db = (new Container())->getDb();
-$dbPath = __DIR__ . '/../database';
+$container = new Container();
+$db        = $container->getDb();
+$dbPath    = $container->getDatabaseSourcesDirectory();
+
 $db->execute(file_get_contents($dbPath . '/01_tables.sql'));
 $db->execute(file_get_contents($dbPath . '/02_indexes.sql'));
 $db->execute(file_get_contents($dbPath . '/03_constraints.sql'));

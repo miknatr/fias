@@ -3,7 +3,6 @@
 use Bravicility\Failure\FailureHandler;
 use FileSystem\Dearchiver;
 use FileSystem\Directory;
-use Loader\InitLoader;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -11,10 +10,11 @@ $container    = new Container();
 $db           = $container->getDb();
 $dataBaseName = $container->getDatabaseName();
 $logger       = $container->getErrorLogger();
+$dbPath       = $container->getDatabaseSourcesDirectory();
 
 FailureHandler::setup(function ($error) use ($logger) {
     $logger->error($error['message'], $error);
-    fwrite(STDERR, "В процессе инициализации произошла ошибка: \n{$error['message']}\n");
+    fwrite(STDERR, "В процессе инициализации произошла ошибка:\n{$error['message']}\n");
     exit(1);
 });
 
@@ -28,11 +28,11 @@ if ($_SERVER['argc'] == 2) {
 
     $directory = new Directory($path);
 } else {
-    $loader    = new InitLoader($container->getWsdlUrl(), $container->getFileDirectory());
+    $loader    = $container->getInitLoader();
     $directory = $loader->load();
 }
 
-DbHelper::runFile($dataBaseName, __DIR__ . '/database/01_tables.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/01_tables.sql');
 
 $addressObjectsConfig = $container->getAddressObjectsImportConfig();
 $addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
@@ -67,13 +67,13 @@ $reader    = new XmlReader(
 
 $houses->import($reader);
 
-DbHelper::runFile($dataBaseName, __DIR__ . '/database/02_indexes.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/02_indexes.sql');
 
 $addressObjects->modifyDataAfterImport();
 $houses->modifyDataAfterImport();
 
-DbHelper::runFile($dataBaseName, __DIR__ . '/database/03_constraints.sql');
-DbHelper::runFile($dataBaseName, __DIR__ . '/database/04_clean_up.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/03_constraints.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/04_clean_up.sql');
 
 UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());
 

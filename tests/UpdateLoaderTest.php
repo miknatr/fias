@@ -59,16 +59,7 @@ class UpdateLoaderTest extends TestAbstract
             . '_fias_delta_xml.rar'
         ;
 
-        $this->assertTrue(
-            $this->invokeMethod(
-                $loader,
-                'fileIsCorrect',
-                array(
-                    $filePath,
-                    $this->getInformationAboutCurrentUpdateFile()['url'],
-                )
-            )
-        );
+        $this->assertTrue($loader->isFileSizeCorrect($filePath, $this->getInformationAboutCurrentUpdateFile()['url']));
     }
 
     private $updateInformation = array();

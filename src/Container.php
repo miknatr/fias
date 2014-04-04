@@ -3,6 +3,8 @@
 use Bravicility\Container\DbContainerTrait;
 use Bravicility\Container\LoggingContainerTrait;
 use Bravicility\Container\RouterContainerTrait;
+use Loader\InitLoader;
+use Loader\UpdateLoader;
 
 class Container
 {
@@ -70,6 +72,11 @@ class Container
         return array_pop($parts);
     }
 
+    public function getDatabaseSourcesDirectory()
+    {
+        return __DIR__ . '/../database';
+    }
+
     public function getHousesImportConfig()
     {
         return $this->importConfig['houses'];
@@ -78,5 +85,14 @@ class Container
     public function getAddressObjectsImportConfig()
     {
         return $this->importConfig['address_objects'];
+    }
+
+    public function getUpdateLoader()
+    {
+        return new UpdateLoader($this->getWsdlUrl(), $this->getFileDirectory());
+    }
+
+    public function getInitLoader(){
+        return new InitLoader($this->getWsdlUrl(), $this->getFileDirectory());
     }
 }

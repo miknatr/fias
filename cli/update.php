@@ -3,7 +3,6 @@
 use Bravicility\Failure\FailureHandler;
 use FileSystem\Dearchiver;
 use FileSystem\Directory;
-use Loader\UpdateLoader;
 use DataSource\XmlReader;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -14,7 +13,7 @@ $logger    = $container->getErrorLogger();
 
 FailureHandler::setup(function ($error) use ($logger) {
     $logger->error($error['message'], $error);
-    fwrite(STDERR, "В процессе инициализации произошла ошибка: \n{$error['message']}\n");
+    fwrite(STDERR, "В процессе инициализации произошла ошибка:\n{$error['message']}\n");
     exit(1);
 });
 
@@ -28,7 +27,7 @@ if ($_SERVER['argc'] == 2) {
 
     $directory = new Directory($path);
 } else {
-    $loader    = new UpdateLoader($container->getWsdlUrl(), $container->getFileDirectory());
+    $loader    = $container->getUpdateLoader();
     $directory = $loader->load();
 }
 

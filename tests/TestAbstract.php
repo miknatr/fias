@@ -19,7 +19,7 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
         $this->db = $this->container->getDb();
     }
 
-    protected static $doProductionBackupExist = false;
+    protected static $doesProductionBackupExist = false;
 
     private static function renameProductionDatabase()
     {
@@ -29,21 +29,20 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
         $tempProductionDatabaseName = $currentDatabaseName . '_production_backup';
         $db                         = static::getConnectionForRenaming($container);
 
-        static::terminateConnectionsToDatabase($db, $currentDatabaseName);
-        static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
-
-        if (!static::hasProductionBeenRenamedInPreviousSession($db, $tempProductionDatabaseName)) {
+        if (!static::doesDatabaseExist($db, $tempProductionDatabaseName)) {
+            static::terminateConnectionsToDatabase($db, $currentDatabaseName);
+            static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
             $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($currentDatabaseName, $tempProductionDatabaseName));
             $db->execute('CREATE DATABASE ?f', array($currentDatabaseName));
         }
 
-        static::$doProductionBackupExist = true;
+        static::$doesProductionBackupExist = true;
         register_shutdown_function(function () {
             static::restoreProductionDatabase();
         });
     }
 
-    private static function hasProductionBeenRenamedInPreviousSession(ConnectionInterface $db, $dbName)
+    private static function doesDatabaseExist(ConnectionInterface $db, $dbName)
     {
         return $db->execute(
             'SELECT datname
@@ -102,7 +101,7 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
 
     private static function cleanDatabase()
     {
-        if (!static::$doProductionBackupExist) {
+        if (!static::$doesProductionBackupExist) {
             static::renameProductionDatabase();
         }
 
@@ -116,11 +115,13 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
         $tempProductionDatabaseName = $currentDatabaseName . '_production_backup';
         $db                         = static::getConnectionForRenaming($container);
 
-        static::terminateConnectionsToDatabase($db, $currentDatabaseName);
-        static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
+        if (static::doesDatabaseExist($db, $tempProductionDatabaseName)) {
+            static::terminateConnectionsToDatabase($db, $currentDatabaseName);
+            static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
 
-        $db->execute('DROP DATABASE ?f', array($currentDatabaseName));
-        $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($tempProductionDatabaseName, $currentDatabaseName));
+            $db->execute('DROP DATABASE ?f', array($currentDatabaseName));
+            $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($tempProductionDatabaseName, $currentDatabaseName));
+        }
     }
 
     public static function cleanUpFileDirectory()

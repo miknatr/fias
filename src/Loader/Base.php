@@ -47,7 +47,7 @@ abstract class Base
     {
         $filePath = $this->fileDirectory . '/' . $fileName;
         if (file_exists($filePath)) {
-            if ($this->fileIsCorrect($filePath, $url)) {
+            if ($this->isFileSizeCorrect($filePath, $url)) {
                 return $filePath;
             }
 
@@ -82,7 +82,7 @@ abstract class Base
         file_put_contents($pathToDirectory . '/VERSION_ID_' . $versionId, 'Версия: ' . $versionId);
     }
 
-    protected function fileIsCorrect($filePath, $url)
+    public function isFileSizeCorrect($filePath, $url)
     {
         $ch = curl_init($url);
 
