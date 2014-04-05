@@ -1,12 +1,11 @@
 <phpunit
-	colors                      = "true"
 	convertErrorsToExceptions   = "true"
 	convertNoticesToExceptions  = "true"
 	convertWarningsToExceptions = "true"
-	bootstrap                   = "bootstrap_test.php">
+	bootstrap                   = "vendor/autoload.php">
 	<testsuites>
-		<testsuite name="All tests">
-			<directory>src/Fias/Tests</directory>
-		</testsuite>
+        <testsuite name="Fias Tests">
+            <directory>tests</directory>
+        </testsuite>
 	</testsuites>
 </phpunit>

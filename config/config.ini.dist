@@ -1,0 +1,10 @@
+
+app.host           = fias.loc
+app.file_directory = /var/www/upload
+app.wsdl_url       = http://fias.nalog.ru/WebServices/Public/DownloadService.asmx?WSDL
+
+db.uri = pgsql://postgres:1@localhost:5432/fias
+
+router.skip_cache_invalidation = off
+
+logging.error_log = logs/error.log

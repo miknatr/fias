@@ -4,9 +4,22 @@
     "require": {
         "php": ">=5.4.0",
         "miknatr/grace-dbal": "dev-master",
-        "monolog/monolog": "1.6.0"
+        "stiffbeards/bravicility": "dev-master",
+        "stiffbeards/browser": "dev-master"
     },
     "autoload": {
-        "psr-0": {"Fias\\": "src/"}
-    }
+        "psr-0": {
+            "": ["src", "tests"]
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:stiffbeards/bravicility.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:stiffbeards/browser.git"
+        }
+    ]
 }

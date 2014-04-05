@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE huyak-package SYSTEM "http://huyak.test.intertos.ru/huyak-package.dtd">
+<huyak-package version="1.0">
+    <dependencies>
+        <binary name="composer"/>
+        <binary name="psql"/>
+        <binary name="php"/>
+    </dependencies>
+
+    <resources>
+        <hostname id="host" suggestion="fias.&instance_name;"/>
+        <database id="db" type="postgres" suggestion="&instance_name;_fias"/>
+    </resources>
+
+    <services log-directory="logs">
+        <http id="http" host="{host}" root="web"/>
+    </services>
+
+    <build>
+        <bash title="Local directories">
+            mkdir -p logs
+            mkdir -p cache
+        </bash>
+
+        <load-parameters>
+            <parameter-file name="config/config.ini" dist="config/config.ini.dist">
+                <parameter location="app.host" value="{host}"/>
+                <parameter location="db.uri" value="&postgres_uri;/{db}"/>
+            </parameter-file>
+        </load-parameters>
+
+        <bash title="Composer">
+            composer install
+        </bash>
+
+        <bash title="Cleaning bravicility cache">
+            rm -rf cache/*
+        </bash>
+
+        <bash title="Database rebuild">
+            php cli/init-db.php
+        </bash>
+    </build>
+</huyak-package>
