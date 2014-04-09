@@ -30,7 +30,7 @@ class ApiController
 
         $json = (new Completion($this->container->getDb(), $request->get('address'), $limit))->run();
 
-        return new JsonResponse(200, $json);
+        return $this->makeResponse($json);
     }
 
     /**
@@ -45,11 +45,19 @@ class ApiController
 
         $json = (new Validation($this->container->getDb(), $address))->run();
 
-        return new JsonResponse(200, $json);
+        return $this->makeResponse($json);
     }
 
     private function makeErrorResponse($message)
     {
-        return new JsonResponse(400, array('error_message' => $message));
+        return $this->makeResponse(array('error_message' => $message), 400);
+    }
+
+    private function makeResponse($json, $status = 200)
+    {
+        $response = new JsonResponse($status, $json);
+        $response->addHeader('Access-Control-Allow-Origin: *');
+
+        return $response;
     }
 }
