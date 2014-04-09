@@ -105,7 +105,7 @@ class Completion implements ApiActionInterface
 
     private static function cleanAddressPart($rawAddress)
     {
-        // избавляемся от популярных префиксов/постфиксов
+        // избавляемся от популярных префиксов/постфиксов (Вопросы по поводу регулярки к johnnywoo, сам я ее слабо понимаю).
         $cleanAddress = preg_replace('
             {
                 (?<= ^ | [^а-яА-ЯЁё] )
