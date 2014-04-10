@@ -55,13 +55,20 @@ class Completion implements ApiActionInterface
             FROM address_objects ao
             WHERE ?p
                 AND title ilike  '?e%'
-            ORDER BY ao.title
+            ORDER BY ao.full_title
             LIMIT ?e"
         ;
 
         $parentPart = $this->parentId
             ? $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId))
-            : 'parent_id IS NULL'
+            : '(
+                parent_id IS NULL
+                OR parent_id IN (
+                    SELECT address_id
+                    FROM address_objects
+                    WHERE parent_id IS NULL
+                )
+            )'
         ;
 
         $values = array($parentPart, $pattern, $this->limit);
@@ -91,8 +98,29 @@ class Completion implements ApiActionInterface
         $tmp = explode(',', $address);
 
         return array(
-            'pattern' => trim(array_pop($tmp)),
+            'pattern' => static::cleanAddressPart(array_pop($tmp)),
             'address' => implode(',', $tmp),
         );
+    }
+
+    private static function cleanAddressPart($rawAddress)
+    {
+        // избавляемся от популярных префиксов/постфиксов (Вопросы по поводу регулярки к johnnywoo, сам я ее слабо понимаю).
+        $cleanAddress = preg_replace('
+            {
+                (?<= ^ | [^а-яА-ЯЁё] )
+
+                (?:ул|улица|снт|деревня|тер|пер|переулок|ал|аллея|линия|проезд|гск|ш|шоссе|г|город|обл|область|пр|проспект)
+
+                (?= [^а-яА-ЯЁё] | $ )
+
+                [.,-]*
+            }x',
+            '',
+            $rawAddress
+        );
+
+
+        return trim($cleanAddress);
     }
 }

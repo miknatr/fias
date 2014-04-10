@@ -3,6 +3,7 @@
 use Bravicility\Failure\FailureHandler;
 use FileSystem\Dearchiver;
 use FileSystem\Directory;
+use DataSource\XmlReader;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -31,6 +32,8 @@ if ($_SERVER['argc'] == 2) {
     $loader    = $container->getInitLoader();
     $directory = $loader->load();
 }
+// Получаем VersionId поскольку если его не окажется, то сообщение об этом мы получим только в самом конце 15-ти минутного процесса, что не очень приятно.
+$versionId = $directory->getVersionId();
 
 DbHelper::runFile($dataBaseName, $dbPath . '/01_tables.sql');
 
@@ -75,5 +78,5 @@ $houses->modifyDataAfterImport();
 DbHelper::runFile($dataBaseName, $dbPath . '/03_constraints.sql');
 DbHelper::runFile($dataBaseName, $dbPath . '/04_clean_up.sql');
 
-UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());
+UpdateLogHelper::addVersionIdToLog($db, $versionId);
 
