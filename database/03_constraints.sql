@@ -20,4 +20,10 @@ ALTER TABLE place_types
     ON UPDATE CASCADE ON DELETE CASCADE
 ;
 
+ALTER TABLE places
+    ADD CONSTRAINT places_type_id_fkey
+    FOREIGN KEY (type_id) REFERENCES place_types(id)
+    ON UPDATE CASCADE ON DELETE RESTRICT
+;
+
 COMMIT;

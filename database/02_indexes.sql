@@ -49,6 +49,17 @@ CREATE UNIQUE INDEX update_log_version_id_idx
     ON update_log
     USING BTREE (version_id)
 ;
+
+CREATE INDEX place_types_parent_id_fkey_idx
+    ON place_types
+    USING BTREE (parent_id)
+;
+
+CREATE INDEX places_type_id_fkey_idx
+    ON places
+    USING BTREE (type_id)
+;
+
 -- Что бы если заглючит оптимизатор,он планы составил исходя из индексов все равно в момент массовой правки
 ANALYZE;
 
