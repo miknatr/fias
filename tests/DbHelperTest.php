@@ -8,12 +8,12 @@ class DbHelperTest extends TestAbstract
      */
     public function testRunException()
     {
-        DbHelper::runFile('fias', __DIR__ . '/resources/inCorrectScript.sql');
+        DbHelper::runFile($this->container->getDatabaseName(), __DIR__ . '/resources/inCorrectScript.sql');
     }
 
     public function testRun()
     {
-        DbHelper::runFile('fias', __DIR__ . '/resources/correctScript.sql');
+        DbHelper::runFile($this->container->getDatabaseName(), __DIR__ . '/resources/correctScript.sql');
         $this->assertEquals(2, $this->db->execute('SELECT * FROM "correctTable"')->getNumRows());
     }
 }

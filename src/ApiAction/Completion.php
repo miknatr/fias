@@ -55,7 +55,7 @@ class Completion implements ApiActionInterface
             FROM address_objects ao
             WHERE ?p
                 AND title ilike  '?e%'
-            ORDER BY ao.full_title
+            ORDER BY ao.title
             LIMIT ?e"
         ;
 
