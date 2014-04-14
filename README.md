@@ -27,6 +27,9 @@ FIAS
     "addresses" : [
         {"is_complete":false, "title": "Москва, Невский пр."},
         {"is_complete":false, "title": "Москва, Невское урочище"}
+    ],
+    "places" : [
+        {"title": "Невский вокзал"}
     ]
 }
 ```

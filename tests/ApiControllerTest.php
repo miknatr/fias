@@ -24,6 +24,9 @@ class ApiControllerTest extends TestAbstract
             ->describe('Проверяем автоподстановку для дома.')
             ->loadPage('/api/complete/?address=г Москва, ул Стахановская, 1')
             ->ensureResponse(json_decode($this->curResponse->getContent())->addresses[0]->title == 'г Москва, ул Стахановская, 1к1')
+            ->describe('Проверяем автоподстановку для места')
+            ->loadPage('/api/complete/?address=Паве')
+            ->ensureResponse(count(json_decode($this->curResponse->getContent())->places) == 2)
         ;
     }
 

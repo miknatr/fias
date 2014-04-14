@@ -7,7 +7,7 @@ class ApiActionPlaceCompletionTest extends TestAbstract
     public function testNotFound()
     {
         $completion = new PlaceCompletion($this->db, 'Никому неизвестное место', 50);
-        $this->assertEmpty($completion->run());
+        $this->assertEmpty($completion->run()['places']);
     }
 
     public function testWithType()
@@ -15,7 +15,7 @@ class ApiActionPlaceCompletionTest extends TestAbstract
         $completion = new PlaceCompletion($this->db, 'вокзал Паве', 50);
         $result = $completion->run();
 
-        $this->assertEquals('Павелецкий вокзал', $result[0]['title']);
+        $this->assertEquals('Павелецкий вокзал', $result['places'][0]['title']);
     }
 
     public function testWithoutType()
@@ -23,7 +23,7 @@ class ApiActionPlaceCompletionTest extends TestAbstract
         $completion = new PlaceCompletion($this->db, 'Павел', 50);
         $result = $completion->run();
 
-        $this->assertEquals('Павелецкий автовокзал', $result[0]['title']);
-        $this->assertEquals('Павелецкий вокзал', $result[1]['title']);
+        $this->assertEquals('Павелецкий автовокзал', $result['places'][0]['title']);
+        $this->assertEquals('Павелецкий вокзал', $result['places'][1]['title']);
     }
 }

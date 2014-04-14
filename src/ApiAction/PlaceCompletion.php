@@ -2,7 +2,7 @@
 
 namespace ApiAction;
 
-class PlaceCompletion extends CompletionAbstract implements ApiActionInterface
+class PlaceCompletion extends CompletionAbstract
 {
     private $placeWords = array();
     private $typeId     = null;
@@ -11,8 +11,9 @@ class PlaceCompletion extends CompletionAbstract implements ApiActionInterface
     {
         $this->preparePlaceWords();
         $this->extractType();
+        $rows = $this->findPlaces();
 
-        return $this->findPlaces();
+        return array('places' => $rows);
     }
 
     private function extractType()
