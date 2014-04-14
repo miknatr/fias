@@ -3,27 +3,15 @@
 namespace ApiAction;
 
 use AddressStorage;
-use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class AddressCompletion implements ApiActionInterface
+class AddressCompletion extends CompletionAbstract implements ApiActionInterface
 {
-    const MAX_LIMIT = 50;
-
-    /** @var ConnectionInterface */
-    private $db;
     private $address;
     private $parentId;
-    private $limit;
-
-    public function __construct(ConnectionInterface $db, $address, $limit)
-    {
-        $this->db      = $db;
-        $this->address = $address;
-        $this->limit   = $limit ?: static::MAX_LIMIT;
-    }
 
     public function run()
     {
+        $this->address  = $this->textForCompletion;
         $storage        = new AddressStorage($this->db);
         $addressParts   = static::splitAddress($this->address);
         $this->parentId = $storage->findAddress($addressParts['address']);
