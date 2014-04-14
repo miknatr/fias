@@ -35,7 +35,7 @@ class PlaceCompletion extends CompletionAbstract
     private function findPlaces()
     {
         $pattern = implode(' ', $this->placeWords);
-        $sql = "
+        $sql     = "
             SELECT full_title title, 1 is_complete
             FROM places
             WHERE ?p
@@ -60,6 +60,7 @@ class PlaceCompletion extends CompletionAbstract
 
         foreach ($tmp as $word) {
             $trimmedWord = trim($word);
+
             $this->placeWords[$trimmedWord] = $trimmedWord;
         }
     }
