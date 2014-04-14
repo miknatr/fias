@@ -4,7 +4,7 @@ namespace ApiAction;
 
 use AddressStorage;
 
-class AddressCompletion extends CompletionAbstract implements ApiActionInterface
+class AddressCompletion extends CompletionAbstract
 {
     private $address;
     private $parentId;
