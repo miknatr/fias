@@ -65,7 +65,7 @@ CREATE UNIQUE INDEX places_title_type_id_uq_idx
     USING BTREE (title, type_id)
 ;
 
-CREATE INDEX places_title_ids
+CREATE INDEX places_title_idx
     ON places
     USING BTREE (title)
 ;
