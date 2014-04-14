@@ -1,7 +1,7 @@
 <?php
 
 use Browser\TestBrowserTrait;
-use ApiAction\Completion;
+use ApiAction\AddressCompletion;
 
 class ApiControllerTest extends TestAbstract
 {
@@ -15,7 +15,7 @@ class ApiControllerTest extends TestAbstract
 
     public function testComplete()
     {
-        $tooBigLimit = Completion::MAX_LIMIT + 1;
+        $tooBigLimit = AddressCompletion::MAX_LIMIT + 1;
         $this->describe('Проверяем отсечение слишком большого лимита.')
             ->loadPage('/api/complete/?address=Москва&limit=' . $tooBigLimit, 400)
             ->describe('Проверяем автоподстановку для адресного объекта.')

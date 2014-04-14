@@ -1,12 +1,12 @@
 <?php
 
-use ApiAction\Completion;
+use ApiAction\AddressCompletion;
 
-class ApiActionCompletionTest extends TestAbstract
+class ApiActionAddressCompletionTest extends TestAbstract
 {
     public function testNotFound()
     {
-        $complete = new Completion($this->db, 'Нави, Главная б', null);
+        $complete = new AddressCompletion($this->db, 'Нави, Главная б', null);
         $result   = $complete->run()['addresses'];
 
         $this->assertCount(0, $result);
@@ -14,7 +14,7 @@ class ApiActionCompletionTest extends TestAbstract
 
     public function testAddressCompletion()
     {
-        $complete = new Completion($this->db, 'г Москва, Ста', null);
+        $complete = new AddressCompletion($this->db, 'г Москва, Ста', null);
         $result   = $complete->run()['addresses'];
 
         $this->assertCount(4, $result);
@@ -24,7 +24,7 @@ class ApiActionCompletionTest extends TestAbstract
 
     public function testHomeCompletion()
     {
-        $complete = new Completion($this->db, 'г Москва, ул Стахановская, 1', 2);
+        $complete = new AddressCompletion($this->db, 'г Москва, ул Стахановская, 1', 2);
         $result   = $complete->run()['addresses'];
 
         $this->assertCount(2, $result);

@@ -5,7 +5,7 @@ namespace ApiAction;
 use AddressStorage;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class Completion implements ApiActionInterface
+class AddressCompletion implements ApiActionInterface
 {
     const MAX_LIMIT = 50;
 

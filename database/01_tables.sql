@@ -52,6 +52,16 @@ COMMENT ON TABLE update_log              IS 'лог обновлений';
 COMMENT ON COLUMN update_log.version_id  IS 'id версии, полученной от базы ФИАС';
 COMMENT ON COLUMN update_log.created_at  IS 'дата установки обновления/инициализации';
 
+DROP TABLE IF EXISTS places;
+CREATE TABLE places (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR,
+    type_id INTEGER NOT NULL
+);
+COMMENT ON TABLE places              IS 'справочник мест';
+COMMENT ON COLUMN places.title       IS 'название места';
+COMMENT ON COLUMN places.type_id     IS 'идентификатор типа места';
+
 DROP TABLE IF EXISTS place_types;
 CREATE TABLE place_types(
     id SERIAL PRIMARY KEY,
@@ -63,15 +73,5 @@ COMMENT ON TABLE place_types              IS 'справочник типов м
 COMMENT ON COLUMN place_types.parent_id   IS 'идентификатор типа родителя';
 COMMENT ON COLUMN place_types.title       IS 'название типа для пользователя';
 COMMENT ON COLUMN place_types.system_name IS 'системное имя типа, для использования в программном коде';
-
-DROP TABLE IF EXISTS places;
-CREATE TABLE places (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR UNIQUE,
-    type_id INTEGER NOT NULL
-);
-COMMENT ON TABLE places              IS 'справочник мест';
-COMMENT ON COLUMN places.title       IS 'название места';
-COMMENT ON COLUMN places.type_id     IS 'идентификатор типа места';
 
 COMMIT;

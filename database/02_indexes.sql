@@ -60,6 +60,16 @@ CREATE INDEX places_type_id_fkey_idx
     USING BTREE (type_id)
 ;
 
+CREATE UNIQUE INDEX places_title_type_id_uq_idx
+    ON places
+    USING BTREE (title, type_id)
+;
+
+CREATE INDEX places_title_ids
+    ON places
+    USING BTREE (title)
+;
+
 -- Что бы если заглючит оптимизатор,он планы составил исходя из индексов все равно в момент массовой правки
 ANALYZE;
 
