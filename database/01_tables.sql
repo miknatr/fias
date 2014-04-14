@@ -56,10 +56,12 @@ DROP TABLE IF EXISTS places;
 CREATE TABLE places (
     id SERIAL PRIMARY KEY,
     title VARCHAR,
+    full_title VARCHAR,
     type_id INTEGER NOT NULL
 );
 COMMENT ON TABLE places              IS 'справочник мест';
 COMMENT ON COLUMN places.title       IS 'название места';
+COMMENT ON COLUMN places.full_title  IS 'название места с типом';
 COMMENT ON COLUMN places.type_id     IS 'идентификатор типа места';
 
 DROP TABLE IF EXISTS place_types;

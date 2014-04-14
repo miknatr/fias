@@ -1,15 +1,15 @@
 
 INSERT INTO place_types(id, title)
 VALUES
-    (1, 'Транспортный объект')
+    (1, 'транспортный объект')
 ;
 
 INSERT INTO place_types(id, title, parent_id, system_name)
 VALUES
-    (2, 'Аэропорт', 1, 'airport'),
-    (3, 'Вокзал', 1, 'railway_station'),
-    (4, 'Автовокзал', 1, 'bus_terminal'),
-    (5, 'Порт', 1, 'port')
+    (2, 'аэропорт', 1, 'airport'),
+    (3, 'вокзал', 1, 'railway_station'),
+    (4, 'автовокзал', 1, 'bus_terminal'),
+    (5, 'порт', 1, 'port')
 ;
 
 INSERT INTO places(title, type_id)
@@ -40,5 +40,9 @@ VALUES
     ('Морской', 5)
 ;
 
+UPDATE places p
+SET full_title = p.title || ' ' || pt.title
+FROM place_types pt
+WHERE pt.id = p.type_id;
 
 SELECT setval('place_types_id_seq',  (SELECT MAX(id) FROM place_types LIMIT 1));

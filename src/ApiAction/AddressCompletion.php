@@ -42,7 +42,7 @@ class AddressCompletion extends CompletionAbstract implements ApiActionInterface
             SELECT full_title title, 0 is_complete
             FROM address_objects ao
             WHERE ?p
-                AND title ilike  '?e%'
+                AND title ilike '?e%'
             ORDER BY ao.title
             LIMIT ?e"
         ;
