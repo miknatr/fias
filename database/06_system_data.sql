@@ -32,9 +32,9 @@ VALUES
     (13, NULL, 'Раменское', 2),
     (14, NULL, 'Чкаловский', 2),
     (15, NULL, 'Пулково', 2),
-    (16, NULL, '1', 6),
-    (17, NULL, '2', 6),
-    (18, NULL, 'новый', 6)
+    (16, 15, '1', 6),
+    (17, 15, '2', 6),
+    (18, 15, 'новый', 6)
 ;
 
 SELECT setval('places_id_seq',  (SELECT MAX(id) FROM places LIMIT 1));
@@ -64,3 +64,32 @@ UPDATE places p
 SET full_title = p.title || ' ' || pt.title
 FROM place_types pt
 WHERE pt.id = p.type_id;
+
+-- Формируем полный заголовок
+UPDATE places p
+SET full_title = tmp.title
+FROM (
+    WITH RECURSIVE required_places(id, title) AS (
+        SELECT DISTINCT pw.id, pw.title || ' ' || pwt.title
+        FROM places pw
+        INNER JOIN place_types pwt
+            ON pwt.id = pw.type_id
+        WHERE pw.parent_id IS NULL
+        UNION ALL
+        SELECT pwr.id, pw.title || ', ' || pwr.title || ' ' || pwt.title
+        FROM places pwr
+        INNER JOIN required_places pw
+            ON pw.id = pwr.parent_id
+        INNER JOIN place_types pwt
+            ON pwt.id = pwr.type_id
+    )
+    SELECT * FROM required_places
+) tmp
+WHERE tmp.id = p.id;
+
+-- Определяем наличие дочерних записей
+UPDATE places
+SET have_children = TRUE
+WHERE id IN (SELECT DISTINCT parent_id FROM places)
+
+

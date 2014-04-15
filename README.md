@@ -29,7 +29,7 @@ FIAS
         {"is_complete":false, "title": "Москва, Невское урочище"}
     ],
     "places" : [
-        {"title": "Невский вокзал"}
+        {"is_complete":false, "title": "Невский вокзал"}
     ]
 }
 ```

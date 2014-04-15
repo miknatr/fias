@@ -58,13 +58,15 @@ CREATE TABLE places (
     title VARCHAR,
     full_title VARCHAR,
     parent_id INTEGER,
-    type_id INTEGER NOT NULL
+    type_id INTEGER NOT NULL,
+    have_children BOOLEAN DEFAULT FALSE
 );
-COMMENT ON TABLE places              IS 'справочник мест';
-COMMENT ON COLUMN places.title       IS 'название места';
-COMMENT ON COLUMN places.full_title  IS 'название места с типом';
-COMMENT ON COLUMN places.parent_id   IS 'идентификатор родительского места';
-COMMENT ON COLUMN places.type_id     IS 'идентификатор типа места';
+COMMENT ON TABLE places                IS 'справочник мест';
+COMMENT ON COLUMN places.title         IS 'название места';
+COMMENT ON COLUMN places.full_title    IS 'название места с типом';
+COMMENT ON COLUMN places.parent_id     IS 'идентификатор родительского места';
+COMMENT ON COLUMN places.type_id       IS 'идентификатор типа места';
+COMMENT ON COLUMN places.have_children IS 'есть ли дочерние сущности';
 
 DROP TABLE IF EXISTS place_types;
 CREATE TABLE place_types(

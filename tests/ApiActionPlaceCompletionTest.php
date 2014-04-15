@@ -26,4 +26,13 @@ class ApiActionPlaceCompletionTest extends TestAbstract
         $this->assertEquals('Павелецкий автовокзал', $result['places'][0]['title']);
         $this->assertEquals('Павелецкий вокзал', $result['places'][1]['title']);
     }
+
+    public function testWithParent()
+    {
+        $completion = new PlaceCompletion($this->db, 'пулко', 50);
+        $result     = $completion->run();
+
+        $this->assertEquals('Пулково аэропорт', $result['places'][0]['title']);
+        $this->assertEquals(0, $result['places'][0]['is_complete']);
+    }
 }

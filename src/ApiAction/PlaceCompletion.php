@@ -37,7 +37,7 @@ class PlaceCompletion extends CompletionAbstract
     {
         $pattern = implode(' ', $this->placeWords);
         $sql     = "
-            SELECT full_title title, 1 is_complete
+            SELECT full_title title, (CASE WHEN have_children THEN 0 ELSE 1 END)  is_complete
             FROM places
             WHERE ?p
                 AND title ilike '?e%'
