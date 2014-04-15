@@ -15,8 +15,8 @@ abstract class CompletionAbstract implements ApiActionInterface
 
     public function __construct(ConnectionInterface $db, $textForCompletion, $limit)
     {
-        $this->db      = $db;
-        $this->limit   = $limit ?: static::MAX_LIMIT;
+        $this->db    = $db;
+        $this->limit = $limit ?: static::MAX_LIMIT;
 
         $this->textForCompletion = $textForCompletion;
     }

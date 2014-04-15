@@ -14,7 +14,7 @@ class PlaceStorage
 
     public function findPlace($place)
     {
-        $sql   = '
+        $sql = '
             SELECT id
             FROM places
             WHERE lower(full_title) = lower(?q)'
