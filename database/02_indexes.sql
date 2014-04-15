@@ -60,9 +60,9 @@ CREATE INDEX places_type_id_fkey_idx
     USING BTREE (type_id)
 ;
 
-CREATE UNIQUE INDEX places_title_type_id_uq_idx
+CREATE UNIQUE INDEX places_title_type_id_parent_id_uq_idx
     ON places
-    USING BTREE (title, type_id)
+    USING BTREE (title, type_id, parent_id)
 ;
 
 CREATE INDEX places_title_idx
