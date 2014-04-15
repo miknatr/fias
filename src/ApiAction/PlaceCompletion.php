@@ -5,13 +5,12 @@ namespace ApiAction;
 class PlaceCompletion extends CompletionAbstract
 {
     private $placeWords = array();
-    private $typeId     = null;
 
     public function run()
     {
         $this->preparePlaceWords();
-        $this->extractType();
-        $rows = $this->findPlaces();
+        $typeId = $this->extractType();
+        $rows   = $this->findPlaces($typeId);
 
         return array('places' => $rows);
     }
@@ -26,13 +25,15 @@ class PlaceCompletion extends CompletionAbstract
             array($this->placeWords)
         )->fetchOneOrFalse();
 
-        if ($type) {
-            unset($this->placeWords[$type['title']]);
-            $this->typeId = $type['id'];
+        if (!$type) {
+            return null;
         }
+
+        unset($this->placeWords[$type['title']]);
+        return $type['id'];
     }
 
-    private function findPlaces()
+    private function findPlaces($typeId = null)
     {
         $pattern = implode(' ', $this->placeWords);
         $sql     = "
@@ -44,12 +45,12 @@ class PlaceCompletion extends CompletionAbstract
             LIMIT ?e"
         ;
 
-        $parentPart = $this->typeId
-            ? $this->db->replacePlaceholders('type_id = ?q', array($this->typeId))
+        $typePart = $typeId
+            ? $this->db->replacePlaceholders('type_id = ?q', array($typeId))
             : '1 = 1 '
         ;
 
-        $values = array($parentPart, $pattern, $this->limit);
+        $values = array($typePart, $pattern, $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
     }
