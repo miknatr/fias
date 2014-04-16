@@ -1,6 +1,7 @@
 /.idea/
-/logs/*
+/logs
 /vendor
 /config/config.ini
-/src/Fias/Tests/file_directory/*
+/tests/file_directory/*
+/cache
 /phpunit.xml
