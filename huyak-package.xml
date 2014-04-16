@@ -5,6 +5,7 @@
         <binary name="composer"/>
         <binary name="psql"/>
         <binary name="php"/>
+        <binary name="rar"/>
     </dependencies>
 
     <resources>
@@ -20,6 +21,7 @@
         <bash title="Local directories">
             mkdir -p logs
             mkdir -p cache
+            mkdir -p tests/file_directory
         </bash>
 
         <load-parameters>
