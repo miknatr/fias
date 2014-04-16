@@ -61,12 +61,11 @@ class PlaceCompletion extends CompletionAbstract
             SELECT full_title title, (CASE WHEN have_children THEN 0 ELSE 1 END)  is_complete
             FROM places
             WHERE ?p
-                AND title ilike '?e%'
             ORDER BY title
             LIMIT ?e"
         ;
 
-        $whereParts = array('1 = 1');
+        $whereParts = array($this->db->replacePlaceholders("title ilike '?e%'", array($pattern)));
 
         if ($type) {
             $whereParts[] = $this->db->replacePlaceholders('type_id = ?q', array($type['id']));
@@ -76,7 +75,7 @@ class PlaceCompletion extends CompletionAbstract
             $whereParts[] = $this->db->replacePlaceholders('parent_id = ?q', array($parentId));
         }
 
-        $values = array(implode($whereParts, ' AND '), $pattern, $this->limit);
+        $values = array(implode($whereParts, ' AND '), $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
     }

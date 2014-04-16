@@ -14,7 +14,7 @@ VALUES
     (7, 'речной вокзал', 1, 'riverside_station')
 ;
 
-SELECT setval('place_types_id_seq',  (SELECT MAX(id) FROM place_types LIMIT 1));
+SELECT setval('place_types_id_seq', (SELECT MAX(id) FROM place_types LIMIT 1));
 
 INSERT INTO places(id, parent_id, title, type_id)
 VALUES
@@ -38,7 +38,7 @@ VALUES
     (18, 15, 'новый', 6)
 ;
 
-SELECT setval('places_id_seq',  (SELECT MAX(id) FROM places LIMIT 1));
+SELECT setval('places_id_seq', (SELECT MAX(id) FROM places LIMIT 1));
 
 INSERT INTO places(title, type_id)
 VALUES
