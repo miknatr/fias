@@ -2,40 +2,61 @@
 
 namespace ApiAction;
 
+use PlaceStorage;
+
 class PlaceCompletion extends CompletionAbstract
 {
-    private $placeWords = array();
-
     public function run()
     {
-        $this->preparePlaceWords();
-        $typeId = $this->extractType();
-        $rows   = $this->findPlaces($typeId);
+        $placeParts = $this->splitPlaceTitle($this->textForCompletion);
+        $parentId   = null;
+
+        if (!empty($placeParts['parent_place'])) {
+            $storage  = new PlaceStorage($this->db);
+            $parentId = $storage->findPlace($placeParts['parent_place']);
+            if (!$parentId) {
+                return array('places' => array());
+            }
+        }
+
+        $placeWords = $this->splitPatternToWords($placeParts['pattern']);
+        $type       = $this->extractType($placeWords);
+
+        if ($type) {
+            unset($placeWords[$type['title']]);
+        }
+
+        $rows = $this->findPlaces($placeWords, $type, $parentId);
 
         return array('places' => $rows);
     }
 
-    private function extractType()
+    private function splitPlaceTitle($title)
+    {
+        $tmp = explode(',', $title);
+
+        return array(
+            'pattern'      => strtolower(trim(array_pop($tmp))),
+            'parent_place' => implode(',', $tmp),
+        );
+    }
+
+    private function extractType(array $words)
     {
         $type = $this->db->execute(
             'SELECT id, title
             FROM place_types
             WHERE title IN (?l)
             ',
-            array($this->placeWords)
+            array($words)
         )->fetchOneOrFalse();
 
-        if (!$type) {
-            return null;
-        }
-
-        unset($this->placeWords[$type['title']]);
-        return $type['id'];
+        return  $type ?: array();
     }
 
-    private function findPlaces($typeId = null)
+    private function findPlaces(array $placeWords, array $type, $parentId)
     {
-        $pattern = implode(' ', $this->placeWords);
+        $pattern = implode(' ', $placeWords);
         $sql     = "
             SELECT full_title title, (CASE WHEN have_children THEN 0 ELSE 1 END)  is_complete
             FROM places
@@ -45,24 +66,31 @@ class PlaceCompletion extends CompletionAbstract
             LIMIT ?e"
         ;
 
-        $typePart = $typeId
-            ? $this->db->replacePlaceholders('type_id = ?q', array($typeId))
-            : '1 = 1 '
-        ;
+        $whereParts = array('1 = 1');
 
-        $values = array($typePart, $pattern, $this->limit);
+        if ($type) {
+            $whereParts[] = $this->db->replacePlaceholders('type_id = ?q', array($type['id']));
+        }
+
+        if ($parentId) {
+            $whereParts[] = $this->db->replacePlaceholders('parent_id = ?q', array($parentId));
+        }
+
+        $values = array(implode($whereParts, ' AND '), $pattern, $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
     }
 
-    private function preparePlaceWords()
+    private function splitPatternToWords($pattern)
     {
-        $tmp = explode(' ', strtolower($this->textForCompletion));
+        $tmp    = explode(' ', $pattern);
+        $result = array();
 
         foreach ($tmp as $word) {
-            $trimmedWord = trim($word);
-
-            $this->placeWords[$trimmedWord] = $trimmedWord;
+            $trimmedWord          = trim($word);
+            $result[$trimmedWord] = $trimmedWord;
         }
+
+        return $result;
     }
 }
