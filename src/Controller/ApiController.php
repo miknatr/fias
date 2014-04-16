@@ -2,9 +2,10 @@
 
 namespace Controller;
 
+use ApiAction\PlaceCompletion;
 use Bravicility\Http\Request;
 use Bravicility\Http\Response\JsonResponse;
-use ApiAction\Completion;
+use ApiAction\AddressCompletion;
 use ApiAction\Validation;
 use Container;
 
@@ -24,11 +25,13 @@ class ApiController
     public function complete(Request $request)
     {
         $limit = $request->get('limit');
-        if ($limit > Completion::MAX_LIMIT) {
+        if ($limit > AddressCompletion::MAX_LIMIT) {
             return $this->makeErrorResponse('Превышен допустимый лимит на количество записей.');
         }
 
-        $json = (new Completion($this->container->getDb(), $request->get('address'), $limit))->run();
+        $places    = (new PlaceCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
+        $addresses = (new AddressCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
+        $json      = array_merge($places, $addresses);
 
         return $this->makeResponse($json);
     }

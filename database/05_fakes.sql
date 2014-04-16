@@ -1,4 +1,4 @@
-INSERT INTO address_objects ("id", "address_id", "parent_id", "level", "full_title", "title", "prefix", "house_count")
+INSERT INTO address_objects (id, address_id, parent_id, level, full_title, title, prefix, house_count)
 VALUES
     ('29251dcf-00a1-4e34-98d4-5c47484a36d4', '29251dcf-00a1-4e34-98d4-5c47484a36d4', NULL, '0', 'г Москва', 'Москва', 'г', '0'),
     ('77303f7c-452b-4e73-b2b0-cbc59fe636c2', '77303f7c-452b-4e73-b2b0-cbc59fe636c2', '29251dcf-00a1-4e34-98d4-5c47484a36d4', '1', 'г Москва, ул Стахановская', 'Стахановская', 'ул', '4'),
@@ -8,7 +8,7 @@ VALUES
     ('77303f7c-452b-4e73-b2b0-cbc59fe636c7', '77303f7c-452b-4e73-b2b0-cbc59fe636c7', '29251dcf-00a1-4e34-98d4-5c47484a36d4', '1', 'г Москва, ул Машинная', 'Машинная', 'ул', '0')
 ;
 
-INSERT INTO houses("full_number", "id", "house_id", "address_id")
+INSERT INTO houses(full_number, id, house_id, address_id)
 VALUES
     ('16с17', '841254dc-0074-41fe-99ba-0c8501526c04', '841254dc-0074-41fe-99ba-0c8501526c04', '77303f7c-452b-4e73-b2b0-cbc59fe636c2'),
     ('16с18', '841254dc-0074-41fe-99ba-0c8501526c05', '841254dc-0074-41fe-99ba-0c8501526c05', '77303f7c-452b-4e73-b2b0-cbc59fe636c2'),

@@ -3,6 +3,7 @@
 namespace ApiAction;
 
 use AddressStorage;
+use PlaceStorage;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Validation implements ApiActionInterface
@@ -19,6 +20,24 @@ class Validation implements ApiActionInterface
 
     public function run()
     {
+        $addressData = $this->lookUpInFias();
+        if ($addressData) {
+            $addressData['object_type'] = 'address';
+            return $addressData;
+        }
+
+        $placeData = $this->lookUpInPlaces();
+        if ($placeData) {
+            $placeData['object_type'] = 'place';
+            return $placeData;
+        }
+
+        // ничего не нашлось
+        return array('is_complete' => false, 'is_valid' => false, 'object_type' => null);
+    }
+
+    private function lookUpInFias()
+    {
         $storage = new AddressStorage($this->db);
 
         $completeAddress = $storage->findHouse($this->address);
@@ -31,7 +50,19 @@ class Validation implements ApiActionInterface
             return array('is_complete' => false, 'is_valid' => true);
         }
 
-        // Ничего не нашлось
-        return array('is_complete' => false, 'is_valid' => false);
+        // ничего не нашлось
+        return null;
+    }
+
+    private function lookUpInPlaces()
+    {
+        $storage = new PlaceStorage($this->db);
+        $place   = $storage->findPlace($this->address);
+
+        if ($place) {
+            return array('is_valid' => true, 'is_complete' => true);
+        }
+
+        return null;
     }
 }

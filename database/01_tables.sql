@@ -1,7 +1,7 @@
 START TRANSACTION;
 
 DROP TABLE IF EXISTS houses;
-CREATE TABLE "houses" (
+CREATE TABLE houses (
     id          UUID PRIMARY KEY NOT NULL,
     house_id    UUID             NOT NULL,
     address_id  UUID DEFAULT NULL,
@@ -48,5 +48,36 @@ CREATE TABLE update_log (
     version_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP(0)
 );
+COMMENT ON TABLE update_log              IS 'лог обновлений';
+COMMENT ON COLUMN update_log.version_id  IS 'id версии, полученной от базы ФИАС';
+COMMENT ON COLUMN update_log.created_at  IS 'дата установки обновления/инициализации';
+
+DROP TABLE IF EXISTS places;
+CREATE TABLE places (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR,
+    full_title VARCHAR,
+    parent_id INTEGER,
+    type_id INTEGER NOT NULL,
+    have_children BOOLEAN DEFAULT FALSE
+);
+COMMENT ON TABLE places                IS 'справочник мест';
+COMMENT ON COLUMN places.title         IS 'название места';
+COMMENT ON COLUMN places.full_title    IS 'название места с типом';
+COMMENT ON COLUMN places.parent_id     IS 'идентификатор родительского места';
+COMMENT ON COLUMN places.type_id       IS 'идентификатор типа места';
+COMMENT ON COLUMN places.have_children IS 'есть ли дочерние сущности';
+
+DROP TABLE IF EXISTS place_types;
+CREATE TABLE place_types(
+    id SERIAL PRIMARY KEY,
+    parent_id INTEGER,
+    title VARCHAR NOT NULL UNIQUE,
+    system_name VARCHAR UNIQUE
+);
+COMMENT ON TABLE place_types              IS 'справочник типов мест';
+COMMENT ON COLUMN place_types.parent_id   IS 'идентификатор типа родителя';
+COMMENT ON COLUMN place_types.title       IS 'название типа для пользователя';
+COMMENT ON COLUMN place_types.system_name IS 'системное имя типа, для использования в программном коде';
 
 COMMIT;
