@@ -10,7 +10,8 @@ VALUES
     (3, 'вокзал', 1, 'railway_station'),
     (4, 'автовокзал', 1, 'bus_terminal'),
     (5, 'порт', 1, 'port'),
-    (6, 'терминал', 2, 'airport_terminal')
+    (6, 'терминал', 2, 'airport_terminal'),
+    (7, 'речной вокзал', 1, 'riverside_station')
 ;
 
 SELECT setval('place_types_id_seq',  (SELECT MAX(id) FROM place_types LIMIT 1));
@@ -57,7 +58,9 @@ VALUES
     ('Ярославский', 3),
     ('Щелковский', 4),
     ('Павелецкий', 4),
-    ('Морской', 5)
+    ('Морской', 5),
+    ('Пролетарский', 7),
+    ('Уткина заводь', 7)
 ;
 
 UPDATE places p
