@@ -18,8 +18,10 @@ class AddressCompletion extends CompletionAbstract
 
         if ($this->getHousesCount()) {
             $rows = $this->findHouses($addressParts['pattern']);
+            $rows = $this->setIsCompleteFlag($rows, true);
         } else {
             $rows = $this->findAddresses($addressParts['pattern']);
+            $rows = $this->setIsCompleteFlag($rows, false);
         }
 
         return array('addresses' => $rows);
@@ -39,7 +41,7 @@ class AddressCompletion extends CompletionAbstract
     private function findAddresses($pattern)
     {
         $sql = "
-            SELECT full_title title, 0 is_complete
+            SELECT full_title title
             FROM address_objects ao
             WHERE ?p
                 AND title ilike '?e%'
@@ -67,7 +69,7 @@ class AddressCompletion extends CompletionAbstract
     private function findHouses($pattern)
     {
         $sql    = "
-            SELECT full_title||', '||full_number title, 1 is_complete
+            SELECT full_title||', '||full_number title
             FROM houses h
             INNER JOIN address_objects ao
                 ON ao.address_id = h.address_id
@@ -79,6 +81,16 @@ class AddressCompletion extends CompletionAbstract
         $values = array($this->parentId, $pattern, $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
+    }
+
+    private function setIsCompleteFlag(array $values, $flag)
+    {
+        // Проставляем здесь, а не в запросе так как хотим получить в JSON честное false а не 0
+        foreach ($values as $key => $value) {
+            $values[$key]['is_complete'] = $flag;
+        }
+
+        return $values;
     }
 
     private static function splitAddress($address)

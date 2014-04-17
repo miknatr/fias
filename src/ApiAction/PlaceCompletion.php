@@ -77,7 +77,14 @@ class PlaceCompletion extends CompletionAbstract
 
         $values = array(implode($whereParts, ' AND '), $this->limit);
 
-        return $this->db->execute($sql, $values)->fetchAll();
+        $items = $this->db->execute($sql, $values)->fetchAll();
+        if ($items) {
+            foreach ($items as $key => $item) {
+                $items[$key]['is_complete'] = $item['is_complete'] ? true : false;
+            }
+        }
+
+        return $items;
     }
 
     private function splitPatternToWords($pattern)
