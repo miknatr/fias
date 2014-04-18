@@ -9,6 +9,7 @@ return array(
         'fields'       => array(
             'AOID'       => array('name' => 'id', 'type' => 'uuid'),
             'AOGUID'     => array('name' => 'address_id', 'type' => 'uuid'),
+            'AOLEVEL'     => array('name' => 'address_level', 'type' => 'integer'),
             'PARENTGUID' => array('name' => 'parent_id', 'type' => 'uuid'),
             'FORMALNAME' => array('name' => 'title'),
             'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
