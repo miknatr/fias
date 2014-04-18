@@ -1,3 +1,5 @@
+START TRANSACTION;
+
 INSERT INTO place_types(id, title)
 VALUES
     (1, 'транспортный объект')
@@ -106,3 +108,5 @@ VALUES
     (90, 'Дополнительная территория', 'territory'),
     (91, 'Часть дополнительной территории', 'sub_territory')
 ;
+
+COMMIT;
