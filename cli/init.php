@@ -36,6 +36,7 @@ if ($_SERVER['argc'] == 2) {
 $versionId = $directory->getVersionId();
 
 DbHelper::runFile($dataBaseName, $dbPath . '/01_tables.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/02_system_data.sql');
 
 $addressObjectsConfig = $container->getAddressObjectsImportConfig();
 $addressObjects       = new AddressObjectsImporter($db, $addressObjectsConfig['table_name'], $addressObjectsConfig['fields']);
@@ -70,13 +71,13 @@ $reader    = new XmlReader(
 
 $houses->import($reader);
 
-DbHelper::runFile($dataBaseName, $dbPath . '/02_indexes.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/03_indexes.sql');
 
 $addressObjects->modifyDataAfterImport();
 $houses->modifyDataAfterImport();
 
-DbHelper::runFile($dataBaseName, $dbPath . '/03_constraints.sql');
-DbHelper::runFile($dataBaseName, $dbPath . '/04_clean_up.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/04_constraints.sql');
+DbHelper::runFile($dataBaseName, $dbPath . '/05_clean_up.sql');
 
 UpdateLogHelper::addVersionIdToLog($db, $versionId);
 
