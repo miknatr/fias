@@ -7,6 +7,13 @@ ALTER TABLE address_objects
     DEFERRABLE INITIALLY IMMEDIATE
 ;
 
+ALTER TABLE address_objects
+    ADD CONSTRAINT address_objects_address_level_fkey
+    FOREIGN KEY(address_level) REFERENCES address_object_levels(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+    DEFERRABLE INITIALLY IMMEDIATE
+;
+
 ALTER TABLE houses
     ADD CONSTRAINT houses_parent_id_fkey
     FOREIGN KEY(address_id) REFERENCES address_objects(address_id)

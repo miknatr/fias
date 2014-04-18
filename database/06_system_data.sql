@@ -1,4 +1,3 @@
-
 INSERT INTO place_types(id, title)
 VALUES
     (1, 'транспортный объект')
@@ -93,6 +92,17 @@ WHERE tmp.id = p.id;
 -- Определяем наличие дочерних записей
 UPDATE places
 SET have_children = TRUE
-WHERE id IN (SELECT DISTINCT parent_id FROM places)
+WHERE id IN (SELECT DISTINCT parent_id FROM places);
 
-
+INSERT INTO address_object_levels (id, title, code)
+VALUES
+    (1, 'Регион', 'region'),
+    (2, 'Округ', 'area'),
+    (3, 'Район округа', 'area_district'),
+    (4, 'Город', 'city'),
+    (5, 'Район города', 'city_district'),
+    (6, 'Населенный пункт', 'settlement'),
+    (7, 'Улица', 'street'),
+    (90, 'Дополнительная территория', 'territory'),
+    (91, 'Часть дополнительной территории', 'sub_territory')
+;
