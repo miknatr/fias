@@ -13,7 +13,8 @@ return array(
             'PARENTGUID' => array('name' => 'parent_id', 'type' => 'uuid'),
             'FORMALNAME' => array('name' => 'title'),
             'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
-            'SHORTNAME'  => array('name' => 'prefix')
+            'SHORTNAME'  => array('name' => 'prefix'),
+            'REGIONCODE' => array('name' => 'region', 'type' => 'integer'),
         ),
         'filters' => array(
             array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),

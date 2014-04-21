@@ -31,6 +31,7 @@ CREATE TABLE address_objects (
     title         VARCHAR,
     full_title    VARCHAR,
     postal_code   INTEGER,
+    region        VARCHAR,
     prefix        VARCHAR
 );
 COMMENT ON TABLE address_objects                IS 'данные по адресным объектам(округам, улицам, городам)';
@@ -43,6 +44,7 @@ COMMENT ON COLUMN address_objects.parent_id     IS 'идентификацион
 COMMENT ON COLUMN address_objects.title         IS 'наименование объекта';
 COMMENT ON COLUMN address_objects.full_title    IS 'полное наименование объекта';
 COMMENT ON COLUMN address_objects.postal_code   IS 'индекс';
+COMMENT ON COLUMN address_objects.region        IS 'регион';
 COMMENT ON COLUMN address_objects.prefix        IS 'ул., пр. и так далее';
 COMMENT ON COLUMN address_objects.house_count   IS 'количество домов';
 
