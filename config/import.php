@@ -17,7 +17,6 @@ return array(
         ),
         'filters' => array(
             array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),
-            array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47, 50, 77, 78)),
         ),
     ),
     'houses' => array(
