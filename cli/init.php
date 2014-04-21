@@ -52,21 +52,10 @@ $addressObjects->import($reader);
 $housesConfig = $container->getHousesImportConfig();
 $houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
-// Если не отсекать записи исходя из региона придется грузить 21 млн записей вместо полутора.
-$addresses = $db->execute('SELECT address_id, address_id second_id FROM address_objects')->fetchHash();
-
-$filters   = array(
-    array(
-        'field' => 'AOGUID',
-        'type'  => 'hash',
-        'value' => $addresses,
-    )
-);
 $reader    = new XmlReader(
     $directory->getHousesFile(),
     $housesConfig['node_name'],
-    array_keys($housesConfig['fields']),
-    $filters
+    array_keys($housesConfig['fields'])
 );
 
 $houses->import($reader);
