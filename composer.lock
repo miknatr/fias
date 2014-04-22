@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/miknatr/grace-dbal.git",
-                "reference": "b0a8c667f60b0af38e936818695d88f329e7c04f"
+                "reference": "8dc8e8ba8178802e9c235e51e7877a129bb86e37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/miknatr/grace-dbal/zipball/b0a8c667f60b0af38e936818695d88f329e7c04f",
-                "reference": "b0a8c667f60b0af38e936818695d88f329e7c04f",
+                "url": "https://api.github.com/repos/miknatr/grace-dbal/zipball/8dc8e8ba8178802e9c235e51e7877a129bb86e37",
+                "reference": "8dc8e8ba8178802e9c235e51e7877a129bb86e37",
                 "shasum": ""
             },
             "type": "library",
@@ -35,7 +35,7 @@
                     "email": "miknatr@gmail.com"
                 }
             ],
-            "time": "2014-04-22 09:25:14"
+            "time": "2014-04-22 09:58:21"
         },
         {
             "name": "monolog/monolog",
