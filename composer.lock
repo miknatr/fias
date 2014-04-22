@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "214f3e7dccb8423e509ae98a59872298",
+    "hash": "6f2a9da88610f9cc8bb169c7b5ddfef1",
     "packages": [
         {
             "name": "miknatr/grace-dbal",
@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/miknatr/grace-dbal.git",
-                "reference": "5164401dedb57e668dd6bf75d17da6963ef6f5f8"
+                "reference": "b0a8c667f60b0af38e936818695d88f329e7c04f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/miknatr/grace-dbal/zipball/5164401dedb57e668dd6bf75d17da6963ef6f5f8",
-                "reference": "5164401dedb57e668dd6bf75d17da6963ef6f5f8",
+                "url": "https://api.github.com/repos/miknatr/grace-dbal/zipball/b0a8c667f60b0af38e936818695d88f329e7c04f",
+                "reference": "b0a8c667f60b0af38e936818695d88f329e7c04f",
                 "shasum": ""
             },
             "type": "library",
@@ -35,7 +35,7 @@
                     "email": "miknatr@gmail.com"
                 }
             ],
-            "time": "2014-03-11 11:07:49"
+            "time": "2014-04-22 09:25:14"
         },
         {
             "name": "monolog/monolog",
@@ -153,12 +153,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stiffbeards/bravicility.git",
-                "reference": "c3833d117ac70c895a7b9ac70715a14208f05460"
+                "reference": "b811fe52dea16fc5c3750f91225dfa04baa514e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stiffbeards/bravicility/zipball/c3833d117ac70c895a7b9ac70715a14208f05460",
-                "reference": "c3833d117ac70c895a7b9ac70715a14208f05460",
+                "url": "https://api.github.com/repos/stiffbeards/bravicility/zipball/b811fe52dea16fc5c3750f91225dfa04baa514e4",
+                "reference": "b811fe52dea16fc5c3750f91225dfa04baa514e4",
                 "shasum": ""
             },
             "require": {
@@ -181,7 +181,7 @@
                 "source": "https://github.com/stiffbeards/bravicility/tree/master",
                 "issues": "https://github.com/stiffbeards/bravicility/issues"
             },
-            "time": "2014-04-01 07:28:25"
+            "time": "2014-04-18 15:21:11"
         },
         {
             "name": "stiffbeards/browser",
@@ -213,32 +213,6 @@
                 "issues": "https://github.com/stiffbeards/browser/issues"
             },
             "time": "2014-03-27 14:17:43"
-        },
-        {
-            "name": "stiffbeards/kola",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:stiffbeards/kola.git",
-                "reference": "14e5fc5e9335abdcdfdb6d7b81e75b9a5b0f39f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stiffbeards/kola/zipball/14e5fc5e9335abdcdfdb6d7b81e75b9a5b0f39f6",
-                "reference": "14e5fc5e9335abdcdfdb6d7b81e75b9a5b0f39f6",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Kola": "lib/"
-                }
-            },
-            "support": {
-                "source": "https://github.com/stiffbeards/kola/tree/master",
-                "issues": "https://github.com/stiffbeards/kola/issues"
-            },
-            "time": "2014-03-27 06:52:24"
         },
         {
             "name": "symfony/css-selector",
@@ -411,8 +385,7 @@
     "stability-flags": {
         "miknatr/grace-dbal": 20,
         "stiffbeards/bravicility": 20,
-        "stiffbeards/browser": 20,
-        "stiffbeards/kola": 20
+        "stiffbeards/browser": 20
     },
     "platform": {
         "php": ">=5.4.0"

@@ -98,10 +98,9 @@ class XmlReader implements DataSource
     private function getRowAttributes()
     {
         $result = array();
-
         foreach ($this->attributes as $attribute) {
-            // Если атрибут отсутствует, в $result[$attribute] окажется null.
-            $result[$attribute] = $this->reader->getAttribute($attribute);
+            // Если атрибут отсутствует, в $result[$attribute] окажется null, также передаем null вместо пустого значения
+            $result[$attribute] = $this->reader->getAttribute($attribute) ?: null;
         }
 
         return $result;
