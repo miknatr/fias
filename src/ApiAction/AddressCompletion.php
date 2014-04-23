@@ -14,7 +14,9 @@ class AddressCompletion extends CompletionAbstract
         $this->address  = $this->textForCompletion;
         $storage        = new AddressStorage($this->db);
         $addressParts   = static::splitAddress($this->address);
-        $this->parentId = $storage->findAddress($addressParts['address']);
+
+        $address        = $storage->findAddress($addressParts['address']);
+        $this->parentId = $address ? $address['address_id'] : null;
 
         if ($this->getHousesCount()) {
             $rows = $this->findHouses($addressParts['pattern']);

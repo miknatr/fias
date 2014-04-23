@@ -31,9 +31,10 @@ class AddressStorage
         $tmp   = explode(',', $address);
         $house = trim(array_pop($tmp));
 
-        $addressId = $this->findAddress(implode(',', $tmp));
-        if ($addressId) {
-            $sql = '
+        $address = $this->findAddress(implode(',', $tmp));
+        if ($address) {
+            $addressId = $address['address_id'];
+            $sql       = '
                 SELECT *
                 FROM houses
                 WHERE address_id = ?q

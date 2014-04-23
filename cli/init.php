@@ -69,4 +69,3 @@ DbHelper::runFile($dataBaseName, $dbPath . '/04_constraints.sql');
 DbHelper::runFile($dataBaseName, $dbPath . '/05_clean_up.sql');
 
 UpdateLogHelper::addVersionIdToLog($db, $versionId);
-
