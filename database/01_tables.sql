@@ -1,5 +1,3 @@
-START TRANSACTION;
-
 DROP TABLE IF EXISTS houses;
 CREATE TABLE houses (
     id          UUID PRIMARY KEY NOT NULL,
@@ -96,5 +94,3 @@ COMMENT ON TABLE place_types              IS 'справочник типов м
 COMMENT ON COLUMN place_types.parent_id   IS 'идентификатор типа родителя';
 COMMENT ON COLUMN place_types.title       IS 'название типа для пользователя';
 COMMENT ON COLUMN place_types.system_name IS 'системное имя типа, для использования в программном коде';
-
-COMMIT;

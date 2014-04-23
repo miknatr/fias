@@ -1,5 +1,3 @@
-START TRANSACTION;
-
 CREATE UNIQUE INDEX address_objects_address_id_uq_idx
     ON address_objects
     USING BTREE (address_id)
@@ -72,5 +70,3 @@ CREATE INDEX places_title_idx
 
 -- Что бы если заглючит оптимизатор,он планы составил исходя из индексов все равно в момент массовой правки
 ANALYZE;
-
-COMMIT;
