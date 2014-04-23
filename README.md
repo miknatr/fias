@@ -69,16 +69,10 @@ FIAS
 ```fias.loc/api/correspondence/?postal_code=198504```
 Ответ:
 ```
-{ "addresses" : [
-        {
-            "title": "г Санкт-Петербург, р-н Петродворцовый, бул Эйлеровский",
-            "address_level":"street",
-            "parents": [
-                {"title": "г Санкт-Петербург", "address_level": "region"}
-                {"title": "г Санкт-Петербург, р-н Петродворцовый", "address_level": "city_district"}
-            ]
-        }
-  ]
+{ "address_parts" : [
+        {"title": "г Санкт-Петербург", "address_level": "region"},
+        {"title": "р-н Петродворцовый", "address_level": "city_district"}
+    ]
 }
 ```
 
