@@ -5,7 +5,7 @@ namespace ApiAction;
 use AddressStorage;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class PostCodeToAddressCorrespondence implements ApiActionInterface
+class PostalCodeToAddressCorrespondence implements ApiActionInterface
 {
     /** @var ConnectionInterface */
     private $db;
@@ -19,15 +19,7 @@ class PostCodeToAddressCorrespondence implements ApiActionInterface
 
     public function run()
     {
-        $result  = array('address' => null, 'houses' => null);
         $storage = new AddressStorage($this->db);
-        $addresses = $storage->findAddressByPostalCode($this->postCode);
-
-        if ($addresses) {
-            $result['addresses'] = $addresses;
-            $result['houses']    = $storage->findHousesByPostalCode($this->postCode);
-        }
-
-        return $result;
+        return array('addresses' => $storage->findAddressByPostalCode($this->postCode));
     }
 }

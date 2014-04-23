@@ -53,9 +53,12 @@ class ApiControllerTest extends TestAbstract
     {
         $this->describe('Проверяем выдачу ошибки при отсутствии необходимого параметра')
             ->loadPage('/api/correspondence', 400)
-            ->describe('Проверяем выдачу корректного почтового индекса при запросе адреса')
+            ->describe('Проверяем выдачу корректного почтового индекса')
             ->loadPage('/api/correspondence/?address=г Москва, ул Стахановская', 200)
             ->ensureResponse(json_decode($this->curResponse->getContent())->postal_code == 123456)
+            ->describe('Проверяем выдачу адресов')
+            ->loadPage('/api/correspondence/?postal_code=123456', 200)
+            ->ensureResponse(count(json_decode($this->curResponse->getContent())->addresses) == 2)
         ;
     }
 

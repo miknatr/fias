@@ -1,5 +1,4 @@
 <?php
-// STOPPER убрать дублирование
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class AddressStorage
@@ -50,15 +49,16 @@ class AddressStorage
 
     public function findAddressByPostalCode($postalCode)
     {
+        // STOPPPER рекурсивный запрос на родителей объекта, полученных по индексу.
+        // STOPPER разбор на составляющие по уровню?
         $sql = '
-            SELECT *
+            SELECT title
             FROM address_objects
             WHERE postal_code = ?q
-            ORDER BY level DESC
-            LIMIT 1'
+            ORDER BY level DESC'
         ;
 
-        return $this->db->execute($sql, array($postalCode))->fetchOneOrFalse();
+        return $this->db->execute($sql, array($postalCode))->fetchAll();
     }
 
     public function findAddressById($id)
