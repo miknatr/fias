@@ -49,6 +49,16 @@ class ApiControllerTest extends TestAbstract
         ;
     }
 
+    public function testCorrespondence()
+    {
+        $this->describe('Проверяем выдачу ошибки при отсутствии необходимого параметра')
+            ->loadPage('/api/correspondence', 400)
+            ->describe('Проверяем выдачу корректного почтового индекса при запросе адреса')
+            ->loadPage('/api/correspondence/?address=г Москва, ул Стахановская', 200)
+            ->ensureResponse(json_decode($this->curResponse->getContent())->postal_code == 123456)
+        ;
+    }
+
     public function testNotFound()
     {
         $this->describe('Проверяем выдачу 404 ошибки при ошибочном uri')

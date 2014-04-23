@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use ApiAction\AddressToPostCodeCorrespondence;
 use ApiAction\PlaceCompletion;
 use Bravicility\Http\Request;
 use Bravicility\Http\Response\JsonResponse;
@@ -51,14 +52,29 @@ class ApiController
         return $this->makeResponse($json);
     }
 
+    /**
+     * @route GET /api/correspondence
+     */
+    public function correspondence(Request $request)
+    {
+        $address    = $request->get('address');
+
+        if ($address) {
+            $result = (new AddressToPostCodeCorrespondence($this->container->getDb(), $address))->run();
+            return $this->makeResponse($result);
+        }
+
+        return $this->makeErrorResponse('Не заданы параметры для поиска соответствия.');
+    }
+
     private function makeErrorResponse($message)
     {
         return $this->makeResponse(array('error_message' => $message), 400);
     }
 
-    private function makeResponse($json, $status = 200)
+    private function makeResponse(array $values, $status = 200)
     {
-        $response = new JsonResponse($status, $json);
+        $response = new JsonResponse($status, $values);
         $response->addHeader('Access-Control-Allow-Origin: *');
 
         return $response;

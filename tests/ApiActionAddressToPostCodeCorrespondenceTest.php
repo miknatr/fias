@@ -2,7 +2,7 @@
 
 use ApiAction\AddressToPostCodeCorrespondence;
 
-class AddressToPostCodeCorrespondenceTest extends TestAbstract
+class ApiActionAddressToPostCodeCorrespondenceTest extends TestAbstract
 {
     public function testNotFound()
     {

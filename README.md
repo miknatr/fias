@@ -42,9 +42,9 @@ FIAS
 ```
 {
     "items" : [
-        {"is_complete":false, "title": "Москва, Невский пр.", "type": "address"},
-        {"is_complete":false, "title": "Москва, Невское урочище", "type": "address"},
-        {"is_complete":false, "title": "Невский вокзал", "type": "place"}
+        {"is_complete": false, "title": "Москва, Невский пр.", "type": "address"},
+        {"is_complete": false, "title": "Москва, Невское урочище", "type": "address"},
+        {"is_complete": false, "title": "Невский вокзал", "type": "place"}
     ]
 }
 ```
@@ -69,4 +69,7 @@ FIAS
 ```fias.loc/api/convert/?address=```
 
 4. Индекс по адресу.
-```fias.loc/api/convert/?postal_code=```
+Запрос:
+```fias.loc/api/correspondence/?address=обл Псковская, р-н Новосокольнический, д Мошино```
+Ответ:
+{ "postal_code": 182200 }
