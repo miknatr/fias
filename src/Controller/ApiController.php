@@ -2,7 +2,7 @@
 
 namespace Controller;
 
-use ApiAction\AddressToPostCodeCorrespondence;
+use ApiAction\AddressToPostalCodeCorrespondence;
 use ApiAction\PlaceCompletion;
 use ApiAction\PostalCodeToAddressCorrespondence;
 use Bravicility\Http\Request;
@@ -60,7 +60,7 @@ class ApiController
     {
         $address = $request->get('address');
         if ($address) {
-            $result = (new AddressToPostCodeCorrespondence($this->container->getDb(), $address))->run();
+            $result = (new AddressToPostalCodeCorrespondence($this->container->getDb(), $address))->run();
             return $this->makeResponse($result);
         }
 
