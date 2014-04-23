@@ -66,7 +66,7 @@ class ApiController
 
         $postalCode = $request->get('postal_code');
         if ($postalCode) {
-            $result = (new PostalCodeToAddressCorrespondence($this->container->getDb(), $postalCode))->run();
+            $result = array('addresses' => (new PostalCodeToAddressCorrespondence($this->container->getDb(), $postalCode))->run());
             return $this->makeResponse($result);
         }
 
