@@ -2,10 +2,24 @@
 
 namespace ApiAction;
 
+use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use PlaceStorage;
 
-class PlaceCompletion extends CompletionAbstract
+class PlaceCompletion implements ApiActionInterface
 {
+    /** @var ConnectionInterface */
+    private $db;
+    private $limit;
+    private $textForCompletion;
+
+    public function __construct(ConnectionInterface $db, $textForCompletion, $limit)
+    {
+        $this->db    = $db;
+        $this->limit = $limit;
+
+        $this->textForCompletion = $textForCompletion;
+    }
+
     public function run()
     {
         $placeParts = $this->splitPlaceTitle($this->textForCompletion);

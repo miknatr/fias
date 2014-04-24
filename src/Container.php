@@ -18,7 +18,10 @@ class Container
     public function __construct()
     {
         $this->config = parse_ini_file(__DIR__ . '/../config/config.ini', true);
-        $this->ensureParameters($this->config, array('app.host', 'app.file_directory', 'app.wsdl_url', 'db.uri'));
+        $this->ensureParameters(
+            $this->config,
+            array('app.host', 'app.file_directory', 'app.wsdl_url', 'app.max_completion_limit', 'db.uri')
+        );
 
         $this->importConfig = require(__DIR__ . '/../config/import.php');
         $this->loadDbConfig($this->config);
@@ -63,6 +66,11 @@ class Container
     public function getFileDirectory()
     {
         return $this->config['app.file_directory'];
+    }
+
+    public function getMaxCompletionLimit()
+    {
+        return $this->config['app.max_completion_limit'];
     }
 
     public function getDatabaseName()

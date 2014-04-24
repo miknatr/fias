@@ -1,7 +1,8 @@
 
-app.host           = fias.loc
-app.file_directory = /var/www/upload
-app.wsdl_url       = http://fias.nalog.ru/WebServices/Public/DownloadService.asmx?WSDL
+app.host                 = fias.loc
+app.file_directory       = /var/www/upload
+app.wsdl_url             = http://fias.nalog.ru/WebServices/Public/DownloadService.asmx?WSDL
+app.max_completion_limit = 50
 
 db.uri = pgsql://postgres:1@localhost:5432/fias
 

@@ -26,19 +26,34 @@ class ApiController
      */
     public function complete(Request $request)
     {
-        $limit = $request->get('limit');
-        if ($limit > AddressCompletion::MAX_LIMIT) {
+        $maxLimit = $this->container->getMaxCompletionLimit();
+
+        $maxDepth      = $request->get('max_depth');
+        $addressLevels = $request->get('address_levels', array());
+        $regions       = $request->get('regions', array());
+        $pattern       = $request->get('pattern');
+        $limit         = $request->get('limit') ?: $maxLimit;
+
+        if ($limit > $maxLimit) {
             return $this->makeErrorResponse('Превышен допустимый лимит на количество записей.');
         }
 
-        $places = (new PlaceCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
+        $places = (new PlaceCompletion($this->container->getDb(), $pattern, $limit))->run();
         if ($places) {
             foreach ($places as $key => $devNull) {
                 $places[$key]['type'] = 'place';
             }
         }
 
-        $addresses = (new AddressCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
+        $addresses = (new AddressCompletion(
+            $this->container->getDb(),
+            $pattern,
+            $limit,
+            $maxDepth,
+            $addressLevels,
+            $regions
+        ))->run();
+
         if ($addresses) {
             foreach ($addresses as $key => $devNull) {
                 $addresses[$key]['type'] = 'address';
@@ -55,12 +70,12 @@ class ApiController
      */
     public function validate(Request $request)
     {
-        $address = $request->get('address');
-        if (!$address) {
-            return $this->makeErrorResponse('Отсутствует обязательный параметр: адрес.');
+        $pattern = $request->get('pattern');
+        if (!$pattern) {
+            return $this->makeErrorResponse('Отсутствует обязательный параметр: pattern.');
         }
 
-        $json = (new Validation($this->container->getDb(), $address))->run();
+        $json = (new Validation($this->container->getDb(), $pattern))->run();
 
         return $this->makeResponse($json);
     }

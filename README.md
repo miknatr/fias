@@ -51,7 +51,7 @@ FIAS
 
 2. Валидация элемента.
 Запрос:
-```fias.loc/api/validate/?title=Москва, Невский пр.```
+```fias.loc/api/validate/?pattern=Москва, Невский пр.```
 Ответ:
 ```
 {
