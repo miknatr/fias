@@ -15,7 +15,7 @@ class PlaceCompletion extends CompletionAbstract
             $storage  = new PlaceStorage($this->db);
             $parentId = $storage->findPlace($placeParts['parent_place']);
             if (!$parentId) {
-                return array('places' => array());
+                return array();
             }
         }
 
@@ -28,7 +28,7 @@ class PlaceCompletion extends CompletionAbstract
 
         $rows = $this->findPlaces($placeWords, $type, $parentId);
 
-        return array('places' => $rows);
+        return $rows;
     }
 
     private function splitPlaceTitle($title)

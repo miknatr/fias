@@ -20,13 +20,14 @@ class ApiControllerTest extends TestAbstract
             ->loadPage('/api/complete/?address=Москва&limit=' . $tooBigLimit, 400)
             ->describe('Проверяем автоподстановку для адресного объекта.')
             ->loadPage('/api/complete/?address=Моск', 200)
-            ->ensureResponse(json_decode($this->curResponse->getContent())->addresses[0]->title == 'г Москва')
+            ->ensureResponse(json_decode($this->curResponse->getContent())->items[0]->title == 'Московский вокзал')
+            ->ensureResponse(json_decode($this->curResponse->getContent())->items[1]->title == 'г Москва')
             ->describe('Проверяем автоподстановку для дома.')
             ->loadPage('/api/complete/?address=г Москва, ул Стахановская, 1')
-            ->ensureResponse(json_decode($this->curResponse->getContent())->addresses[0]->title == 'г Москва, ул Стахановская, 1к1')
+            ->ensureResponse(json_decode($this->curResponse->getContent())->items[0]->title == 'г Москва, ул Стахановская, 1к1')
             ->describe('Проверяем автоподстановку для места')
             ->loadPage('/api/complete/?address=Паве')
-            ->ensureResponse(count(json_decode($this->curResponse->getContent())->places) == 2)
+            ->ensureResponse(count(json_decode($this->curResponse->getContent())->items) == 2)
         ;
     }
 

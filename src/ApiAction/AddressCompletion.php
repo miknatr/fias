@@ -26,7 +26,7 @@ class AddressCompletion extends CompletionAbstract
             $rows = $this->setIsCompleteFlag($rows, false);
         }
 
-        return array('addresses' => $rows);
+        return $rows;
     }
 
     private function getHousesCount()

@@ -31,11 +31,23 @@ class ApiController
             return $this->makeErrorResponse('Превышен допустимый лимит на количество записей.');
         }
 
-        $places    = (new PlaceCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
-        $addresses = (new AddressCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
-        $json      = array_merge($places, $addresses);
+        $places = (new PlaceCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
+        if ($places) {
+            foreach ($places as $key => $devNull) {
+                $places[$key]['type'] = 'place';
+            }
+        }
 
-        return $this->makeResponse($json);
+        $addresses = (new AddressCompletion($this->container->getDb(), $request->get('address'), $limit))->run();
+        if ($addresses) {
+            foreach ($addresses as $key => $devNull) {
+                $addresses[$key]['type'] = 'address';
+            }
+        }
+
+        $result = array('items' => array_merge($places, $addresses));
+
+        return $this->makeResponse($result);
     }
 
     /**
