@@ -77,23 +77,33 @@ class ApiController
     }
 
     /**
-     * @route GET /api/mapping
+     * @route GET /api/map_address_to_postal_code/
      */
-    public function mapping(Request $request)
+    public function mapAddressToPostalCode(Request $request)
     {
         $address = $request->get('address', '');
-        if ($address) {
-            $result = (new AddressToPostalCodeMapping($this->container->getDb(), $address))->run();
-            return $this->makeResponse(array('postal_code' => $result));
+        if (!$address) {
+            return $this->makeErrorResponse('Не указан адрес для поиска индекса.');
         }
 
+        $result = (new AddressToPostalCodeMapping($this->container->getDb(), $address))->run();
+
+        return $this->makeResponse(array('postal_code' => $result));
+    }
+
+    /**
+     * @route GET /api/map_postal_code_to_address
+     */
+    public function mapPostalCodeToAddress(Request $request)
+    {
         $postalCode = $request->get('postal_code', '');
-        if ($postalCode) {
-            $result = array('addresses' => (new PostalCodeToAddressMapping($this->container->getDb(), $postalCode))->run());
-            return $this->makeResponse($result);
+        if (!$postalCode) {
+            return $this->makeErrorResponse('Не заданы индекс для поиска адреса.');
         }
 
-        return $this->makeErrorResponse('Не заданы параметры для поиска соответствия.');
+        $result = array('addresses' => (new PostalCodeToAddressMapping($this->container->getDb(), $postalCode))->run());
+
+        return $this->makeResponse($result);
     }
 
     private function makeErrorResponse($message)

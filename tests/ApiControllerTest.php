@@ -52,12 +52,13 @@ class ApiControllerTest extends TestAbstract
     public function testMapping()
     {
         $this->describe('Проверяем выдачу ошибки при отсутствии необходимого параметра')
-            ->loadPage('/api/mapping', 400)
+            ->loadPage('/api/map_address_to_postal_code', 400)
+            ->loadPage('/api/map_postal_code_to_address', 400)
             ->describe('Проверяем выдачу корректного почтового индекса')
-            ->loadPage('/api/mapping/?address=г Москва, ул Стахановская', 200)
+            ->loadPage('/api/map_address_to_postal_code/?address=г Москва, ул Стахановская', 200)
             ->ensureResponse(json_decode($this->curResponse->getContent())->postal_code == 123456)
             ->describe('Проверяем выдачу адресов')
-            ->loadPage('/api/mapping/?postal_code=123456', 200)
+            ->loadPage('/api/map_postal_code_to_address/?postal_code=123456', 200)
             ->ensureResponse(count(json_decode($this->curResponse->getContent())->addresses) == 1)
         ;
     }

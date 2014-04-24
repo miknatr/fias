@@ -66,7 +66,7 @@ FIAS
 
 3. Получение адреса по индексу.
 Запрос:
-```fias.loc/api/mapping/?postal_code=198504```
+```fias.loc/api/map_postal_code_to_address/?postal_code=198504```
 Ответ:
 ```
 { "address_parts" : [
@@ -76,8 +76,8 @@ FIAS
 }
 ```
 
-4. Индекс по адресу.
+4. Получение индекса по адресу.
 Запрос:
-```fias.loc/api/mapping/?address=обл Псковская, р-н Новосокольнический, д Мошино```
+```fias.loc/api/map_address_to_postal_code/?address=обл Псковская, р-н Новосокольнический, д Мошино```
 Ответ:
 { "postal_code": 182200 }
