@@ -52,7 +52,7 @@ $addressObjects->import($reader);
 $housesConfig = $container->getHousesImportConfig();
 $houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
-$reader    = new XmlReader(
+$reader = new XmlReader(
     $directory->getHousesFile(),
     $housesConfig['node_name'],
     array_keys($housesConfig['fields'])
