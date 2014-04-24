@@ -21,7 +21,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->directory->getPath() . '/AS_HOUSE_20131221_bccfd0d0-af7a-49db-8401-df23dc3d2efa.XML',
-            $this->directory->getHousesFile()
+            $this->directory->getHouseFile()
         );
 
         $this->assertEquals(
@@ -42,7 +42,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
     public function testFileNotFound()
     {
         $this->directory = new Directory(__DIR__);
-        $this->directory->getHousesFile();
+        $this->directory->getHouseFile();
     }
 
     /** @expectedException \FileSystem\FileException */

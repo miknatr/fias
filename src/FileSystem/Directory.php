@@ -37,7 +37,7 @@ class Directory
         return $this->directoryPath . '/' . $this->find('AS_ADDROBJ');
     }
 
-    public function getHousesFile()
+    public function getHouseFile()
     {
         return $this->directoryPath . '/' . $this->find('AS_HOUSE_');
     }

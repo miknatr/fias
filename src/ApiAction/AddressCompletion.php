@@ -96,17 +96,17 @@ class AddressCompletion implements ApiActionInterface
 
         $whereParts[] = $this->parentId
             ? $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId))
-            : '(
+            : '
                 parent_id IS NULL
                 OR parent_id IN (
-                    SELECT address_id
-                    FROM address_objects
-                    WHERE parent_id IS NULL
+                  SELECT address_id
+                  FROM address_objects
+                  WHERE parent_id IS NULL
                 )
-            )'
+            '
         ;
 
-        $values = array(implode(' AND ', $whereParts), $this->limit);
+        $values = array('(' . implode(') AND (', $whereParts) . ')', $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
     }

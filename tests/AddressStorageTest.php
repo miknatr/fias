@@ -33,6 +33,6 @@ class AddressStorageTest extends TestAbstract
             $this->storage->findHouse('г москва, ул стахановская, 16с17')['house_id']
         );
 
-        $this->assertNull($this->storage->findHouse('Ерунда какая-то, а не дом'));
+        $this->assertFalse($this->storage->findHouse('Ерунда какая-то, а не дом'));
     }
 }

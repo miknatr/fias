@@ -24,6 +24,8 @@ try {
     $response = (new $route->class($container))->{$route->method}($request);
 } catch (RouteNotFoundException $e) {
     $response = new Response(404);
+} catch (BadRequestException $e) {
+    $response = new Response(400, $e->getMessage());
 }
 
 $response->send();

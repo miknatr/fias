@@ -53,7 +53,7 @@ $housesConfig = $container->getHousesImportConfig();
 $houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
 $reader = new XmlReader(
-    $directory->getHousesFile(),
+    $directory->getHouseFile(),
     $housesConfig['node_name'],
     array_keys($housesConfig['fields'])
 );

@@ -2,9 +2,9 @@
 
 namespace Controller;
 
-use ApiAction\AddressToPostalCodeCorrespondence;
+use ApiAction\AddressToPostalCodeMapping;
 use ApiAction\PlaceCompletion;
-use ApiAction\PostalCodeToAddressCorrespondence;
+use ApiAction\PostalCodeToAddressMapping;
 use Bravicility\Http\Request;
 use Bravicility\Http\Response\JsonResponse;
 use ApiAction\AddressCompletion;
@@ -31,19 +31,18 @@ class ApiController
         $maxDepth      = $request->get('max_depth');
         $addressLevels = $request->get('address_levels', array());
         $regions       = $request->get('regions', array());
-        $pattern       = $request->get('pattern');
-        $limit         = $request->get('limit') ?: $maxLimit;
+        $pattern       = $request->get('pattern', '');
+        $limit         = $request->get('limit', $maxLimit);
 
         if ($limit > $maxLimit) {
-            return $this->makeErrorResponse('Превышен допустимый лимит на количество записей.');
+            return $this->makeErrorResponse('Превышен допустимый лимит на количество записей. Лимит должен быть не более: ' . $maxLimit);
         }
 
         $places = (new PlaceCompletion($this->container->getDb(), $pattern, $limit))->run();
-        if ($places) {
-            foreach ($places as $key => $devNull) {
-                $places[$key]['type'] = 'place';
-            }
+        foreach ($places as $key => $devNull) {
+            $places[$key]['type'] = 'place';
         }
+
 
         $addresses = (new AddressCompletion(
             $this->container->getDb(),
@@ -53,11 +52,8 @@ class ApiController
             $addressLevels,
             $regions
         ))->run();
-
-        if ($addresses) {
-            foreach ($addresses as $key => $devNull) {
-                $addresses[$key]['type'] = 'address';
-            }
+        foreach ($addresses as $key => $devNull) {
+            $addresses[$key]['type'] = 'address';
         }
 
         $result = array('items' => array_merge($places, $addresses));
@@ -81,19 +77,19 @@ class ApiController
     }
 
     /**
-     * @route GET /api/correspondence
+     * @route GET /api/mapping
      */
-    public function correspondence(Request $request)
+    public function mapping(Request $request)
     {
-        $address = $request->get('address');
+        $address = $request->get('address', '');
         if ($address) {
-            $result = (new AddressToPostalCodeCorrespondence($this->container->getDb(), $address))->run();
-            return $this->makeResponse($result);
+            $result = (new AddressToPostalCodeMapping($this->container->getDb(), $address))->run();
+            return $this->makeResponse(array('postal_code' => $result));
         }
 
-        $postalCode = $request->get('postal_code');
+        $postalCode = $request->get('postal_code', '');
         if ($postalCode) {
-            $result = array('addresses' => (new PostalCodeToAddressCorrespondence($this->container->getDb(), $postalCode))->run());
+            $result = array('addresses' => (new PostalCodeToAddressMapping($this->container->getDb(), $postalCode))->run());
             return $this->makeResponse($result);
         }
 

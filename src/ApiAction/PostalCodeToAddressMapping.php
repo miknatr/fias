@@ -4,7 +4,7 @@ namespace ApiAction;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class PostalCodeToAddressCorrespondence implements ApiActionInterface
+class PostalCodeToAddressMapping implements ApiActionInterface
 {
     /** @var ConnectionInterface */
     private $db;
@@ -18,7 +18,7 @@ class PostalCodeToAddressCorrespondence implements ApiActionInterface
 
     public function run()
     {
-        $count = $this->getAddressesCount();
+        $count = $this->getAddressCount();
         if (!$count) {
             return array();
         }
@@ -28,7 +28,7 @@ class PostalCodeToAddressCorrespondence implements ApiActionInterface
         return $this->filterAddressStack($stack, $count);
     }
 
-    private function getAddressesCount($pattern = null)
+    private function getAddressCount($pattern = null)
     {
         $values = array($this->postalCode);
         $sql    = 'SELECT COUNT(*) FROM address_objects WHERE postal_code = ?q';
@@ -72,7 +72,7 @@ class PostalCodeToAddressCorrespondence implements ApiActionInterface
     private function filterAddressStack(array $partsForChecking, $totalCount, array $currentStack = array())
     {
         $part       = array_shift($partsForChecking);
-        $levelCount = $this->getAddressesCount($part['full_title']);
+        $levelCount = $this->getAddressCount($part['full_title']);
 
         if ($levelCount == $totalCount) {
             $currentStack[] = array('title' => $part['title'], 'address_level' => $part['address_level']);

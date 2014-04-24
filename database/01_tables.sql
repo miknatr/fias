@@ -36,8 +36,8 @@ COMMENT ON TABLE address_objects                IS 'данные по адрес
 COMMENT ON COLUMN address_objects.id            IS 'идентификационный код записи';
 COMMENT ON COLUMN address_objects.address_id    IS 'идентификационный код адресного объекта';
 COMMENT ON COLUMN address_objects.parent_id     IS 'идентификационный код родительского адресного объекта';
-COMMENT ON COLUMN address_objects.level         IS 'уровень оъекта по parent_id (0 для региона и далее по возрастающей';
-COMMENT ON COLUMN address_objects.address_level IS 'уровень оъекта по ФИАС';
+COMMENT ON COLUMN address_objects.level         IS 'уровень объекта по parent_id (0 для региона и далее по возрастающей';
+COMMENT ON COLUMN address_objects.address_level IS 'уровень объекта по ФИАС';
 COMMENT ON COLUMN address_objects.parent_id     IS 'идентификационный код родительского адресного объекта';
 COMMENT ON COLUMN address_objects.title         IS 'наименование объекта';
 COMMENT ON COLUMN address_objects.full_title    IS 'полное наименование объекта';

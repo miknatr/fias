@@ -1,4 +1,5 @@
 <?php
+
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class AddressStorage
@@ -44,21 +45,7 @@ class AddressStorage
             return $this->db->execute($sql, array($addressId, $house))->fetchOneOrFalse();
         }
 
-        return null;
-    }
-
-    public function findAddressByPostalCode($postalCode)
-    {
-        // STOPPPER рекурсивный запрос на родителей объекта, полученных по индексу.
-        // STOPPER разбор на составляющие по уровню?
-        $sql = '
-            SELECT title
-            FROM address_objects
-            WHERE postal_code = ?q
-            ORDER BY level DESC'
-        ;
-
-        return $this->db->execute($sql, array($postalCode))->fetchAll();
+        return false;
     }
 
     public function findAddressById($id)

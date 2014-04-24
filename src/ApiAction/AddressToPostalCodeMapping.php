@@ -5,7 +5,7 @@ namespace ApiAction;
 use AddressStorage;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class AddressToPostalCodeCorrespondence implements ApiActionInterface
+class AddressToPostalCodeMapping implements ApiActionInterface
 {
     /** @var ConnectionInterface */
     private $db;
@@ -22,21 +22,20 @@ class AddressToPostalCodeCorrespondence implements ApiActionInterface
         $storage = new AddressStorage($this->db);
         $address = $storage->findAddress($this->address);
         if ($address) {
-            return array('postal_code' => $address['postal_code']);
+            return $address['postal_code'];
         }
 
         $house = $storage->findHouse($this->address);
         if ($house) {
-
             if ($house['postal_code']) {
-                return array('postal_code' => $house['postal_code']);
-            } else {
-                $address = $storage->findAddressById($house['address_id']);
-                return array('postal_code' => $address['postal_code']);
+                return $house['postal_code'];
             }
+
+            $address = $storage->findAddressById($house['address_id']);
+            return $address['postal_code'];
         }
 
         // ничего не найдено
-        return array('postal_code' => null);
+        return null;
     }
 }

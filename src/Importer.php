@@ -39,7 +39,7 @@ class Importer
         while ($rows = $reader->getRows($this->rowsPerInsert)) {
             $this->db->execute($this->getQuery($rows[0]), array($rows));
             ++$i;
-            if ( ($i % 100) == 0) {
+            if (($i % 100) == 0) {
                 $this->db->getLogger()->reset();
             }
         }
