@@ -13,8 +13,8 @@ class AddressToPostalCodeCorrespondence implements ApiActionInterface
 
     public function __construct(ConnectionInterface $db, $address)
     {
-        $this->db       = $db;
-        $this->address  = $address;
+        $this->db      = $db;
+        $this->address = $address;
     }
 
     public function run()

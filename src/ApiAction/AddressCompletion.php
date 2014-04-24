@@ -44,7 +44,7 @@ class AddressCompletion implements ApiActionInterface
         $this->parentId = $address ? $address['address_id'] : null;
         $housesCount    = $address ? $address['house_count'] : null;
 
-        if ($housesCount && ($this->maxDepth || $this->addressLevels) ) {
+        if ($housesCount && ($this->maxDepth || $this->addressLevels)) {
             return array();
         }
 

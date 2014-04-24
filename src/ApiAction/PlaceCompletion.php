@@ -65,7 +65,7 @@ class PlaceCompletion implements ApiActionInterface
             array($words)
         )->fetchOneOrFalse();
 
-        return  $type ?: array();
+        return $type ?: array();
     }
 
     private function findPlaces(array $placeWords, array $type, $parentId)
