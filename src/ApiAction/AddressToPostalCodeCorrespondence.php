@@ -20,7 +20,6 @@ class AddressToPostalCodeCorrespondence implements ApiActionInterface
     public function run()
     {
         $storage = new AddressStorage($this->db);
-
         $address = $storage->findAddress($this->address);
         if ($address) {
             return array('postal_code' => $address['postal_code']);

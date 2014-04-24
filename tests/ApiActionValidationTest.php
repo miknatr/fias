@@ -29,14 +29,14 @@ class ApiActionValidationTest extends TestAbstract
 
         $this->assertTrue($result['is_complete']);
         $this->assertTrue($result['is_valid']);
-        $this->assertEquals('address', $result['object_type']);
+        $this->assertEquals('address', $result['item_type']);
 
         $validate = new Validation($this->db, 'Павелецкий автовокзал');
         $result   = $validate->run();
 
         $this->assertTrue($result['is_complete']);
         $this->assertTrue($result['is_valid']);
-        $this->assertEquals('place', $result['object_type']);
+        $this->assertEquals('place', $result['item_type']);
     }
 
     public function testZeroLevel()

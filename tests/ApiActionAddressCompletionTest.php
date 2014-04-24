@@ -7,9 +7,7 @@ class ApiActionAddressCompletionTest extends TestAbstract
     public function testNotFound()
     {
         $complete = new AddressCompletion($this->db, 'Нави, Главная б', 50);
-        $result   = $complete->run();
-
-        $this->assertCount(0, $result);
+        $this->assertCount(0, $complete->run());
     }
 
     public function testAddressCompletion()
@@ -53,37 +51,30 @@ class ApiActionAddressCompletionTest extends TestAbstract
     public function testMaxDepth()
     {
         $complete = new AddressCompletion($this->db, 'г Москва, Ста', 50, 'region');
-        $result   = $complete->run();
-        $this->assertEmpty($result);
+        $this->assertEmpty($complete->run());
 
         $complete = new AddressCompletion($this->db, 'Моск', 50, 'region');
-        $result   = $complete->run();
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $complete->run());
     }
 
     public function testAddressLevels()
     {
         $complete = new AddressCompletion($this->db, 'Моск', 50, null, array('street'));
-        $result   = $complete->run();
-        $this->assertEmpty($result);
+        $this->assertEmpty($complete->run());
 
         $complete = new AddressCompletion($this->db, 'Моск', 50, null, array('region'));
-        $result   = $complete->run();
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $complete->run());
 
         $complete = new AddressCompletion($this->db, 'г Москва, Ста', 50, null, array('region', 'street'));
-        $result   = $complete->run();
-        $this->assertCount(4, $result);
+        $this->assertCount(4, $complete->run());
     }
 
     public function testRegion()
     {
         $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(), array(78));
-        $result   = $complete->run();
-        $this->assertEmpty($result);
+        $this->assertEmpty($complete->run());
 
         $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(), array(77));
-        $result   = $complete->run();
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $complete->run());
     }
 }

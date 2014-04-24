@@ -13,9 +13,7 @@ class ApiActionPlaceCompletionTest extends TestAbstract
     public function testWithType()
     {
         $completion = new PlaceCompletion($this->db, 'вокзал Паве', 50);
-        $result     = $completion->run();
-
-        $this->assertEquals('Павелецкий вокзал', $result[0]['title']);
+        $this->assertEquals('Павелецкий вокзал', $completion->run()[0]['title']);
     }
 
     public function testWithoutType()
