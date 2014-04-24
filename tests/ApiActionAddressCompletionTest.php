@@ -31,7 +31,7 @@ class ApiActionAddressCompletionTest extends TestAbstract
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException BadRequestException
      * @expectedExceptionMessage Некорректное значение
      */
     public function testBadMaxDepth()
@@ -40,7 +40,7 @@ class ApiActionAddressCompletionTest extends TestAbstract
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException BadRequestException
      * @expectedExceptionMessage Некорректное значение
      */
     public function testBadAddressLevels()

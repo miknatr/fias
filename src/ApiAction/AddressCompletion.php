@@ -3,8 +3,8 @@
 namespace ApiAction;
 
 use AddressStorage;
+use BadRequestException;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use LogicException;
 
 class AddressCompletion implements ApiActionInterface
 {
@@ -176,7 +176,7 @@ class AddressCompletion implements ApiActionInterface
         )->fetchResult();
 
         if (!$result) {
-            throw new LogicException('Некорректное значение уровня адреса: ' . $code);
+            throw new BadRequestException('Некорректное значение уровня адреса: ' . $code);
         }
 
         return $result;
