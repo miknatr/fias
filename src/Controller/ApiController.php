@@ -40,7 +40,7 @@ class ApiController
 
         $places = (new PlaceCompletion($this->container->getDb(), $pattern, $limit))->run();
         foreach ($places as $key => $devNull) {
-            $places[$key]['type'] = 'place';
+            $places[$key]['item_type'] = 'place';
         }
 
 
@@ -53,7 +53,7 @@ class ApiController
             $regions
         ))->run();
         foreach ($addresses as $key => $devNull) {
-            $addresses[$key]['type'] = 'address';
+            $addresses[$key]['item_type'] = 'address';
         }
 
         $result = array('items' => array_merge($places, $addresses));

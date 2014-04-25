@@ -22,9 +22,9 @@ FIAS
     Ответ:
     {
         "items": [
-            {"title": "Москва, Невский пр.", "is_complete": false, "type": "address"},
-            {"title": "Москва, Невское урочище", "is_complete": false, "type": "address"},
-            {"title": "Невский вокзал", "is_complete": false, "type": "place"}
+            {"title": "Москва, Невский пр.", "is_complete": false, "item_type": "address"},
+            {"title": "Москва, Невское урочище", "is_complete": false, "item_type": "address"},
+            {"title": "Невский вокзал", "is_complete": false, "item_type": "place"}
         ]
     }
 
@@ -42,7 +42,7 @@ GET-параметры:
 * `items` — массив вариантов дополнения адреса;
     * `title` — текст варианта дополнения;
     * `is_complete` — `true` для точных адресов (которым не нужно дальнейшее дополнение);
-    * `type` — тип найденного варианта: ??? item_type
+    * `item_type` — тип найденного варианта: ??? item_type
         * `"address"` — текст найден в ФИАС;
         * `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.).
 
@@ -59,8 +59,8 @@ GET-параметры:
     В ответе будут все варианты вплоть до номеров домов:
     {
         "items": [
-            {"title": "Москва, Невский пр. 10", "is_complete": true, "type": "address"},
-            {"title": "Москва, Невский пр. 11", "is_complete": true, "type": "address"}
+            {"title": "Москва, Невский пр. 10", "is_complete": true, "item_type": "address"},
+            {"title": "Москва, Невский пр. 11", "is_complete": true, "item_type": "address"}
         ]
     }
 
@@ -70,8 +70,8 @@ GET-параметры:
     В ответе будут только регионы без дальнейшей детализации:
     {
         "items": [
-            {"title": "Москва", "is_complete": false, "type": "address"},
-            {"title": "Московская область", "is_complete": false, "type": "address"}
+            {"title": "Москва", "is_complete": false, "item_type": "address"},
+            {"title": "Московская область", "is_complete": false, "item_type": "address"}
         ]
     }
 
