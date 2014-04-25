@@ -90,7 +90,7 @@ class PlaceCompletion implements ApiActionInterface
             $whereParts[] = $this->db->replacePlaceholders('parent_id = ?q', array($parentId));
         }
 
-        $values = array('(' . implode($whereParts, ' AND ') . ')', $this->limit);
+        $values = array('(' . implode($whereParts, ') AND (') . ')', $this->limit);
 
         $items = $this->db->execute($sql, $values)->fetchAll();
         if ($items) {

@@ -42,13 +42,13 @@ class AddressCompletion implements ApiActionInterface
 
         $address        = $storage->findAddress($addressParts['address']);
         $this->parentId = $address ? $address['address_id'] : null;
-        $housesCount    = $address ? $address['house_count'] : null;
+        $houseCount    = $address ? $address['house_count'] : null;
 
-        if ($housesCount && ($this->maxDepth || $this->addressLevels)) {
+        if ($houseCount && ($this->maxDepth || $this->addressLevels)) {
             return array();
         }
 
-        if ($this->getHousesCount()) {
+        if ($this->getHouseCount()) {
             $rows = $this->findHouses($addressParts['pattern']);
             $rows = $this->setIsCompleteFlag($rows, true);
         } else {
@@ -59,7 +59,7 @@ class AddressCompletion implements ApiActionInterface
         return $rows;
     }
 
-    private function getHousesCount()
+    private function getHouseCount()
     {
         if (!$this->parentId) {
             return null;

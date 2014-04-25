@@ -13,13 +13,13 @@ class ApiActionPostalCodeLocationTest extends TestAbstract
     public function testPostalCodeToAddressMapping()
     {
         $mapping = new PostalCodeLocation($this->db, '123456');
-        $parts          = $mapping->run();
+        $parts   = $mapping->run();
 
         $this->assertCount(1, $parts);
         $this->assertEquals($parts[0]['title'], 'г Москва');
 
         $mapping = new PostalCodeLocation($this->db, '1234567');
-        $parts          = $mapping->run();
+        $parts   = $mapping->run();
 
         $this->assertCount(2, $parts);
         $this->assertEquals($parts[0]['title'], 'г Москва');
