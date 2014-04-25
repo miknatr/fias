@@ -4,7 +4,7 @@ namespace ApiAction;
 
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class PostalCodeToAddressMapping implements ApiActionInterface
+class PostalCodeLocation implements ApiActionInterface
 {
     /** @var ConnectionInterface */
     private $db;

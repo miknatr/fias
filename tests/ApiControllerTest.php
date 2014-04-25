@@ -53,12 +53,12 @@ class ApiControllerTest extends TestAbstract
     {
         $this->describe('Проверяем выдачу ошибки при отсутствии необходимого параметра')
             ->loadPage('/api/map_address_to_postal_code', 400)
-            ->loadPage('/api/map_postal_code_to_address', 400)
+            ->loadPage('/api/postal_code_location', 400)
             ->describe('Проверяем выдачу корректного почтового индекса')
             ->loadPage('/api/map_address_to_postal_code/?address=г Москва, ул Стахановская', 200)
             ->ensureResponse(json_decode($this->curResponse->getContent())->postal_code == 123456)
             ->describe('Проверяем выдачу адресов')
-            ->loadPage('/api/map_postal_code_to_address/?postal_code=123456', 200)
+            ->loadPage('/api/postal_code_location/?postal_code=123456', 200)
             ->ensureResponse(count(json_decode($this->curResponse->getContent())->addresses) == 1)
         ;
     }

@@ -4,7 +4,7 @@ namespace Controller;
 
 use ApiAction\AddressToPostalCodeMapping;
 use ApiAction\PlaceCompletion;
-use ApiAction\PostalCodeToAddressMapping;
+use ApiAction\PostalCodeLocation;
 use Bravicility\Http\Request;
 use Bravicility\Http\Response\JsonResponse;
 use ApiAction\AddressCompletion;
@@ -92,16 +92,16 @@ class ApiController
     }
 
     /**
-     * @route GET /api/map_postal_code_to_address
+     * @route GET /api/postal_code_location
      */
-    public function mapPostalCodeToAddress(Request $request)
+    public function postalCodeLocation(Request $request)
     {
         $postalCode = $request->get('postal_code', '');
         if (!$postalCode) {
             return $this->makeErrorResponse('Не заданы индекс для поиска адреса.');
         }
 
-        $result = array('addresses' => (new PostalCodeToAddressMapping($this->container->getDb(), $postalCode))->run());
+        $result = array('addresses' => (new PostalCodeLocation($this->container->getDb(), $postalCode))->run());
 
         return $this->makeResponse($result);
     }

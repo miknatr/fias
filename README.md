@@ -103,12 +103,11 @@ GET-параметры:
     * `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.).
 
 
-### `/api/map_postal_code_to_address` — получение адреса по почтовому индексу
-??? это надо назвать /api/postal_code_location
+### `/api/postal_code_location` — получение адреса по почтовому индексу
 
 Пример запроса:
 
-    http://fias.loc/api/map_postal_code_to_address?postal_code=198504
+    http://fias.loc/api/postal_code_location?postal_code=198504
 
     Ответ:
     {
