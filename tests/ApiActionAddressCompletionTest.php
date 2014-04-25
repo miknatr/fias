@@ -34,39 +34,23 @@ class ApiActionAddressCompletionTest extends TestAbstract
      * @expectedException BadRequestException
      * @expectedExceptionMessage Некорректное значение
      */
-    public function testBadMaxDepth()
+    public function testBadMaxAddressLevel()
     {
-        new AddressCompletion($this->db, 'Моск', 50, 'totally_wrong_max_depth');
+        new AddressCompletion($this->db, 'Моск', 50, 'totally_wrong_max_address_level');
     }
 
-    /**
-     * @expectedException BadRequestException
-     * @expectedExceptionMessage Некорректное значение
-     */
-    public function testBadAddressLevels()
-    {
-        new AddressCompletion($this->db, 'Моск', 50, 'region', array('region', 'putin\'s village', 'street'));
-    }
-
-    public function testMaxDepth()
+    public function testMaxAddressLevel()
     {
         $complete = new AddressCompletion($this->db, 'г Москва, Ста', 50, 'region');
         $this->assertEmpty($complete->run());
 
         $complete = new AddressCompletion($this->db, 'Моск', 50, 'region');
         $this->assertCount(1, $complete->run());
-    }
 
-    public function testAddressLevels()
-    {
-        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array('street'));
-        $this->assertEmpty($complete->run());
+        $complete = new AddressCompletion($this->db, 'г Москва, ул Стахановская, 1', 2, 'building');
+        $result   = $complete->run();
 
-        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array('region'));
-        $this->assertCount(1, $complete->run());
-
-        $complete = new AddressCompletion($this->db, 'г Москва, Ста', 50, null, array('region', 'street'));
-        $this->assertCount(4, $complete->run());
+        $this->assertCount(2, $result);
     }
 
     public function testRegion()

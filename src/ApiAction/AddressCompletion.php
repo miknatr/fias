@@ -17,7 +17,7 @@ class AddressCompletion implements ApiActionInterface
     private $addressLevels = array();
     private $regions = array();
 
-    public function __construct(ConnectionInterface $db, $address, $limit, $maxDepth = null, array $addressLevels = array(), array $regions = array())
+    public function __construct(ConnectionInterface $db, $address, $limit, $maxDepth = 'building', array $addressLevels = array(), array $regions = array())
     {
         $this->db      = $db;
         $this->limit   = $limit;
@@ -175,7 +175,7 @@ class AddressCompletion implements ApiActionInterface
             array($code)
         )->fetchResult();
 
-        if (!$result) {
+        if ($result === null) {
             throw new BadRequestException('Некорректное значение уровня адреса: ' . $code);
         }
 
