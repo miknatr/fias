@@ -3,20 +3,52 @@
 namespace ApiAction;
 
 use AddressStorage;
+use BadRequestException;
+use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
-class AddressCompletion extends CompletionAbstract
+class AddressCompletion implements ApiActionInterface
 {
+    /** @var ConnectionInterface */
+    private $db;
+    private $limit;
     private $address;
     private $parentId;
+    private $maxDepth;
+    private $addressLevels = array();
+    private $regions = array();
+
+    public function __construct(ConnectionInterface $db, $address, $limit, $maxDepth = 'building', array $addressLevels = array(), array $regions = array())
+    {
+        $this->db      = $db;
+        $this->limit   = $limit;
+        $this->address = $address;
+        $this->regions = $regions;
+
+        if ($maxDepth) {
+            $this->maxDepth = $this->getAddressLevelId($maxDepth);
+        }
+
+        if ($addressLevels) {
+            foreach ($addressLevels as $level) {
+                $this->addressLevels[] = $this->getAddressLevelId($level);
+            }
+        }
+    }
 
     public function run()
     {
-        $this->address  = $this->textForCompletion;
-        $storage        = new AddressStorage($this->db);
-        $addressParts   = static::splitAddress($this->address);
-        $this->parentId = $storage->findAddress($addressParts['address']);
+        $storage      = new AddressStorage($this->db);
+        $addressParts = static::splitAddress($this->address);
 
-        if ($this->getHousesCount()) {
+        $address        = $storage->findAddress($addressParts['address']);
+        $this->parentId = $address ? $address['address_id'] : null;
+        $houseCount    = $address ? $address['house_count'] : null;
+
+        if ($houseCount && ($this->maxDepth || $this->addressLevels)) {
+            return array();
+        }
+
+        if ($this->getHouseCount()) {
             $rows = $this->findHouses($addressParts['pattern']);
             $rows = $this->setIsCompleteFlag($rows, true);
         } else {
@@ -24,10 +56,10 @@ class AddressCompletion extends CompletionAbstract
             $rows = $this->setIsCompleteFlag($rows, false);
         }
 
-        return array('addresses' => $rows);
+        return $rows;
     }
 
-    private function getHousesCount()
+    private function getHouseCount()
     {
         if (!$this->parentId) {
             return null;
@@ -44,24 +76,37 @@ class AddressCompletion extends CompletionAbstract
             SELECT full_title title
             FROM address_objects ao
             WHERE ?p
-                AND title ilike '?e%'
             ORDER BY ao.title
             LIMIT ?e"
         ;
 
-        $parentPart = $this->parentId
+        $whereParts = array($this->db->replacePlaceholders("title ilike '?e%'", array($pattern)));
+
+        if ($this->maxDepth) {
+            $whereParts[] = $this->db->replacePlaceholders('address_level <= ?q', array($this->maxDepth));
+        }
+
+        if ($this->addressLevels) {
+            $whereParts[] = $this->db->replacePlaceholders('address_level IN (?l)', array($this->addressLevels));
+        }
+
+        if ($this->regions) {
+            $whereParts[] = $this->db->replacePlaceholders('region IN (?l)', array($this->regions));
+        }
+
+        $whereParts[] = $this->parentId
             ? $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId))
-            : '(
+            : '
                 parent_id IS NULL
                 OR parent_id IN (
-                    SELECT address_id
-                    FROM address_objects
-                    WHERE parent_id IS NULL
+                  SELECT address_id
+                  FROM address_objects
+                  WHERE parent_id IS NULL
                 )
-            )'
+            '
         ;
 
-        $values = array($parentPart, $pattern, $this->limit);
+        $values = array('(' . implode(') AND (', $whereParts) . ')', $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
     }
@@ -120,7 +165,20 @@ class AddressCompletion extends CompletionAbstract
             $rawAddress
         );
 
-
         return trim($cleanAddress);
+    }
+
+    public function getAddressLevelId($code)
+    {
+        $result = $this->db->execute(
+            'SELECT id FROM address_object_levels WHERE code = ?q',
+            array($code)
+        )->fetchResult();
+
+        if ($result === null) {
+            throw new BadRequestException('Некорректное значение уровня адреса: ' . $code);
+        }
+
+        return $result;
     }
 }

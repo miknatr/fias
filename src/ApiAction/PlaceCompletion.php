@@ -2,10 +2,25 @@
 
 namespace ApiAction;
 
+use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use PlaceStorage;
 
-class PlaceCompletion extends CompletionAbstract
+// TODO IS-1258 Связь мест с адресами в ФИАС.
+class PlaceCompletion implements ApiActionInterface
 {
+    /** @var ConnectionInterface */
+    private $db;
+    private $limit;
+    private $textForCompletion;
+
+    public function __construct(ConnectionInterface $db, $textForCompletion, $limit)
+    {
+        $this->db    = $db;
+        $this->limit = $limit;
+
+        $this->textForCompletion = $textForCompletion;
+    }
+
     public function run()
     {
         $placeParts = $this->splitPlaceTitle($this->textForCompletion);
@@ -15,7 +30,7 @@ class PlaceCompletion extends CompletionAbstract
             $storage  = new PlaceStorage($this->db);
             $parentId = $storage->findPlace($placeParts['parent_place']);
             if (!$parentId) {
-                return array('places' => array());
+                return array();
             }
         }
 
@@ -28,7 +43,7 @@ class PlaceCompletion extends CompletionAbstract
 
         $rows = $this->findPlaces($placeWords, $type, $parentId);
 
-        return array('places' => $rows);
+        return $rows;
     }
 
     private function splitPlaceTitle($title)
@@ -51,7 +66,7 @@ class PlaceCompletion extends CompletionAbstract
             array($words)
         )->fetchOneOrFalse();
 
-        return  $type ?: array();
+        return $type ?: array();
     }
 
     private function findPlaces(array $placeWords, array $type, $parentId)
@@ -75,7 +90,7 @@ class PlaceCompletion extends CompletionAbstract
             $whereParts[] = $this->db->replacePlaceholders('parent_id = ?q', array($parentId));
         }
 
-        $values = array(implode($whereParts, ' AND '), $this->limit);
+        $values = array('(' . implode($whereParts, ') AND (') . ')', $this->limit);
 
         $items = $this->db->execute($sql, $values)->fetchAll();
         if ($items) {

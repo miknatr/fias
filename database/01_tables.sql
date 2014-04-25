@@ -1,5 +1,3 @@
-START TRANSACTION;
-
 DROP TABLE IF EXISTS houses;
 CREATE TABLE houses (
     id          UUID PRIMARY KEY NOT NULL,
@@ -22,25 +20,42 @@ COMMENT ON COLUMN houses.postal_code IS 'индекс';
 
 DROP TABLE IF EXISTS address_objects;
 CREATE TABLE address_objects (
-    id          UUID PRIMARY KEY NOT NULL,
-    address_id  UUID             NOT NULL,
-    parent_id   UUID             DEFAULT NULL,
-    level       INTEGER,
-    house_count INTEGER,
-    title       VARCHAR,
-    full_title  VARCHAR,
-    postal_code INTEGER,
-    prefix      VARCHAR
+    id            UUID PRIMARY KEY NOT NULL,
+    address_id    UUID             NOT NULL,
+    parent_id     UUID             DEFAULT NULL,
+    level         INTEGER,
+    address_level INTEGER,
+    house_count   INTEGER,
+    title         VARCHAR,
+    full_title    VARCHAR,
+    postal_code   INTEGER,
+    region        VARCHAR,
+    prefix        VARCHAR
 );
-COMMENT ON TABLE address_objects              IS 'данные по адресным объектам(округам, улицам, городам)';
-COMMENT ON COLUMN address_objects.id          IS 'идентификационный код записи';
-COMMENT ON COLUMN address_objects.address_id  IS 'идентификационный код адресного объекта';
-COMMENT ON COLUMN address_objects.parent_id   IS 'идентификационный код родительского адресного объекта';
-COMMENT ON COLUMN address_objects.title       IS 'наименование объекта';
-COMMENT ON COLUMN address_objects.full_title  IS 'полное наименование объекта';
-COMMENT ON COLUMN address_objects.postal_code IS 'индекс';
-COMMENT ON COLUMN address_objects.prefix      IS 'ул., пр. и так далее';
-COMMENT ON COLUMN address_objects.house_count IS 'количество домов';
+COMMENT ON TABLE address_objects                IS 'данные по адресным объектам(округам, улицам, городам)';
+COMMENT ON COLUMN address_objects.id            IS 'идентификационный код записи';
+COMMENT ON COLUMN address_objects.address_id    IS 'идентификационный код адресного объекта';
+COMMENT ON COLUMN address_objects.parent_id     IS 'идентификационный код родительского адресного объекта';
+COMMENT ON COLUMN address_objects.level         IS 'уровень объекта по parent_id (0 для региона и далее по возрастающей';
+COMMENT ON COLUMN address_objects.address_level IS 'уровень объекта по ФИАС';
+COMMENT ON COLUMN address_objects.parent_id     IS 'идентификационный код родительского адресного объекта';
+COMMENT ON COLUMN address_objects.title         IS 'наименование объекта';
+COMMENT ON COLUMN address_objects.full_title    IS 'полное наименование объекта';
+COMMENT ON COLUMN address_objects.postal_code   IS 'индекс';
+COMMENT ON COLUMN address_objects.region        IS 'регион';
+COMMENT ON COLUMN address_objects.prefix        IS 'ул., пр. и так далее';
+COMMENT ON COLUMN address_objects.house_count   IS 'количество домов';
+
+DROP TABLE IF EXISTS address_object_levels;
+CREATE TABLE address_object_levels (
+    id    INTEGER PRIMARY KEY,
+    title VARCHAR,
+    code  VARCHAR
+);
+COMMENT ON TABLE address_object_levels        IS 'перечень уровня адресных объектов по ФИАС';
+COMMENT ON COLUMN address_object_levels.id    IS 'идентификационный код записи';
+COMMENT ON COLUMN address_object_levels.title IS 'описание уровня';
+COMMENT ON COLUMN address_object_levels.title IS 'код уровня';
 
 DROP TABLE IF EXISTS update_log;
 CREATE TABLE update_log (
@@ -80,4 +95,11 @@ COMMENT ON COLUMN place_types.parent_id   IS 'идентификатор тип�
 COMMENT ON COLUMN place_types.title       IS 'название типа для пользователя';
 COMMENT ON COLUMN place_types.system_name IS 'системное имя типа, для использования в программном коде';
 
-COMMIT;
+DROP TABLE IF EXISTS regions;
+CREATE TABLE regions (
+    number VARCHAR PRIMARY KEY,
+    title VARCHAR
+);
+COMMENT ON TABLE regions         IS 'список регионов';
+COMMENT ON COLUMN regions.number IS 'номер региона';
+COMMENT ON COLUMN regions.number IS 'название региона';

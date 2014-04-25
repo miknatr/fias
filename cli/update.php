@@ -95,7 +95,7 @@ $houseFields           = $housesConfig['fields'];
 $houseFields['PREVID'] = array('name' => 'previous_id', 'type' => 'uuid');
 $housesUpdater         = new HousesUpdater($db, $housesConfig['table_name'], $houseFields);
 $housesUpdater->update(new XmlReader(
-    $directory->getHousesFile(),
+    $directory->getHouseFile(),
     $housesConfig['node_name'],
     array_keys($houseFields),
     array()

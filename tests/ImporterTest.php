@@ -16,7 +16,7 @@ class ImporterTest extends TestAbstract
      */
     public function testEmptyTable()
     {
-        new Importer($this->db, '', array('one', 'two', 'three'), array());
+        new Importer($this->db, '', array('one', 'two', 'three'));
     }
 
     /**

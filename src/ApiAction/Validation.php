@@ -20,20 +20,21 @@ class Validation implements ApiActionInterface
 
     public function run()
     {
+        $result = array();
+
         $addressData = $this->lookUpInFias();
         if ($addressData) {
-            $addressData['object_type'] = 'address';
-            return $addressData;
+            $addressData['item_type'] = 'address';
+            $result[] = $addressData;
         }
 
         $placeData = $this->lookUpInPlaces();
         if ($placeData) {
-            $placeData['object_type'] = 'place';
-            return $placeData;
+            $placeData['item_type'] = 'place';
+            $result[] = $placeData;
         }
 
-        // ничего не нашлось
-        return array('is_complete' => false, 'is_valid' => false, 'object_type' => null);
+        return $result;
     }
 
     private function lookUpInFias()

@@ -9,14 +9,15 @@ return array(
         'fields'       => array(
             'AOID'       => array('name' => 'id', 'type' => 'uuid'),
             'AOGUID'     => array('name' => 'address_id', 'type' => 'uuid'),
+            'AOLEVEL'    => array('name' => 'address_level', 'type' => 'integer'),
             'PARENTGUID' => array('name' => 'parent_id', 'type' => 'uuid'),
             'FORMALNAME' => array('name' => 'title'),
             'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
-            'SHORTNAME'  => array('name' => 'prefix')
+            'SHORTNAME'  => array('name' => 'prefix'),
+            'REGIONCODE' => array('name' => 'region', 'type' => 'integer'),
         ),
         'filters' => array(
             array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),
-            array('field' => 'REGIONCODE', 'type' => 'in', 'value' => array(47, 50, 77, 78)),
         ),
     ),
     'houses' => array(
