@@ -28,11 +28,10 @@ class ApiController
     {
         $maxLimit = $this->container->getMaxCompletionLimit();
 
-        $maxDepth      = $request->get('max_depth');
-        $addressLevels = $request->get('address_levels', array());
-        $regions       = $request->get('regions', array());
-        $pattern       = $request->get('pattern', '');
-        $limit         = $request->get('limit', $maxLimit);
+        $maxAddressLevel = $request->get('max_address_level');
+        $regions         = $request->get('regions', array());
+        $pattern         = $request->get('pattern', '');
+        $limit           = $request->get('limit', $maxLimit);
 
         if ($limit > $maxLimit) {
             return $this->makeErrorResponse('Превышен допустимый лимит на количество записей. Лимит должен быть не более: ' . $maxLimit);
@@ -48,8 +47,7 @@ class ApiController
             $this->container->getDb(),
             $pattern,
             $limit,
-            $maxDepth,
-            $addressLevels,
+            $maxAddressLevel,
             $regions
         ))->run();
         foreach ($addresses as $key => $devNull) {

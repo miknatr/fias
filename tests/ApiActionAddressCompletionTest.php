@@ -30,15 +30,6 @@ class ApiActionAddressCompletionTest extends TestAbstract
         $this->assertEquals(1, $result[0]['is_complete']);
     }
 
-    /**
-     * @expectedException BadRequestException
-     * @expectedExceptionMessage Некорректное значение
-     */
-    public function testBadMaxAddressLevel()
-    {
-        new AddressCompletion($this->db, 'Моск', 50, 'totally_wrong_max_address_level');
-    }
-
     public function testMaxAddressLevel()
     {
         $complete = new AddressCompletion($this->db, 'г Москва, Ста', 50, 'region');
@@ -55,10 +46,10 @@ class ApiActionAddressCompletionTest extends TestAbstract
 
     public function testRegion()
     {
-        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(), array(78));
+        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(78));
         $this->assertEmpty($complete->run());
 
-        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(), array(77));
+        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(77));
         $this->assertCount(1, $complete->run());
     }
 }

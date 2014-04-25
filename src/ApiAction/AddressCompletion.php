@@ -13,25 +13,18 @@ class AddressCompletion implements ApiActionInterface
     private $limit;
     private $address;
     private $parentId;
-    private $maxDepth;
-    private $addressLevels = array();
+    private $maxAddressLevel;
     private $regions = array();
 
-    public function __construct(ConnectionInterface $db, $address, $limit, $maxDepth = 'building', array $addressLevels = array(), array $regions = array())
+    public function __construct(ConnectionInterface $db, $address, $limit, $maxAddressLevel = 'building', array $regions = array())
     {
         $this->db      = $db;
         $this->limit   = $limit;
         $this->address = $address;
         $this->regions = $regions;
 
-        if ($maxDepth) {
-            $this->maxDepth = $this->getAddressLevelId($maxDepth);
-        }
-
-        if ($addressLevels) {
-            foreach ($addressLevels as $level) {
-                $this->addressLevels[] = $this->getAddressLevelId($level);
-            }
+        if ($maxAddressLevel) {
+            $this->maxAddressLevel = $this->getAddressLevelId($maxAddressLevel);
         }
     }
 
@@ -44,7 +37,7 @@ class AddressCompletion implements ApiActionInterface
         $this->parentId = $address ? $address['address_id'] : null;
         $houseCount    = $address ? $address['house_count'] : null;
 
-        if ($houseCount && ($this->maxDepth || $this->addressLevels)) {
+        if ($houseCount && $this->maxAddressLevel) {
             return array();
         }
 
@@ -82,12 +75,8 @@ class AddressCompletion implements ApiActionInterface
 
         $whereParts = array($this->db->replacePlaceholders("title ilike '?e%'", array($pattern)));
 
-        if ($this->maxDepth) {
-            $whereParts[] = $this->db->replacePlaceholders('address_level <= ?q', array($this->maxDepth));
-        }
-
-        if ($this->addressLevels) {
-            $whereParts[] = $this->db->replacePlaceholders('address_level IN (?l)', array($this->addressLevels));
+        if ($this->maxAddressLevel) {
+            $whereParts[] = $this->db->replacePlaceholders('address_level <= ?q', array($this->maxAddressLevel));
         }
 
         if ($this->regions) {
