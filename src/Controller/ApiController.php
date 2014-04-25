@@ -71,9 +71,9 @@ class ApiController
             return $this->makeErrorResponse('Отсутствует обязательный параметр: pattern.');
         }
 
-        $json = (new Validation($this->container->getDb(), $pattern))->run();
+        $result = array('items' => (new Validation($this->container->getDb(), $pattern))->run());
 
-        return $this->makeResponse($json);
+        return $this->makeResponse($result);
     }
 
     /**

@@ -36,16 +36,16 @@ class ApiControllerTest extends TestAbstract
             ->loadPage('/api/validate/', 400)
             ->describe('Проверяем валидацию корректного адресного объекта')
             ->loadPage('/api/validate/?pattern=г Москва', 200)
-            ->ensureResponse(json_decode($this->curResponse->getContent())->is_valid && !json_decode($this->curResponse->getContent())->is_complete)
+            ->ensureResponse(!json_decode($this->curResponse->getContent())->items[0]->is_complete)
             ->describe('Проверяем валидацию некорректного адресного объекта')
             ->loadPage('/api/validate/?pattern=г Мосва', 200)
-            ->ensureResponse(!json_decode($this->curResponse->getContent())->is_valid && !json_decode($this->curResponse->getContent())->is_complete)
+            ->ensureResponse(!json_decode($this->curResponse->getContent())->items)
             ->describe('Проверяем валидацию корректного дома')
             ->loadPage('/api/validate/?pattern=г Москва, ул Стахановская, 1к1', 200)
-            ->ensureResponse(json_decode($this->curResponse->getContent())->is_valid && json_decode($this->curResponse->getContent())->is_complete)
+            ->ensureResponse(json_decode($this->curResponse->getContent())->items[0]->is_complete)
             ->describe('Проверяем валидацию некорректного дома')
             ->loadPage('/api/validate/?pattern=г Москва, ул Стахановская, 1324326с1', 200)
-            ->ensureResponse(!json_decode($this->curResponse->getContent())->is_valid && !json_decode($this->curResponse->getContent())->is_complete)
+            ->ensureResponse(!json_decode($this->curResponse->getContent())->items)
         ;
     }
 
