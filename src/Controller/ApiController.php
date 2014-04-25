@@ -2,7 +2,7 @@
 
 namespace Controller;
 
-use ApiAction\PostalCode;
+use ApiAction\AddressPostalCode;
 use ApiAction\PlaceCompletion;
 use ApiAction\PostalCodeLocation;
 use Bravicility\Http\Request;
@@ -77,7 +77,7 @@ class ApiController
     }
 
     /**
-     * @route GET /api/postal_code/
+     * @route GET /api/address_postal_code/
      */
     public function postalCode(Request $request)
     {
@@ -86,7 +86,7 @@ class ApiController
             return $this->makeErrorResponse('Не указан адрес для поиска индекса.');
         }
 
-        $result = (new PostalCode($this->container->getDb(), $address))->run();
+        $result = (new AddressPostalCode($this->container->getDb(), $address))->run();
 
         return $this->makeResponse(array('postal_code' => $result));
     }
