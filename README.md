@@ -22,8 +22,8 @@ FIAS
     Ответ:
     {
         "items": [
-            {"title": "Москва, Невский пр.", "is_complete": false, "item_type": "address"},
-            {"title": "Москва, Невское урочище", "is_complete": false, "item_type": "address"},
+            {"title": "г Москва, пр Невский", "is_complete": false, "item_type": "address"},
+            {"title": "г Москва, Невское урочище", "is_complete": false, "item_type": "address"},
             {"title": "Невский вокзал", "is_complete": false, "item_type": "place"}
         ]
     }
@@ -59,8 +59,8 @@ GET-параметры:
     В ответе будут все варианты вплоть до номеров домов:
     {
         "items": [
-            {"title": "Москва, Невский пр. 10", "is_complete": true, "item_type": "address"},
-            {"title": "Москва, Невский пр. 11", "is_complete": true, "item_type": "address"}
+            {"title": "г Москва, пр Невский, 10", "is_complete": true, "item_type": "address"},
+            {"title": "г Москва, пр Невский, 11", "is_complete": true, "item_type": "address"}
         ]
     }
 
@@ -70,8 +70,8 @@ GET-параметры:
     В ответе будут только регионы без дальнейшей детализации:
     {
         "items": [
-            {"title": "Москва", "is_complete": false, "item_type": "address"},
-            {"title": "Московская область", "is_complete": false, "item_type": "address"}
+            {"title": "г Москва", "is_complete": false, "item_type": "address"},
+            {"title": "обл Московская", "is_complete": false, "item_type": "address"}
         ]
     }
 
