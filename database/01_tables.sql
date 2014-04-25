@@ -94,3 +94,12 @@ COMMENT ON TABLE place_types              IS 'справочник типов м
 COMMENT ON COLUMN place_types.parent_id   IS 'идентификатор типа родителя';
 COMMENT ON COLUMN place_types.title       IS 'название типа для пользователя';
 COMMENT ON COLUMN place_types.system_name IS 'системное имя типа, для использования в программном коде';
+
+DROP TABLE IF EXISTS regions;
+CREATE TABLE regions (
+    number VARCHAR PRIMARY KEY,
+    title VARCHAR
+);
+COMMENT ON TABLE regions         IS 'список регионов';
+COMMENT ON COLUMN regions.number IS 'номер региона';
+COMMENT ON COLUMN regions.number IS 'название региона';
