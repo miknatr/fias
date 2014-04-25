@@ -17,13 +17,13 @@ class Container
 
     public function __construct()
     {
-        $this->config = parse_ini_file(__DIR__ . '/../config/config.ini', true);
+        $this->config = parse_ini_file(__DIR__ . '/../config.ini', true);
         $this->ensureParameters(
             $this->config,
             array('app.host', 'app.file_directory', 'app.wsdl_url', 'app.max_completion_limit', 'db.uri')
         );
 
-        $this->importConfig = require(__DIR__ . '/../config/import.php');
+        $this->importConfig = require(__DIR__ . '/../import.php');
         $this->loadDbConfig($this->config);
         $this->loadRouterConfig($this->config, $this->getRootDirectory());
         $this->loadLoggingConfig($this->config, $this->getRootDirectory());

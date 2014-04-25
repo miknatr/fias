@@ -26,7 +26,7 @@
         </bash>
 
         <load-parameters>
-            <parameter-file name="config/config.ini" dist="config/config.ini.dist">
+            <parameter-file name="config.ini" dist="config.ini.dist">
                 <parameter location="app.host" value="{host}"/>
                 <parameter location="db.uri" value="&postgres_uri;/{db}"/>
             </parameter-file>
