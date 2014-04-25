@@ -5,6 +5,7 @@ namespace ApiAction;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 use PlaceStorage;
 
+// TODO IS-1258 Связь мест с адресами в ФИАС.
 class PlaceCompletion implements ApiActionInterface
 {
     /** @var ConnectionInterface */
