@@ -26,6 +26,7 @@ CREATE TABLE address_objects (
     level         INTEGER,
     address_level INTEGER,
     house_count   INTEGER,
+    have_children BOOLEAN          DEFAULT FALSE,
     title         VARCHAR,
     full_title    VARCHAR,
     postal_code   INTEGER,
@@ -45,6 +46,7 @@ COMMENT ON COLUMN address_objects.postal_code   IS 'индекс';
 COMMENT ON COLUMN address_objects.region        IS 'регион';
 COMMENT ON COLUMN address_objects.prefix        IS 'ул., пр. и так далее';
 COMMENT ON COLUMN address_objects.house_count   IS 'количество домов';
+COMMENT ON COLUMN address_objects.have_children IS 'кеширующий флаг, показывающий есть ли у ноды потомки (дома или адреса)';
 
 DROP TABLE IF EXISTS address_object_levels;
 CREATE TABLE address_object_levels (

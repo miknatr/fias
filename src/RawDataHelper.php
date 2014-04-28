@@ -1,5 +1,5 @@
 <?php
-
+// TODO убрать ненужное больше переопределение таблиц
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class RawDataHelper
@@ -8,8 +8,8 @@ class RawDataHelper
     {
         // Формируем полный заголовок
         $sql = <<<SQL
-            UPDATE ?f:address_table: ao SET
-                level      = tmp.level,
+            UPDATE ?f:address_table: ao
+            SET level      = tmp.level,
                 full_title = tmp.title
             FROM (
                 WITH RECURSIVE required_addresses(level, address_id, title) AS (
@@ -36,8 +36,8 @@ SQL;
 
         // Если будем импортировать больше половины регионов из фиаса, перенести на сторону PHP.
         $db->execute(
-            "UPDATE ?f SET
-                number    = lower(number),
+            "UPDATE ?f
+            SET number    = lower(number),
                 building  = CASE WHEN building  IN (?l) THEN NULL ELSE lower(building)  END,
                 structure = CASE WHEN structure IN (?l) THEN NULL ELSE lower(structure) END
             WHERE number ~ '[^0-9]+'
@@ -49,8 +49,8 @@ SQL;
 
         // Убираем ложные данные по корпусам и строениям ("1а" и в корпусе и в номере, например)
         $db->execute(
-            "UPDATE ?f SET
-                building = NULL,
+            "UPDATE ?f
+            SET building = NULL,
                 structure = NULL
             WHERE number ~ '[^0-9]+'
                 AND (
@@ -65,7 +65,7 @@ SQL;
         // нормализуем адрес по яндексу
         $db->execute(
             "UPDATE ?f
-                SET full_number = COALESCE(number, '')
+            SET full_number = COALESCE(number, '')
                     ||COALESCE('к'||building, '')
                     ||COALESCE('с'||structure, '')
             ",
@@ -78,7 +78,7 @@ SQL;
         // прописываем данные по домам в address_objects
         $db->execute(
             "UPDATE address_objects ao
-                SET house_count = tmp.count
+            SET house_count = tmp.count
             FROM (
                 SELECT address_id, count(*) count
                 FROM houses GROUP BY 1
@@ -86,6 +86,23 @@ SQL;
             WHERE tmp.address_id = ao.address_id
             ",
             array($table)
+        );
+    }
+
+    public static function updateHaveChildrenFlag(ConnectionInterface $db)
+    {
+        // ставим TRUE тем записям у которых есть потомки (адреса или дома)
+        $db->execute(
+            "UPDATE address_objects ao
+            SET have_children = TRUE
+            FROM (
+                SELECT parent_id
+                FROM address_objects
+                WHERE parent_id IS NOT NULL
+                GROUP BY 1
+            ) tmp
+            WHERE house_count > 0 OR tmp.parent_id = address_id
+            "
         );
     }
 }
