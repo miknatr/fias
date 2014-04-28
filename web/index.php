@@ -28,4 +28,5 @@ try {
     $response = new Response(400, $e->getMessage());
 }
 
+$response->addHeader('Access-Control-Allow-Origin: *');
 $response->send();

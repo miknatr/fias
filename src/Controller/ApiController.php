@@ -112,7 +112,6 @@ class ApiController
     private function makeResponse(array $values, $status = 200)
     {
         $response = new JsonResponse($status, $values);
-        $response->addHeader('Access-Control-Allow-Origin: *');
 
         return $response;
     }
