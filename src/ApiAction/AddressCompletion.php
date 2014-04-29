@@ -68,7 +68,7 @@ class AddressCompletion implements ApiActionInterface
     private function findAddresses($pattern)
     {
         $sql = "
-            SELECT full_title title, address_level
+            SELECT full_title title, address_level, CASE WHEN have_children THEN 1 ELSE 0 END as have_children
             FROM address_objects ao
             WHERE ?p
             ORDER BY ao.title
@@ -105,7 +105,7 @@ class AddressCompletion implements ApiActionInterface
     private function findHouses($pattern)
     {
         $sql    = "
-            SELECT full_title||', '||full_number title, ?q address_level
+            SELECT full_title||', '||full_number title, ?q address_level, 0 have_children
             FROM houses h
             INNER JOIN address_objects ao
                 ON ao.address_id = h.address_id
@@ -123,7 +123,7 @@ class AddressCompletion implements ApiActionInterface
     {
         // Проставляем здесь, а не в запросе так как хотим получить в JSON честное false а не 0
         foreach ($values as $key => $value) {
-            $values[$key]['is_complete'] = $value['address_level'] == $this->maxAddressLevel;
+            $values[$key]['is_complete'] = ($value['address_level'] == $this->maxAddressLevel) || $value['have_children'];
             unset($values[$key]['address_level']);
         }
 
