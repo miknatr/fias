@@ -27,6 +27,7 @@ class HousesUpdater extends Importer
         $this->addNewRecords();
 
         RawDataHelper::updateHousesCount($this->db);
+        RawDataHelper::updateHaveChildrenFlag($this->db);
     }
 
     private function removeOldRecords()
