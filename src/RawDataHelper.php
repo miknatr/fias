@@ -1,24 +1,24 @@
 <?php
-// TODO убрать ненужное больше переопределение таблиц
+
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class RawDataHelper
 {
-    public static function cleanAddressObjects(ConnectionInterface $db, $table = 'address_objects')
+    public static function cleanAddressObjects(ConnectionInterface $db)
     {
         // Формируем полный заголовок
         $sql = <<<SQL
-            UPDATE ?f:address_table: ao
+            UPDATE address_objects ao
             SET level      = tmp.level,
                 full_title = tmp.title
             FROM (
                 WITH RECURSIVE required_addresses(level, address_id, title) AS (
                     SELECT DISTINCT 0, address_id, "prefix" || ' ' || title
-                    FROM ?f:address_table:
+                    FROM address_objects
                     WHERE parent_id IS NULL
                 UNION ALL
                     SELECT ra.level + 1, ar.address_id, ra.title || ', ' || "prefix" || ' ' || ar.title
-                    FROM ?f:address_table: ar
+                    FROM address_objects ar
                     INNER JOIN required_addresses ra
                         ON ra.address_id = ar.parent_id
                 )
@@ -27,7 +27,7 @@ class RawDataHelper
             WHERE tmp.address_id = ao.address_id;
 SQL;
 
-        $db->execute($sql, array('address_table' => $table));
+        $db->execute($sql);
     }
 
     public static function cleanHouses(ConnectionInterface $db, $table = 'houses')
@@ -73,7 +73,7 @@ SQL;
         );
     }
 
-    public static function updateHousesCount(ConnectionInterface $db, $table = 'houses')
+    public static function updateHousesCount(ConnectionInterface $db)
     {
         // прописываем данные по домам в address_objects
         $db->execute(
@@ -84,8 +84,7 @@ SQL;
                 FROM houses GROUP BY 1
             ) tmp
             WHERE tmp.address_id = ao.address_id
-            ",
-            array($table)
+            "
         );
     }
 

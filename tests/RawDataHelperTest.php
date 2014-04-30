@@ -9,29 +9,11 @@ class RawDataHelperTest extends TestAbstract
     {
         parent::setUp();
 
-        $this->addressObjectTable = 'raw_data_address_objects_test';
-        $this->housesTable        = 'raw_data_houses_test';
+        $this->addressObjectTable = 'address_objects';
+        $this->housesTable        = 'houses';
 
-        $addressObjectFields               = $this->container->getAddressObjectsImportConfig()['fields'];
-        $addressObjectFields['level']      = array('name' => 'level', 'type' => 'integer');
-        $addressObjectFields['full_title'] = array('name' => 'full_title');
-
-        $this->db->execute('DROP TABLE IF EXISTS ?f', array($this->addressObjectTable));
-        $this->db->execute('DROP TABLE IF EXISTS ?f', array($this->housesTable));
-        DbHelper::createTable(
-            $this->db,
-            $this->addressObjectTable,
-            $addressObjectFields
-        );
-
-        $housesFields                = $this->container->getHousesImportConfig()['fields'];
-        $housesFields['full_number'] = array('name' => 'full_number');
-
-        DbHelper::createTable(
-            $this->db,
-            $this->housesTable,
-            $housesFields
-        );
+        $this->db->execute('TRUNCATE TABLE address_objects CASCADE');
+        $this->db->execute('TRUNCATE TABLE houses CASCADE');
 
         $addressObjects = array(
             array('5c8b06f1-518e-496e-b683-7bf917e0d70b', '0c5b2444-70a0-4932-980c-b4dc0d3f02b5', NULL, 'Москва', NULL, 'г'),
@@ -44,8 +26,8 @@ class RawDataHelperTest extends TestAbstract
         );
 
         $houses = array(
-            array( 'a64330e3-7a41-41ee-a8a2-41db8693c584', 'a64330e3-7a41-41ee-a8a2-41db8693c584', 'afdda482-42ae-45d3-9af1-61ac6da41105', '02', '1', 'нет'),
-            array( 'b3ace9e8-dead-4e2c-9c56-e524aef28082', '4fd3b082-34bf-4ad9-8f27-c5c92952554c', 'afdda482-42ae-45d3-9af1-61ac6da41105', '02a', '02a', null),
+            array('a64330e3-7a41-41ee-a8a2-41db8693c584', 'a64330e3-7a41-41ee-a8a2-41db8693c584', '0ecde158-a58f-43af-9707-aa6dd3484b56', '02', '1', 'нет'),
+            array('b3ace9e8-dead-4e2c-9c56-e524aef28082', '4fd3b082-34bf-4ad9-8f27-c5c92952554c', '0ecde158-a58f-43af-9707-aa6dd3484b56', '02a', '02a', null),
         );
         $this->db->execute(
             'INSERT INTO ?f ("id", "house_id", "address_id", "number", "structure", "building")
