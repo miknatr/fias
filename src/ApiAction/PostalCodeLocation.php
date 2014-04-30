@@ -63,7 +63,11 @@ class PostalCodeLocation implements ApiActionInterface
                             ON ads.parent_id = r.address_id
 
                 )
-                SELECT * FROM address_stack ORDER BY level
+                SELECT parent_id, a.title, full_title, level, al.code address_level
+                FROM address_stack a
+                INNER JOIN address_object_levels al
+                    ON al.id = address_level
+                ORDER BY level
             ",
             array($this->postalCode)
         )->fetchAll();
