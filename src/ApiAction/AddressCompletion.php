@@ -126,7 +126,7 @@ class AddressCompletion implements ApiActionInterface
             $doChildrenSuitNextLevel = ($value['next_address_level'] <= $this->maxAddressLevel)
                 || (!$this->maxAddressLevel && !empty($value['house_count']))
             ;
-            $values[$key]['is_complete']      = $isMaxLevelReached || !$doChildrenSuitNextLevel;
+            $values[$key]['is_complete'] = $isMaxLevelReached || !$doChildrenSuitNextLevel;
 
             unset($values[$key]['address_level']);
         }
