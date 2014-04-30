@@ -66,7 +66,7 @@ class ApiControllerTest extends TestAbstract
             ->ensureResponse(json_decode($this->curResponse->getContent())->postal_code == 123456)
             ->describe('Проверяем выдачу адресов')
             ->loadPage('/api/postal_code_location/?postal_code=123456', 200)
-            ->ensureResponse(count(json_decode($this->curResponse->getContent())->addresses) == 1)
+            ->ensureResponse(count(json_decode($this->curResponse->getContent())->address_parts) == 1)
         ;
     }
 

@@ -99,7 +99,7 @@ class ApiController
             return $this->makeErrorResponse('Не заданы индекс для поиска адреса.');
         }
 
-        $result = array('addresses' => (new PostalCodeLocation($this->container->getDb(), $postalCode))->run());
+        $result = array('address_parts' => (new PostalCodeLocation($this->container->getDb(), $postalCode))->run());
 
         return $this->makeResponse($result);
     }
