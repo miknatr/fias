@@ -26,7 +26,7 @@ CREATE TABLE address_objects (
     level              INTEGER,
     address_level      INTEGER,
     house_count        INTEGER,
-    max_children_level INTEGER,
+    next_address_level INTEGER,
     title              VARCHAR,
     full_title         VARCHAR,
     postal_code        INTEGER,
@@ -46,7 +46,7 @@ COMMENT ON COLUMN address_objects.postal_code        IS 'индекс';
 COMMENT ON COLUMN address_objects.region             IS 'регион';
 COMMENT ON COLUMN address_objects.prefix             IS 'ул., пр. и так далее';
 COMMENT ON COLUMN address_objects.house_count        IS 'количество домов';
-COMMENT ON COLUMN address_objects.max_children_level IS 'минимальный уровень дочерних объектов по ФИАС';
+COMMENT ON COLUMN address_objects.next_address_level IS 'уровень следующего дочернего объекта по ФИАС';
 
 DROP TABLE IF EXISTS address_object_levels;
 CREATE TABLE address_object_levels (

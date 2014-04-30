@@ -78,7 +78,8 @@ SQL;
         // прописываем данные по домам в address_objects
         $db->execute(
             "UPDATE address_objects ao
-            SET house_count = tmp.count
+            SET house_count = tmp.count,
+                next_address_level = 0
             FROM (
                 SELECT address_id, count(*) count
                 FROM houses GROUP BY 1
@@ -88,16 +89,16 @@ SQL;
         );
     }
 
-    public static function updateMaxChildrenLevelFlag(ConnectionInterface $db)
+    public static function updateNextAddressLevelFlag(ConnectionInterface $db)
     {
         $db->execute(
             "UPDATE address_objects ao
-            SET max_children_level = tmp.address_level
+            SET next_address_level = tmp.address_level
             FROM (
                 SELECT DISTINCT ON (parent_id) parent_id, address_level
                 FROM address_objects
                 WHERE parent_id IS NOT NULL
-                ORDER BY parent_id, address_level DESC
+                ORDER BY parent_id, address_level
             ) tmp
             WHERE tmp.parent_id = address_id
             "

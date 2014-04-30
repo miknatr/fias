@@ -68,7 +68,7 @@ class AddressCompletion implements ApiActionInterface
     private function findAddresses($pattern)
     {
         $sql = "
-            SELECT full_title title, address_level, max_children_level
+            SELECT full_title title, address_level, next_address_level
             FROM address_objects ao
             WHERE ?p
             ORDER BY ao.title
@@ -105,7 +105,7 @@ class AddressCompletion implements ApiActionInterface
     private function findHouses($pattern)
     {
         $sql    = "
-            SELECT full_title||', '||full_number title, ?q address_level, NULL max_children_level
+            SELECT full_title||', '||full_number title, ?q address_level, NULL next_address_level
             FROM houses h
             INNER JOIN address_objects ao
                 ON ao.address_id = h.address_id
@@ -122,9 +122,12 @@ class AddressCompletion implements ApiActionInterface
     private function setIsCompleteFlag(array $values)
     {
         foreach ($values as $key => $value) {
-            $values[$key]['is_complete'] = ($value['address_level'] == $this->maxAddressLevel)
-                || ($value['max_children_level'] && ($value['max_children_level'] > $this->maxAddressLevel))
+            $isMaxLevelReached       = $value['address_level'] == $this->maxAddressLevel;
+            $doChildrenSuitNextLevel = ($value['next_address_level'] <= $this->maxAddressLevel)
+                || (!$this->maxAddressLevel && !empty($value['house_count']))
             ;
+            $values[$key]['is_complete']      = $isMaxLevelReached || !$doChildrenSuitNextLevel;
+
             unset($values[$key]['address_level']);
         }
 

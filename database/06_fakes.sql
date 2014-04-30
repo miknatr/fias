@@ -1,4 +1,4 @@
-INSERT INTO address_objects (id, address_id, parent_id, level, full_title, title, prefix, house_count, postal_code, address_level, region, max_children_level)
+INSERT INTO address_objects (id, address_id, parent_id, level, full_title, title, prefix, house_count, postal_code, address_level, region, next_address_level)
 VALUES
     ('29251dcf-00a1-4e34-98d4-5c47484a36d4', '29251dcf-00a1-4e34-98d4-5c47484a36d4', NULL, '0', 'г Москва', 'Москва', 'г', '0', NULL, 1, 77, 7),
     ('77303f7c-452b-4e73-b2b0-cbc59fe636c2', '77303f7c-452b-4e73-b2b0-cbc59fe636c2', '29251dcf-00a1-4e34-98d4-5c47484a36d4', '1', 'г Москва, ул Стахановская', 'Стахановская', 'ул', '4', 123456, 7, 77, NULL),
