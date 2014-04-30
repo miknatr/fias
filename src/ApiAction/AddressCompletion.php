@@ -37,7 +37,7 @@ class AddressCompletion implements ApiActionInterface
 
         $address        = $storage->findAddress($addressParts['address']);
         $this->parentId = $address ? $address['address_id'] : null;
-        $houseCount    = $address ? $address['house_count'] : null;
+        $houseCount     = $address ? $address['house_count'] : null;
 
         if ($houseCount && $this->maxAddressLevel) {
             return array();
