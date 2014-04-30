@@ -14,7 +14,7 @@ class HousesImporter extends Importer
     {
         RawDataHelper::cleanHouses($this->db, $this->table);
         RawDataHelper::updateHousesCount($this->db);
-        RawDataHelper::updateHaveChildrenFlag($this->db);
+        RawDataHelper::updateMaxChildrenLevelFlag($this->db);
     }
 
     protected $rowsPerInsert = 10000;

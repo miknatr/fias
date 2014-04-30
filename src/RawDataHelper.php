@@ -88,19 +88,18 @@ SQL;
         );
     }
 
-    public static function updateHaveChildrenFlag(ConnectionInterface $db)
+    public static function updateMaxChildrenLevelFlag(ConnectionInterface $db)
     {
-        // ставим TRUE тем записям у которых есть потомки (адреса или дома)
         $db->execute(
             "UPDATE address_objects ao
-            SET have_children = TRUE
+            SET max_children_level = tmp.address_level
             FROM (
-                SELECT parent_id
+                SELECT DISTINCT ON (parent_id) parent_id, address_level
                 FROM address_objects
                 WHERE parent_id IS NOT NULL
-                GROUP BY 1
+                ORDER BY parent_id, address_level DESC
             ) tmp
-            WHERE house_count > 0 OR tmp.parent_id = address_id
+            WHERE tmp.parent_id = address_id
             "
         );
     }
