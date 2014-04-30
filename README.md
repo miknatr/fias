@@ -24,7 +24,7 @@ FIAS
         "items": [
             {"title": "г Москва, пр Невский", "is_complete": false, "item_type": "address"},
             {"title": "г Москва, Невское урочище", "is_complete": false, "item_type": "address"},
-            {"title": "Невский вокзал", "is_complete": false, "item_type": "place"}
+            {"title": "Невский вокзал", "is_complete": true, "item_type": "place"}
         ]
     }
 
@@ -41,7 +41,7 @@ GET-параметры:
 
 * `items` — массив вариантов дополнения адреса;
     * `title` — текст варианта дополнения;
-    * `is_complete` — `true` для адресов которым не нужно дальнейшее дополнение (набран точный адрес, либо достигнута максимальная детализация адреса);
+    * `is_complete` — `true` для адресов, которым не нужно дальнейшее дополнение (набран точный адрес, либо достигнута максимальная детализация адреса);
     * `item_type` — тип найденного варианта:
         * `"address"` — текст найден в ФИАС;
         * `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.).
@@ -70,8 +70,8 @@ GET-параметры:
     В ответе будут только регионы без дальнейшей детализации:
     {
         "items": [
-            {"title": "г Москва", "is_complete": false, "item_type": "address"},
-            {"title": "обл Московская", "is_complete": false, "item_type": "address"}
+            {"title": "г Москва", "is_complete": true, "item_type": "address"},
+            {"title": "обл Московская", "is_complete": true, "item_type": "address"}
         ]
     }
 
