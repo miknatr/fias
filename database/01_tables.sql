@@ -20,31 +20,33 @@ COMMENT ON COLUMN houses.postal_code IS 'индекс';
 
 DROP TABLE IF EXISTS address_objects;
 CREATE TABLE address_objects (
-    id            UUID PRIMARY KEY NOT NULL,
-    address_id    UUID             NOT NULL,
-    parent_id     UUID             DEFAULT NULL,
-    level         INTEGER,
-    address_level INTEGER,
-    house_count   INTEGER,
-    title         VARCHAR,
-    full_title    VARCHAR,
-    postal_code   INTEGER,
-    region        VARCHAR,
-    prefix        VARCHAR
+    id                 UUID PRIMARY KEY NOT NULL,
+    address_id         UUID             NOT NULL,
+    parent_id          UUID             DEFAULT NULL,
+    level              INTEGER,
+    address_level      INTEGER,
+    house_count        INTEGER,
+    next_address_level INTEGER,
+    title              VARCHAR,
+    full_title         VARCHAR,
+    postal_code        INTEGER,
+    region             VARCHAR,
+    prefix             VARCHAR
 );
-COMMENT ON TABLE address_objects                IS 'данные по адресным объектам(округам, улицам, городам)';
-COMMENT ON COLUMN address_objects.id            IS 'идентификационный код записи';
-COMMENT ON COLUMN address_objects.address_id    IS 'идентификационный код адресного объекта';
-COMMENT ON COLUMN address_objects.parent_id     IS 'идентификационный код родительского адресного объекта';
-COMMENT ON COLUMN address_objects.level         IS 'уровень объекта по parent_id (0 для региона и далее по возрастающей';
-COMMENT ON COLUMN address_objects.address_level IS 'уровень объекта по ФИАС';
-COMMENT ON COLUMN address_objects.parent_id     IS 'идентификационный код родительского адресного объекта';
-COMMENT ON COLUMN address_objects.title         IS 'наименование объекта';
-COMMENT ON COLUMN address_objects.full_title    IS 'полное наименование объекта';
-COMMENT ON COLUMN address_objects.postal_code   IS 'индекс';
-COMMENT ON COLUMN address_objects.region        IS 'регион';
-COMMENT ON COLUMN address_objects.prefix        IS 'ул., пр. и так далее';
-COMMENT ON COLUMN address_objects.house_count   IS 'количество домов';
+COMMENT ON TABLE address_objects                     IS 'данные по адресным объектам(округам, улицам, городам)';
+COMMENT ON COLUMN address_objects.id                 IS 'идентификационный код записи';
+COMMENT ON COLUMN address_objects.address_id         IS 'идентификационный код адресного объекта';
+COMMENT ON COLUMN address_objects.parent_id          IS 'идентификационный код родительского адресного объекта';
+COMMENT ON COLUMN address_objects.level              IS 'уровень объекта по parent_id (0 для региона и далее по возрастающей';
+COMMENT ON COLUMN address_objects.address_level      IS 'уровень объекта по ФИАС';
+COMMENT ON COLUMN address_objects.parent_id          IS 'идентификационный код родительского адресного объекта';
+COMMENT ON COLUMN address_objects.title              IS 'наименование объекта';
+COMMENT ON COLUMN address_objects.full_title         IS 'полное наименование объекта';
+COMMENT ON COLUMN address_objects.postal_code        IS 'индекс';
+COMMENT ON COLUMN address_objects.region             IS 'регион';
+COMMENT ON COLUMN address_objects.prefix             IS 'ул., пр. и так далее';
+COMMENT ON COLUMN address_objects.house_count        IS 'количество домов';
+COMMENT ON COLUMN address_objects.next_address_level IS 'уровень следующего дочернего объекта по ФИАС';
 
 DROP TABLE IF EXISTS address_object_levels;
 CREATE TABLE address_object_levels (

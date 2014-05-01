@@ -8,6 +8,8 @@ use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class AddressCompletion implements ApiActionInterface
 {
+    const BUILDING_ADDRESS_LEVEL = 0;
+
     /** @var ConnectionInterface */
     private $db;
     private $limit;
@@ -35,7 +37,7 @@ class AddressCompletion implements ApiActionInterface
 
         $address        = $storage->findAddress($addressParts['address']);
         $this->parentId = $address ? $address['address_id'] : null;
-        $houseCount    = $address ? $address['house_count'] : null;
+        $houseCount     = $address ? $address['house_count'] : null;
 
         if ($houseCount && $this->maxAddressLevel) {
             return array();
@@ -43,10 +45,10 @@ class AddressCompletion implements ApiActionInterface
 
         if ($this->getHouseCount()) {
             $rows = $this->findHouses($addressParts['pattern']);
-            $rows = $this->setIsCompleteFlag($rows, true);
+            $rows = $this->setIsCompleteFlag($rows);
         } else {
             $rows = $this->findAddresses($addressParts['pattern']);
-            $rows = $this->setIsCompleteFlag($rows, false);
+            $rows = $this->setIsCompleteFlag($rows);
         }
 
         return $rows;
@@ -66,7 +68,7 @@ class AddressCompletion implements ApiActionInterface
     private function findAddresses($pattern)
     {
         $sql = "
-            SELECT full_title title
+            SELECT full_title title, address_level, next_address_level
             FROM address_objects ao
             WHERE ?p
             ORDER BY ao.title
@@ -103,7 +105,7 @@ class AddressCompletion implements ApiActionInterface
     private function findHouses($pattern)
     {
         $sql    = "
-            SELECT full_title||', '||full_number title
+            SELECT full_title||', '||full_number title, ?q address_level, NULL next_address_level
             FROM houses h
             INNER JOIN address_objects ao
                 ON ao.address_id = h.address_id
@@ -112,16 +114,21 @@ class AddressCompletion implements ApiActionInterface
             ORDER BY (regexp_matches(full_number, '^[0-9]+', 'g'))[1]
             LIMIT ?e"
         ;
-        $values = array($this->parentId, $pattern, $this->limit);
+        $values = array(static::BUILDING_ADDRESS_LEVEL, $this->parentId, $pattern, $this->limit);
 
         return $this->db->execute($sql, $values)->fetchAll();
     }
 
-    private function setIsCompleteFlag(array $values, $flag)
+    private function setIsCompleteFlag(array $values)
     {
-        // Проставляем здесь, а не в запросе так как хотим получить в JSON честное false а не 0
         foreach ($values as $key => $value) {
-            $values[$key]['is_complete'] = $flag;
+            $isMaxLevelReached       = $value['address_level'] == $this->maxAddressLevel;
+            $doChildrenSuitNextLevel = ($value['next_address_level'] <= $this->maxAddressLevel)
+                || (!$this->maxAddressLevel && !empty($value['house_count']))
+            ;
+            $values[$key]['is_complete'] = $isMaxLevelReached || !$doChildrenSuitNextLevel;
+
+            unset($values[$key]['address_level']);
         }
 
         return $values;

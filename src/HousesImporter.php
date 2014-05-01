@@ -13,7 +13,8 @@ class HousesImporter extends Importer
     public function modifyDataAfterImport()
     {
         RawDataHelper::cleanHouses($this->db, $this->table);
-        RawDataHelper::updateHousesCount($this->db, $this->table);
+        RawDataHelper::updateHousesCount($this->db);
+        RawDataHelper::updateNextAddressLevelFlag($this->db);
     }
 
     protected $rowsPerInsert = 10000;

@@ -36,7 +36,14 @@ class ApiActionAddressCompletionTest extends TestAbstract
         $this->assertEmpty($complete->run());
 
         $complete = new AddressCompletion($this->db, 'Моск', 50, 'region');
-        $this->assertCount(1, $complete->run());
+        $result   = $complete->run();
+        $this->assertCount(1, $result);
+        $this->assertTrue($result[0]['is_complete']);
+
+        $complete = new AddressCompletion($this->db, 'Моск', 50, 'street');
+        $result   = $complete->run();
+        $this->assertCount(1, $result);
+        $this->assertFalse($result[0]['is_complete']);
 
         $complete = new AddressCompletion($this->db, 'г Москва, ул Стахановская, 1', 2, 'building');
         $result   = $complete->run();

@@ -23,6 +23,7 @@ class ApiActionPostalCodeLocationTest extends TestAbstract
 
         $this->assertCount(2, $parts);
         $this->assertEquals($parts[0]['title'], 'г Москва');
+        $this->assertEquals($parts[0]['address_level'], 'region');
         $this->assertEquals($parts[1]['title'], 'р-н Мытищинский');
     }
 }
