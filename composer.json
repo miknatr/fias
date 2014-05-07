@@ -5,6 +5,7 @@
         "php": ">=5.4.0",
         "miknatr/grace-dbal": "dev-master",
         "stiffbeards/bravicility": "dev-master",
+        "stiffbeards/kola": "dev-master",
         "stiffbeards/browser": "dev-master"
     },
     "autoload": {
@@ -16,6 +17,10 @@
         {
             "type": "vcs",
             "url":  "git@github.com:stiffbeards/bravicility.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "git@github.com:stiffbeards/kola.git"
         },
         {
             "type": "vcs",

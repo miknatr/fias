@@ -67,8 +67,13 @@ class UpdateLoaderTest extends TestAbstract
     private function getInformationAboutCurrentUpdateFile()
     {
         if (!$this->updateInformation) {
-            $client    = new \SoapClient($this->container->getWsdlUrl());
-            $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
+            try {
+                $client = new \SoapClient($this->container->getWsdlUrl());
+                $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
+            } catch (SoapFault $e) {
+                $this->markTestSkipped($e->getMessage());
+                return array(); // IDE calmer, markTestSkipped throws an exception
+            }
 
             $ch = curl_init($filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl);
 

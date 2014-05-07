@@ -2,7 +2,6 @@
 
 use DataSource\XmlReader;
 use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
-use Grace\DBAL\ConnectionFactory;
 
 class TestAbstract extends \PHPUnit_Framework_TestCase
 {
@@ -12,116 +11,23 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
     /** @var  ConnectionInterface */
     protected $db;
 
+    /** @var DatabaseDumpManager */
+    protected static $dumpManager;
+
     protected function setUp()
     {
         $this->container = new Container();
-        static::cleanDatabase();
-        $this->db = $this->container->getDb();
-    }
 
-    protected static $doesProductionBackupExist = false;
-
-    private static function renameProductionDatabase()
-    {
-        // То что тут отдельный контейнер это хорошо и правильно. Иначе в контейнере в тесте будет не та БД.
-        $container                  = new Container();
-        $currentDatabaseName        = $container->getDatabaseName();
-        $tempProductionDatabaseName = $currentDatabaseName . '_production_backup';
-        $db                         = static::getConnectionForRenaming($container);
-
-        if (!static::doesDatabaseExist($db, $tempProductionDatabaseName)) {
-            static::terminateConnectionsToDatabase($db, $currentDatabaseName);
-            static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
-            $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($currentDatabaseName, $tempProductionDatabaseName));
-            $db->execute('CREATE DATABASE ?f', array($currentDatabaseName));
+        if (!static::$dumpManager) {
+            static::$dumpManager = new DatabaseDumpManager(null, $this->container->getDbUri());
         }
 
-        static::$doesProductionBackupExist = true;
-        register_shutdown_function(function () {
-            static::restoreProductionDatabase();
+        static::$dumpManager->restore('init', function () {
+            static::$dumpManager->clean(false);
+            exec('php ' . __DIR__ . '/../cli/init-db.php');
         });
-    }
 
-    private static function doesDatabaseExist(ConnectionInterface $db, $dbName)
-    {
-        return $db->execute(
-            'SELECT datname
-            FROM pg_database
-            WHERE NOT datistemplate
-                AND datname = ?q
-            ', array($dbName)
-        )->fetchResult();
-    }
-
-    private static function terminateConnectionsToDatabase(ConnectionInterface $db, $dbName)
-    {
-        // Нельзя удалить базу пока к ней есть коннекты. Запрос на удаление зависит от версии постгреса.
-        $version = $db->execute('SELECT version()')->fetchResult();
-        if (strpos($version, 'PostgreSQL 9.2') !== false) {
-            $db->execute(
-                'SELECT pg_terminate_backend(pg_stat_activity.pid)
-                FROM pg_stat_activity
-                WHERE pg_stat_activity.datname = ?q
-                    AND pid <> pg_backend_pid()
-                ',
-                array($dbName)
-            );
-        } else {
-            $db->execute(
-                'SELECT pg_terminate_backend(pg_stat_activity.procpid)
-                FROM pg_stat_activity
-                WHERE pg_stat_activity.datname = ?q
-                    AND procpid <> pg_backend_pid()
-                ',
-                array($dbName)
-            );
-        }
-    }
-
-    /** @var ConnectionInterface */
-    protected static $dbForRenaming;
-
-    private static function getConnectionForRenaming(Container $container)
-    {
-        if (!static::$dbForRenaming) {
-            $uri = parse_url($container->getDbUri());
-
-            static::$dbForRenaming = ConnectionFactory::getConnection(array(
-                'adapter'  => ($uri['scheme'] == 'mysql') ? 'mysqli' : $uri['scheme'],
-                'host'     => $uri['host'],
-                'port'     => $uri['port'],
-                'user'     => $uri['user'],
-                'password' => $uri['pass'],
-                'database' => 'postgres',
-            ));
-        }
-
-        return static::$dbForRenaming;
-    }
-
-    private static function cleanDatabase()
-    {
-        if (!static::$doesProductionBackupExist) {
-            static::renameProductionDatabase();
-        }
-
-        exec('php ' . __DIR__ . '/../cli/init-db.php');
-    }
-
-    private static function restoreProductionDatabase()
-    {
-        $container                  = new Container();
-        $currentDatabaseName        = $container->getDatabaseName();
-        $tempProductionDatabaseName = $currentDatabaseName . '_production_backup';
-        $db                         = static::getConnectionForRenaming($container);
-
-        if (static::doesDatabaseExist($db, $tempProductionDatabaseName)) {
-            static::terminateConnectionsToDatabase($db, $currentDatabaseName);
-            static::terminateConnectionsToDatabase($db, $tempProductionDatabaseName);
-
-            $db->execute('DROP DATABASE ?f', array($currentDatabaseName));
-            $db->execute('ALTER DATABASE ?f RENAME TO ?f', array($tempProductionDatabaseName, $currentDatabaseName));
-        }
+        $this->db = $this->container->getDb();
     }
 
     public static function cleanUpFileDirectory()
