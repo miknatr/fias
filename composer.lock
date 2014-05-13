@@ -208,8 +208,7 @@
                 }
             },
             "support": {
-                "source": "https://github.com/stiffbeards/browser/tree/master",
-                "issues": "https://github.com/stiffbeards/browser/issues"
+                "source": "https://github.com/stiffbeards/browser/tree/master"
             },
             "time": "2014-04-23 15:10:38"
         },

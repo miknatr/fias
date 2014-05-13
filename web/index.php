@@ -19,6 +19,7 @@ FailureHandler::setup(function ($error) use ($logger) {
 try {
     $request = Request::createFromGlobals();
     $route   = $container->getRouter()->route($request->getMethod(), $request->getUrlPath());
+    $request->setOptions($route->vars);
 
     /** @var Response $response */
     $response = (new $route->class($container))->{$route->method}($request);
