@@ -145,7 +145,6 @@ class ApiController
 
     private function getFormat(Request $request)
     {
-
         $pathParts = explode('/', rtrim($request->getUrlPath(), '/'));
         $lastPart  = explode('.', array_pop($pathParts));
 
