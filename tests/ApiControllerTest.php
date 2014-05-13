@@ -16,7 +16,7 @@ class ApiControllerTest extends TestAbstract
     {
         $this->describe('Проверяем выдачу ошибки при отсутствии callback параметра если выбран jsonp')
             ->loadPage('/api/complete.jsonp/?pattern=Москва', 400)
-            ->ensurePageContains('Не указан обязательный параметр callback')
+            ->ensurePageContains('Отсутствует обязательный параметр: callback.')
             ->describe('Проверяем нормальную работу jsonp')
             ->loadPage('/api/complete.jsonp/?pattern=Москва&callback=testCallback', 200)
             ->ensurePageContains('testCallback(')
