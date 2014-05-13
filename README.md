@@ -156,6 +156,28 @@ GET-параметры:
 * `postal_code` — почтовый индекс или `null`, если индекс не найден.
 
 
+### Выбор формата
+
+Для указания формата необходимо добавить его к названию ресурса:
+
+* `.json` для JSON (по умолчанию)
+* `.jsonp` для JSONP. Для JSONP требуется дополнительный GET параметр callback.
+
+Пример запроса:
+
+    http://fias.loc/api/complete.jsonp?pattern=Невск&limit=20&callback=someFunction
+
+    Ответ:
+    someFunction(
+        {
+            "items": [
+                {"title": "г Москва, пр Невский", "is_complete": false, "item_type": "address"},
+                {"title": "г Москва, Невское урочище", "is_complete": false, "item_type": "address"},
+                {"title": "Невский вокзал", "is_complete": true, "item_type": "place"}
+            ]
+        }
+    )
+
 ### Уровни детализации частей адреса
 
 1. `region` — регион: Санкт-Петербург, Московская область, Хабаровский край;

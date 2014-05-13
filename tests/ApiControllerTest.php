@@ -12,6 +12,21 @@ class ApiControllerTest extends TestAbstract
         $this->prepareHttpClient('http://' . $this->container->getHost());
     }
 
+    public function testFormat()
+    {
+        $this->describe('Проверяем выдачу ошибки при отсутствии callback параметра если выбран jsonp')
+            ->loadPage('/api/complete.jsonp/?pattern=Москва', 400)
+            ->ensurePageContains('Не указан обязательный параметр callback')
+            ->describe('Проверяем нормальную работу jsonp')
+            ->loadPage('/api/complete.jsonp/?pattern=Москва&callback=testCallback', 200)
+            ->ensurePageContains('testCallback(')
+            ->describe('Проверяем нормальную работу json')
+            ->loadPage('/api/complete.json/?pattern=Москва', 200)
+            ->ensureResponse(json_decode($this->curResponse->getContent())->items)
+        ;
+    }
+
+
     public function testComplete()
     {
         $tooBigLimit = $this->container->getMaxCompletionLimit() + 1;
