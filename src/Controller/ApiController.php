@@ -68,7 +68,6 @@ class ApiController
      * @route GET /api/validate
      * @route GET /api/validate.json
      * @route GET /api/validate.jsonp
-     *
      */
     public function validate(Request $request)
     {
@@ -86,7 +85,6 @@ class ApiController
      * @route GET /api/address_postal_code
      * @route GET /api/address_postal_code.json
      * @route GET /api/address_postal_code.jsonp
-     *
      */
     public function postalCode(Request $request)
     {
