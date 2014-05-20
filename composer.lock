@@ -218,12 +218,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:stiffbeards/kola.git",
-                "reference": "a8198a5bd06ba345185bc8de7b3cf6d50b9c16e9"
+                "reference": "68b2ae86692670aacd68071552d23d09ad52f114"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stiffbeards/kola/zipball/a8198a5bd06ba345185bc8de7b3cf6d50b9c16e9",
-                "reference": "a8198a5bd06ba345185bc8de7b3cf6d50b9c16e9",
+                "url": "https://api.github.com/repos/stiffbeards/kola/zipball/68b2ae86692670aacd68071552d23d09ad52f114",
+                "reference": "68b2ae86692670aacd68071552d23d09ad52f114",
                 "shasum": ""
             },
             "type": "library",
@@ -235,7 +235,7 @@
             "support": {
                 "source": "https://github.com/stiffbeards/kola/tree/master"
             },
-            "time": "2014-05-07 11:10:32"
+            "time": "2014-05-20 11:34:55"
         },
         {
             "name": "symfony/css-selector",
