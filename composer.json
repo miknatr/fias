@@ -16,15 +16,15 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "git@github.com:stiffbeards/bravicility.git"
+            "url":  "git@bitbucket.org:stiffbeards/bravicility.git"
         },
         {
             "type": "vcs",
-            "url":  "git@github.com:stiffbeards/kola.git"
+            "url":  "git@bitbucket.org:stiffbeards/kola.git"
         },
         {
             "type": "vcs",
-            "url":  "git@github.com:stiffbeards/browser.git"
+            "url":  "git@bitbucket.org:stiffbeards/browser.git"
         }
     ]
 }

@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "745a718bbb5d3df35ff57f515fac8b7b",
+    "hash": "6b7e9312f07a7ca859da1796c203580c",
     "packages": [
         {
             "name": "miknatr/grace-dbal",
@@ -152,14 +153,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/stiffbeards/bravicility.git",
-                "reference": "0e81fbc9aa83e1991f3d074d664955eb13b8e08e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stiffbeards/bravicility/zipball/0e81fbc9aa83e1991f3d074d664955eb13b8e08e",
-                "reference": "0e81fbc9aa83e1991f3d074d664955eb13b8e08e",
-                "shasum": ""
+                "url": "git@bitbucket.org:stiffbeards/bravicility.git",
+                "reference": "90cbd106354afda20a36f8bdd1ef52d9907a6d2c"
             },
             "require": {
                 "miknatr/grace-dbal": "dev-master",
@@ -177,10 +172,7 @@
                     "Bravicility": "lib/"
                 }
             },
-            "support": {
-                "source": "https://github.com/stiffbeards/bravicility/tree/master"
-            },
-            "time": "2014-04-30 22:01:10"
+            "time": "2014-05-28 10:11:25"
         },
         {
             "name": "stiffbeards/browser",
@@ -208,7 +200,8 @@
                 }
             },
             "support": {
-                "source": "https://github.com/stiffbeards/browser/tree/master"
+                "source": "https://github.com/stiffbeards/browser/tree/master",
+                "issues": "https://github.com/stiffbeards/browser/issues"
             },
             "time": "2014-04-23 15:10:38"
         },
@@ -217,23 +210,14 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:stiffbeards/kola.git",
+                "url": "git@bitbucket.org:stiffbeards/kola.git",
                 "reference": "68b2ae86692670aacd68071552d23d09ad52f114"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stiffbeards/kola/zipball/68b2ae86692670aacd68071552d23d09ad52f114",
-                "reference": "68b2ae86692670aacd68071552d23d09ad52f114",
-                "shasum": ""
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
                     "Kola": "lib/"
                 }
-            },
-            "support": {
-                "source": "https://github.com/stiffbeards/kola/tree/master"
             },
             "time": "2014-05-20 11:34:55"
         },
