@@ -15,10 +15,10 @@ class PlaceStorage
     public function findPlace($place)
     {
         $sql = '
-            SELECT p.id, tp.system_name as type_system_name
+            SELECT p.id, pt.system_name type_system_name
             FROM places p
-            INNER JOIN place_types tp
-                ON tp.id = p.type_id
+            INNER JOIN place_types pt
+                ON pt.id = pt.type_id
             WHERE lower(full_title) = lower(?q)'
         ;
 
