@@ -43,10 +43,6 @@ class ApiController
         }
 
         $places = (new PlaceCompletion($this->container->getDb(), $pattern, $limit))->run();
-        foreach ($places as $key => $devNull) {
-            $places[$key]['item_type'] = 'place';
-        }
-
 
         $addresses = (new AddressCompletion(
             $this->container->getDb(),
@@ -55,9 +51,6 @@ class ApiController
             $maxAddressLevel,
             $regions
         ))->run();
-        foreach ($addresses as $key => $devNull) {
-            $addresses[$key]['item_type'] = 'address';
-        }
 
         $result = array('items' => array_merge($places, $addresses));
 

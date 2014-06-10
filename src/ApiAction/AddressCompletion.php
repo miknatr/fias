@@ -51,6 +51,10 @@ class AddressCompletion implements ApiActionInterface
             $rows = $this->setIsCompleteFlag($rows);
         }
 
+        foreach ($rows as $key => $devNull) {
+            $rows[$key]['tags'] = array('address');
+        }
+
         return $rows;
     }
 
