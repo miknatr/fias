@@ -60,7 +60,6 @@ class ApiActionAddressCompletionTest extends TestAbstract
         $this->assertCount(1, $complete->run());
     }
 
-
     public function testTags()
     {
         $completion = new AddressCompletion($this->db, 'Моск', 50);
