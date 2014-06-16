@@ -15,11 +15,13 @@ class PlaceStorage
     public function findPlace($place)
     {
         $sql = '
-            SELECT id
-            FROM places
+            SELECT p.id, pt.system_name type_system_name
+            FROM places p
+            INNER JOIN place_types pt
+                ON pt.id = pt.type_id
             WHERE lower(full_title) = lower(?q)'
         ;
 
-        return $this->db->execute($sql, array($place))->fetchResult();
+        return $this->db->execute($sql, array($place))->fetchOneOrFalse();
     }
 }

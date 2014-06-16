@@ -28,7 +28,7 @@ class PlaceCompletion implements ApiActionInterface
 
         if (!empty($placeParts['parent_place'])) {
             $storage  = new PlaceStorage($this->db);
-            $parentId = $storage->findPlace($placeParts['parent_place']);
+            $parentId = $storage->findPlace($placeParts['parent_place'])['id'];
             if (!$parentId) {
                 return array();
             }
@@ -73,21 +73,23 @@ class PlaceCompletion implements ApiActionInterface
     {
         $pattern = implode(' ', $placeWords);
         $sql     = "
-            SELECT full_title title, (CASE WHEN have_children THEN 0 ELSE 1 END)  is_complete
-            FROM places
+            SELECT full_title title, (CASE WHEN have_children THEN 0 ELSE 1 END)  is_complete, pt.system_name type_system_name
+            FROM places p
+            INNER JOIN place_types pt
+                ON p.type_id = pt.id
             WHERE ?p
-            ORDER BY title
+            ORDER BY p.title
             LIMIT ?e"
         ;
 
-        $whereParts = array($this->db->replacePlaceholders("title ilike '?e%'", array($pattern)));
+        $whereParts = array($this->db->replacePlaceholders("p.title ilike '?e%'", array($pattern)));
 
         if ($type) {
             $whereParts[] = $this->db->replacePlaceholders('type_id = ?q', array($type['id']));
         }
 
         if ($parentId) {
-            $whereParts[] = $this->db->replacePlaceholders('parent_id = ?q', array($parentId));
+            $whereParts[] = $this->db->replacePlaceholders('p.parent_id = ?q', array($parentId));
         }
 
         $values = array('(' . implode($whereParts, ') AND (') . ')', $this->limit);
@@ -96,6 +98,7 @@ class PlaceCompletion implements ApiActionInterface
         if ($items) {
             foreach ($items as $key => $item) {
                 $items[$key]['is_complete'] = $item['is_complete'] ? true : false;
+                $items[$key]['tags']        = array('place', $item['type_system_name']);
             }
         }
 

@@ -24,14 +24,17 @@ class Validation implements ApiActionInterface
 
         $addressData = $this->lookUpInFias();
         if ($addressData) {
-            $addressData['item_type'] = 'address';
-            $result[] = $addressData;
+            $addressData['tags'] = array('address');
+            $result[]            = $addressData;
         }
 
         $placeData = $this->lookUpInPlaces();
         if ($placeData) {
-            $placeData['item_type'] = 'place';
-            $result[] = $placeData;
+            $result[] = array(
+                'is_valid'    => $placeData['is_valid'],
+                'is_complete' => $placeData['is_complete'],
+                'tags'        => array('place', $placeData['type_system_name'])
+            );
         }
 
         return $result;
@@ -61,7 +64,11 @@ class Validation implements ApiActionInterface
         $place   = $storage->findPlace($this->address);
 
         if ($place) {
-            return array('is_valid' => true, 'is_complete' => true);
+            return array(
+                'type_system_name' => $place['type_system_name'],
+                'is_valid'         => true,
+                'is_complete'      => true
+            );
         }
 
         return null;

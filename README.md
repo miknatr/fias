@@ -22,9 +22,9 @@ FIAS
     Ответ:
     {
         "items": [
-            {"title": "г Москва, пр Невский", "is_complete": false, "item_type": "address"},
-            {"title": "г Москва, Невское урочище", "is_complete": false, "item_type": "address"},
-            {"title": "Невский вокзал", "is_complete": true, "item_type": "place"}
+            {"title": "г Москва, пр Невский", "is_complete": false, "tags": ["address"]},
+            {"title": "г Москва, Невское урочище", "is_complete": false, "tags": ["address"]},
+            {"title": "Невский вокзал", "is_complete": true, "tags": ["place", "railway"]}
         ]
     }
 
@@ -42,9 +42,7 @@ GET-параметры:
 * `items` — массив вариантов дополнения адреса;
     * `title` — текст варианта дополнения;
     * `is_complete` — `true` для адресов, которым не нужно дальнейшее дополнение (набран точный адрес, либо достигнута максимальная детализация адреса);
-    * `item_type` — тип найденного варианта:
-        * `"address"` — текст найден в ФИАС;
-        * `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.).
+    * `tags` — присущие варианту ответа свойства (см. раздел теги).
 
 Параметр `is_complete` помогает отличить точные адреса от промежуточных вариантов дополнения.
 Например, если на Невском проспекте есть дом 11, то
@@ -59,8 +57,8 @@ GET-параметры:
     В ответе будут все варианты вплоть до номеров домов:
     {
         "items": [
-            {"title": "г Москва, пр Невский, 10", "is_complete": true, "item_type": "address"},
-            {"title": "г Москва, пр Невский, 11", "is_complete": true, "item_type": "address"}
+            {"title": "г Москва, пр Невский, 10", "is_complete": true, "tags": ["address"]},
+            {"title": "г Москва, пр Невский, 11", "is_complete": true, "tags": ["address"]}
         ]
     }
 
@@ -70,8 +68,8 @@ GET-параметры:
     В ответе будут только регионы без дальнейшей детализации:
     {
         "items": [
-            {"title": "г Москва", "is_complete": true, "item_type": "address"},
-            {"title": "обл Московская", "is_complete": true, "item_type": "address"}
+            {"title": "г Москва", "is_complete": true, "tags": ["address"]},
+            {"title": "обл Московская", "is_complete": true, "tags": ["address"]}
         ]
     }
 
@@ -87,11 +85,11 @@ GET-параметры:
         "items": [
             {
                 "is_complete": false,
-                "item_type": "address"
+                "tags": ["address"]
             },
             {
                 "is_complete": true,
-                "item_type": "place"
+                "tags": ["place", "railway"]
             }
         ]
     }
@@ -104,9 +102,7 @@ GET-параметры:
 
 * `items` — массив вариантов корректных объектов;
     * `is_complete` — `true` для точного адреса (вместе с домом, корпусом и т.п.);
-    * `item_type` — одно из двух значений:
-        * `"address"` — текст найден в ФИАС;
-        * `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.).
+    * `tags` — присущие варианту ответа свойства (см. раздел теги):
 
 
 ### `/api/postal_code_location` — получение адреса по почтовому индексу
@@ -169,6 +165,18 @@ GET-параметры:
 9. `sub_territory` — часть дополнительной территории: Садовая улица, 7-я линия;
 10. `building` — конкретный дом (максимальная детализация).
 
+### Теги
+
+* `"address"` — текст найден в ФИАС;
+* `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.);
+* `"place"` — текст найден в списке places (аэропорты, вокзалы, порты и т.д.);
+* `"airport"` — аэропорт;
+* `"railway_station"` — вокзал;
+* `"bus_terminal"` — автовокзал;
+* `"port"` — порт;
+* `"airport_terminal"` — терминал аэропорта;
+* `"riverside_station"` — речной вокзал.
+
 
 ### Выбор формата
 
@@ -185,9 +193,9 @@ GET-параметры:
     someFunction(
         {
             "items": [
-                {"title": "г Москва, пр Невский", "is_complete": false, "item_type": "address"},
-                {"title": "г Москва, Невское урочище", "is_complete": false, "item_type": "address"},
-                {"title": "Невский вокзал", "is_complete": true, "item_type": "place"}
+                {"title": "г Москва, пр Невский", "is_complete": false, "tags": ["address"]},
+                {"title": "г Москва, Невское урочище", "is_complete": false, "tags": ["address"]},
+                {"title": "Невский вокзал", "is_complete": true, "tags": ["place", "railway"]}
             ]
         }
     )
