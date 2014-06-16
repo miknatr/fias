@@ -25,7 +25,7 @@ class Validation implements ApiActionInterface
         $addressData = $this->lookUpInFias();
         if ($addressData) {
             $addressData['tags'] = array('address');
-            $result[] = $addressData;
+            $result[]            = $addressData;
         }
 
         $placeData = $this->lookUpInPlaces();
@@ -66,8 +66,8 @@ class Validation implements ApiActionInterface
         if ($place) {
             return array(
                 'type_system_name' => $place['type_system_name'],
-                'is_valid' => true,
-                'is_complete' => true
+                'is_valid'         => true,
+                'is_complete'      => true
             );
         }
 
