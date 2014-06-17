@@ -18,7 +18,7 @@ class PlaceStorage
             SELECT p.id, pt.system_name type_system_name
             FROM places p
             INNER JOIN place_types pt
-                ON pt.id = pt.type_id
+                ON pt.id = p.type_id
             WHERE lower(full_title) = lower(?q)'
         ;
 
