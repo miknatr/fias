@@ -69,41 +69,80 @@ class AddressCompletion implements ApiActionInterface
         return $this->db->execute($sql, array($this->parentId))->fetchResult();
     }
 
-    private function findAddresses($pattern)
+    private function findAddressesWithParentId($pattern)
     {
-        $sql = "
+        $where = $this->generateGeneralWherePart($pattern);
+        $sql   = "
             SELECT full_title title, address_level, next_address_level
             FROM address_objects ao
             WHERE ?p
+                AND (parent_id = ?q)
             ORDER BY ao.title
             LIMIT ?e"
         ;
 
-        $whereParts = array($this->db->replacePlaceholders("title ilike '?e%'", array($pattern)));
+        return $this->db->execute(
+            $sql,
+            array($where, $this->parentId, $this->limit)
+        )->fetchAll();
+    }
+
+    private function findAddressesWithoutParentId($pattern)
+    {
+        $sql = "
+            (
+                SELECT full_title title, address_level, next_address_level
+                FROM address_objects ao
+                WHERE ?p:where:
+                    AND (parent_id IS NULL)
+                LIMIT ?e:limit:
+            )
+            UNION
+            (
+                SELECT ao.full_title title, ao.address_level, ao.next_address_level
+                FROM address_objects ao
+                INNER JOIN address_objects AS aop
+                    ON aop.parent_id IS NULL
+                        AND aop.address_id = ao.parent_id
+                WHERE ?p:where:
+                LIMIT ?e:limit:
+            )
+            ORDER BY title
+            LIMIT ?e:limit:
+            "
+        ;
+
+        $where  = $this->generateGeneralWherePart($pattern);
+        $values = array(
+            'where' => $where,
+            'limit' => $this->limit
+        );
+
+        return $this->db->execute($sql, $values)->fetchAll();
+    }
+
+    private function findAddresses($pattern)
+    {
+        if ($this->parentId) {
+            return $this->findAddressesWithParentId($pattern);
+        }
+
+        return $this->findAddressesWithoutParentId($pattern);
+    }
+
+    private function generateGeneralWherePart($pattern)
+    {
+        $whereParts = array($this->db->replacePlaceholders("ao.title ilike '?e%'", array($pattern)));
 
         if ($this->maxAddressLevel) {
-            $whereParts[] = $this->db->replacePlaceholders('address_level <= ?q', array($this->maxAddressLevel));
+            $whereParts[] = $this->db->replacePlaceholders('ao.address_level <= ?q', array($this->maxAddressLevel));
         }
 
         if ($this->regions) {
-            $whereParts[] = $this->db->replacePlaceholders('region IN (?l)', array($this->regions));
+            $whereParts[] = $this->db->replacePlaceholders('ao.region IN (?l)', array($this->regions));
         }
 
-        $whereParts[] = $this->parentId
-            ? $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId))
-            : '
-                parent_id IS NULL
-                OR parent_id IN (
-                  SELECT address_id
-                  FROM address_objects
-                  WHERE parent_id IS NULL
-                )
-            '
-        ;
-
-        $values = array('(' . implode(') AND (', $whereParts) . ')', $this->limit);
-
-        return $this->db->execute($sql, $values)->fetchAll();
+        return '(' . implode(') AND (', $whereParts) . ')';
     }
 
     private function findHouses($pattern)
@@ -130,6 +169,7 @@ class AddressCompletion implements ApiActionInterface
             $doChildrenSuitNextLevel = ($value['next_address_level'] <= $this->maxAddressLevel)
                 || (!$this->maxAddressLevel && !empty($value['house_count']))
             ;
+
             $values[$key]['is_complete'] = $isMaxLevelReached || !$doChildrenSuitNextLevel;
 
             unset($values[$key]['address_level']);
