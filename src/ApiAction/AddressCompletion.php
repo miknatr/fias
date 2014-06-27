@@ -69,57 +69,65 @@ class AddressCompletion implements ApiActionInterface
         return $this->db->execute($sql, array($this->parentId))->fetchResult();
     }
 
-    private function findAddresses($pattern)
+    private function findAddressesWithParentId($pattern)
     {
-        $selectPart = "
+        $where = $this->generateGeneralWherePart($pattern);
+        $sql   = "
             SELECT full_title title, address_level, next_address_level
             FROM address_objects ao
-            WHERE ?p"
+            WHERE ?p
+                AND (parent_id = ?q)
+            ORDER BY ao.title
+            LIMIT ?e"
         ;
 
-        $generalWhere = $this->generateGeneralWherePart($pattern);
+        return $this->db->execute(
+            $sql,
+            array($where, $this->parentId, $this->limit)
+        )->fetchAll();
+    }
 
-        if ($this->parentId)
-        {
-            $values = array(
-                $generalWhere . 'AND (' . $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId)) . ')',
-                $this->limit,
-            );
-
-            $sql = $this->db->replacePlaceholders($selectPart . ' ORDER BY ao.title LIMIT ?e', $values);
-        } else {
-            $values = array(
-                $generalWhere . 'AND (parent_id IS NULL)',
-            );
-
-            $limitSql                = $this->db->replacePlaceholders('LIMIT ?e', array($this->limit));
-            $subSelectWithoutParents = $this->db->replacePlaceholders($selectPart, $values);
-
-            $values = array(
-                $generalWhere,
-                $this->limit,
-            );
-
-            $sqlWithRootParents = '
+    private function findAddressesWithoutParentId($pattern)
+    {
+        $sql = "
+            (
+                SELECT full_title title, address_level, next_address_level
+                FROM address_objects ao
+                WHERE ?p:where:
+                    AND (parent_id IS NULL)
+                LIMIT ?e:limit:
+            )
+            UNION
+            (
                 SELECT ao.full_title title, ao.address_level, ao.next_address_level
                 FROM address_objects ao
                 INNER JOIN address_objects AS aop
                     ON aop.parent_id IS NULL
                         AND aop.address_id = ao.parent_id
-                WHERE ?p' . $limitSql
-            ;
+                WHERE ?p:where:
+                LIMIT ?e:limit:
+            )
+            ORDER BY title
+            LIMIT ?e:limit:
+            "
+        ;
 
-            $subSelectWithRootParents = $this->db->replacePlaceholders($sqlWithRootParents, $values);
+        $where  = $this->generateGeneralWherePart($pattern);
+        $values = array(
+            'where' => $where,
+            'limit' => $this->limit
+        );
 
-            $sql = '('
-                . $subSelectWithoutParents
-                . ') UNION ('
-                . $subSelectWithRootParents
-                . ') ORDER BY title ' . $limitSql;
+        return $this->db->execute($sql, $values)->fetchAll();
+    }
 
+    private function findAddresses($pattern)
+    {
+        if ($this->parentId) {
+            return $this->findAddressesWithParentId($pattern);
         }
 
-        return $this->db->execute($sql, array())->fetchAll();
+        return $this->findAddressesWithoutParentId($pattern);
     }
 
     private function generateGeneralWherePart($pattern)
