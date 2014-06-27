@@ -71,39 +71,70 @@ class AddressCompletion implements ApiActionInterface
 
     private function findAddresses($pattern)
     {
-        $sql = "
+        $selectPart = "
             SELECT full_title title, address_level, next_address_level
             FROM address_objects ao
-            WHERE ?p
-            ORDER BY ao.title
-            LIMIT ?e"
+            WHERE ?p"
         ;
 
-        $whereParts = array($this->db->replacePlaceholders("title ilike '?e%'", array($pattern)));
+        $generalWhere = $this->generateGeneralWherePart($pattern);
+
+        if ($this->parentId)
+        {
+            $values = array(
+                $generalWhere . 'AND (' . $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId)) . ')',
+                $this->limit,
+            );
+
+            $sql = $this->db->replacePlaceholders($selectPart . ' ORDER BY ao.title LIMIT ?e', $values);
+        } else {
+            $values = array(
+                $generalWhere . 'AND (parent_id IS NULL)',
+            );
+
+            $limitSql                = $this->db->replacePlaceholders('LIMIT ?e', array($this->limit));
+            $subSelectWithoutParents = $this->db->replacePlaceholders($selectPart, $values);
+
+            $values = array(
+                $generalWhere,
+                $this->limit,
+            );
+
+            $sqlWithRootParents = '
+                SELECT ao.full_title title, ao.address_level, ao.next_address_level
+                FROM address_objects ao
+                INNER JOIN address_objects AS aop
+                    ON aop.parent_id IS NULL
+                        AND aop.address_id = ao.parent_id
+                WHERE ?p' . $limitSql
+            ;
+
+            $subSelectWithRootParents = $this->db->replacePlaceholders($sqlWithRootParents, $values);
+
+            $sql = '('
+                . $subSelectWithoutParents
+                . ') UNION ('
+                . $subSelectWithRootParents
+                . ') ORDER BY title ' . $limitSql;
+
+        }
+
+        return $this->db->execute($sql, array())->fetchAll();
+    }
+
+    private function generateGeneralWherePart($pattern)
+    {
+        $whereParts = array($this->db->replacePlaceholders("ao.title ilike '?e%'", array($pattern)));
 
         if ($this->maxAddressLevel) {
-            $whereParts[] = $this->db->replacePlaceholders('address_level <= ?q', array($this->maxAddressLevel));
+            $whereParts[] = $this->db->replacePlaceholders('ao.address_level <= ?q', array($this->maxAddressLevel));
         }
 
         if ($this->regions) {
-            $whereParts[] = $this->db->replacePlaceholders('region IN (?l)', array($this->regions));
+            $whereParts[] = $this->db->replacePlaceholders('ao.region IN (?l)', array($this->regions));
         }
 
-        $whereParts[] = $this->parentId
-            ? $this->db->replacePlaceholders('parent_id = ?q', array($this->parentId))
-            : '
-                parent_id IS NULL
-                OR parent_id IN (
-                  SELECT address_id
-                  FROM address_objects
-                  WHERE parent_id IS NULL
-                )
-            '
-        ;
-
-        $values = array('(' . implode(') AND (', $whereParts) . ')', $this->limit);
-
-        return $this->db->execute($sql, $values)->fetchAll();
+        return '(' . implode(') AND (', $whereParts) . ')';
     }
 
     private function findHouses($pattern)
