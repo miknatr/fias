@@ -28,6 +28,9 @@ class ApiController
      * @route GET /api/complete
      * @route GET /api/complete.json
      * @route GET /api/complete.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function complete(Request $request)
     {
@@ -61,6 +64,9 @@ class ApiController
      * @route GET /api/validate
      * @route GET /api/validate.json
      * @route GET /api/validate.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function validate(Request $request)
     {
@@ -78,6 +84,9 @@ class ApiController
      * @route GET /api/address_postal_code
      * @route GET /api/address_postal_code.json
      * @route GET /api/address_postal_code.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function postalCode(Request $request)
     {
@@ -95,6 +104,9 @@ class ApiController
      * @route GET /api/postal_code_location
      * @route GET /api/postal_code_location.json
      * @route GET /api/postal_code_location.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function postalCodeLocation(Request $request)
     {
