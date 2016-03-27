@@ -61,7 +61,7 @@ class TestAbstract extends \PHPUnit_Framework_TestCase
      */
     public function getReaderMock(\PHPUnit_Framework_TestCase $testCase, array $results)
     {
-        $result = new PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls(array_merge($results, array()));
+        $result = new PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls(array_merge($results, []));
         $reader = $testCase->getMockBuilder('\DataSource\XmlReader')
             ->disableOriginalConstructor()
             ->getMock()

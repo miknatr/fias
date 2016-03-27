@@ -7,7 +7,7 @@ class HousesUpdater extends Importer
 {
     public function __construct(ConnectionInterface $db, $table, array $fields)
     {
-        $fields['full_number'] = array('name' => 'full_number');
+        $fields['full_number'] = ['name' => 'full_number'];
         parent::__construct($db, $table, $fields, true);
     }
 
@@ -43,7 +43,7 @@ class HousesUpdater extends Importer
             ) a
             WHERE a.address_id = h.address_id
             ',
-            array('temp_table' => $this->table)
+            ['temp_table' => $this->table]
         );
 
         $this->db->execute(
@@ -51,7 +51,7 @@ class HousesUpdater extends Importer
             USING ?f h_new
             WHERE (h_old.house_id = h_new.house_id OR h_old.id = h_new.previous_id)
             ',
-            array($this->table)
+            [$this->table]
         );
     }
 
@@ -62,22 +62,22 @@ class HousesUpdater extends Importer
             SELECT h_new.id, h_new.house_id, h_new.address_id, h_new.number, h_new.building, h_new.structure, h_new.full_number
             FROM ?f h_new
             ',
-            array($this->table)
+            [$this->table]
         );
     }
 
     private function createTemporaryIndexes()
     {
         $sql = 'CREATE INDEX tmp_'  . rand() . '_idx ON ?f USING BTREE(building)';
-        $this->db->execute($sql, array($this->table));
+        $this->db->execute($sql, [$this->table]);
 
         $sql = 'CREATE INDEX tmp_2' . rand() . '_idx ON ?f USING BTREE(structure)';
-        $this->db->execute($sql, array($this->table));
+        $this->db->execute($sql, [$this->table]);
 
         $sql = 'CREATE INDEX tmp_3' . rand() . '_idx ON ?f USING BTREE(house_id)';
-        $this->db->execute($sql, array($this->table));
+        $this->db->execute($sql, [$this->table]);
 
         $sql = 'CREATE INDEX tmp_4' . rand() . '_idx ON ?f USING BTREE(previous_id)';
-        $this->db->execute($sql, array($this->table));
+        $this->db->execute($sql, [$this->table]);
     }
 }

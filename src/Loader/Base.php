@@ -38,7 +38,7 @@ abstract class Base
     private function getLastFileInfoRaw()
     {
         $client    = new \SoapClient($this->wsdlUrl);
-        $rawResult = $client->__soapCall('GetLastDownloadFileInfo', array());
+        $rawResult = $client->__soapCall('GetLastDownloadFileInfo', []);
 
         return new SoapResultWrapper($rawResult);
     }

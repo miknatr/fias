@@ -30,7 +30,7 @@ class PlaceCompletion implements ApiActionInterface
             $storage  = new PlaceStorage($this->db);
             $parentId = $storage->findPlace($placeParts['parent_place'])['id'];
             if (!$parentId) {
-                return array();
+                return [];
             }
         }
 
@@ -50,10 +50,10 @@ class PlaceCompletion implements ApiActionInterface
     {
         $tmp = explode(',', $title);
 
-        return array(
+        return [
             'pattern'      => strtolower(trim(array_pop($tmp))),
             'parent_place' => implode(',', $tmp),
-        );
+        ];
     }
 
     private function extractType(array $words)
@@ -63,10 +63,10 @@ class PlaceCompletion implements ApiActionInterface
             FROM place_types
             WHERE title IN (?l)
             ',
-            array($words)
+            [$words]
         )->fetchOneOrFalse();
 
-        return $type ?: array();
+        return $type ?: [];
     }
 
     private function findPlaces(array $placeWords, array $type, $parentId)
@@ -82,23 +82,23 @@ class PlaceCompletion implements ApiActionInterface
             LIMIT ?e"
         ;
 
-        $whereParts = array($this->db->replacePlaceholders("p.title ilike '?e%'", array($pattern)));
+        $whereParts = [$this->db->replacePlaceholders("p.title ilike '?e%'", [$pattern])];
 
         if ($type) {
-            $whereParts[] = $this->db->replacePlaceholders('type_id = ?q', array($type['id']));
+            $whereParts[] = $this->db->replacePlaceholders('type_id = ?q', [$type['id']]);
         }
 
         if ($parentId) {
-            $whereParts[] = $this->db->replacePlaceholders('p.parent_id = ?q', array($parentId));
+            $whereParts[] = $this->db->replacePlaceholders('p.parent_id = ?q', [$parentId]);
         }
 
-        $values = array('(' . implode($whereParts, ') AND (') . ')', $this->limit);
+        $values = ['(' . implode($whereParts, ') AND (') . ')', $this->limit];
 
         $items = $this->db->execute($sql, $values)->fetchAll();
         if ($items) {
             foreach ($items as $key => $item) {
                 $items[$key]['is_complete'] = $item['is_complete'] ? true : false;
-                $items[$key]['tags']        = array('place', $item['type_system_name']);
+                $items[$key]['tags']        = ['place', $item['type_system_name']];
             }
         }
 
@@ -108,7 +108,7 @@ class PlaceCompletion implements ApiActionInterface
     private function splitPatternToWords($pattern)
     {
         $tmp    = explode(' ', $pattern);
-        $result = array();
+        $result = [];
 
         foreach ($tmp as $word) {
             $trimmedWord          = trim($word);

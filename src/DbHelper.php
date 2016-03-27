@@ -5,12 +5,12 @@ use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class DbHelper
 {
-    private static $dataTypes = array('varchar', 'integer', 'uuid');
+    private static $dataTypes = ['varchar', 'integer', 'uuid'];
 
     public static function createTable(ConnectionInterface $db, $name, $fields, $isTemp = true)
     {
         $sql    = '';
-        $params = array($name);
+        $params = [$name];
 
         foreach ($fields as $field) {
             $params[] = $field['name'];

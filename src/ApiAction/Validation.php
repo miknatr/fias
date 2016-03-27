@@ -20,21 +20,21 @@ class Validation implements ApiActionInterface
 
     public function run()
     {
-        $result = array();
+        $result = [];
 
         $addressData = $this->lookUpInFias();
         if ($addressData) {
-            $addressData['tags'] = array('address');
+            $addressData['tags'] = ['address'];
             $result[]            = $addressData;
         }
 
         $placeData = $this->lookUpInPlaces();
         if ($placeData) {
-            $result[] = array(
+            $result[] = [
                 'is_valid'    => $placeData['is_valid'],
                 'is_complete' => $placeData['is_complete'],
-                'tags'        => array('place', $placeData['type_system_name'])
-            );
+                'tags'        => ['place', $placeData['type_system_name']]
+            ];
         }
 
         return $result;
@@ -46,12 +46,12 @@ class Validation implements ApiActionInterface
 
         $completeAddress = $storage->findHouse($this->address);
         if ($completeAddress) {
-            return array('is_complete' => true, 'is_valid' => true);
+            return ['is_complete' => true, 'is_valid' => true];
         }
 
         $incompleteAddress = $storage->findAddress($this->address);
         if ($incompleteAddress) {
-            return array('is_complete' => false, 'is_valid' => true);
+            return ['is_complete' => false, 'is_valid' => true];
         }
 
         // ничего не нашлось
@@ -64,11 +64,11 @@ class Validation implements ApiActionInterface
         $place   = $storage->findPlace($this->address);
 
         if ($place) {
-            return array(
+            return [
                 'type_system_name' => $place['type_system_name'],
                 'is_valid'         => true,
                 'is_complete'      => true
-            );
+            ];
         }
 
         return null;

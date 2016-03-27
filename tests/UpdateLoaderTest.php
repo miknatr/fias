@@ -62,17 +62,17 @@ class UpdateLoaderTest extends TestAbstract
         $this->assertTrue($loader->isFileSizeCorrect($filePath, $this->getInformationAboutCurrentUpdateFile()['url']));
     }
 
-    private $updateInformation = array();
+    private $updateInformation = [];
 
     private function getInformationAboutCurrentUpdateFile()
     {
         if (!$this->updateInformation) {
             try {
                 $client = new \SoapClient($this->container->getWsdlUrl());
-                $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', array());
+                $filesInfo = $client->__soapCall('GetLastDownloadFileInfo', []);
             } catch (SoapFault $e) {
                 $this->markTestSkipped($e->getMessage());
-                return array(); // IDE calmer, markTestSkipped throws an exception
+                return []; // IDE calmer, markTestSkipped throws an exception
             }
 
             $ch = curl_init($filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl);
@@ -83,11 +83,11 @@ class UpdateLoaderTest extends TestAbstract
 
             curl_exec($ch);
 
-            $this->updateInformation = array(
+            $this->updateInformation = [
                 'url'       => $filesInfo->GetLastDownloadFileInfoResult->FiasDeltaXmlUrl,
                 'version'   => $filesInfo->GetLastDownloadFileInfoResult->VersionId,
                 'file_size' => curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD),
-            );
+            ];
 
             curl_close($ch);
         }

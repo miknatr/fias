@@ -40,7 +40,7 @@ class AddressObjectsUpdater extends Importer
                 OR COALESCE(ao_old.prefix, '') != COALESCE(ao_new.prefix, '')
                 OR COALESCE(ao_old.parent_id, '00000000-0000-0000-0000-000000000000') != COALESCE(ao_new.parent_id, '00000000-0000-0000-0000-000000000000')
             )",
-            array($this->table)
+            [$this->table]
         );
     }
 
@@ -54,7 +54,7 @@ class AddressObjectsUpdater extends Importer
                 ON (ao_old.address_id = ao_new.address_id OR ao_old.id = ao_new.previous_id)
             WHERE ao_old.id IS NULL
             ',
-            array($this->table)
+            [$this->table]
         );
     }
 }

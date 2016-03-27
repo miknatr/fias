@@ -20,7 +20,7 @@ class PostalCodeLocation implements ApiActionInterface
     {
         $count = $this->getAddressCount();
         if (!$count) {
-            return array();
+            return [];
         }
 
         $stack = $this->getBiggestSuitableStack();
@@ -30,7 +30,7 @@ class PostalCodeLocation implements ApiActionInterface
 
     private function getAddressCount($pattern = null)
     {
-        $values = array($this->postalCode);
+        $values = [$this->postalCode];
         $sql    = 'SELECT COUNT(*) FROM address_objects WHERE postal_code = ?q';
 
         if ($pattern) {
@@ -69,17 +69,17 @@ class PostalCodeLocation implements ApiActionInterface
                     ON al.id = address_level
                 ORDER BY level
             ",
-            array($this->postalCode)
+            [$this->postalCode]
         )->fetchAll();
     }
 
-    private function filterAddressStack(array $partsForChecking, $totalCount, array $currentStack = array())
+    private function filterAddressStack(array $partsForChecking, $totalCount, array $currentStack = [])
     {
         $part       = array_shift($partsForChecking);
         $levelCount = $this->getAddressCount($part['full_title']);
 
         if ($levelCount == $totalCount) {
-            $currentStack[] = array('title' => $part['title'], 'address_level' => $part['address_level']);
+            $currentStack[] = ['title' => $part['title'], 'address_level' => $part['address_level']];
         }
 
         if (!$partsForChecking || ($levelCount != $totalCount)) {

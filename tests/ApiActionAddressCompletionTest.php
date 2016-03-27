@@ -53,10 +53,10 @@ class ApiActionAddressCompletionTest extends TestAbstract
 
     public function testRegion()
     {
-        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(78));
+        $complete = new AddressCompletion($this->db, 'Моск', 50, null, [78]);
         $this->assertEmpty($complete->run());
 
-        $complete = new AddressCompletion($this->db, 'Моск', 50, null, array(77));
+        $complete = new AddressCompletion($this->db, 'Моск', 50, null, [77]);
         $this->assertCount(1, $complete->run());
     }
 
@@ -65,6 +65,6 @@ class ApiActionAddressCompletionTest extends TestAbstract
         $completion = new AddressCompletion($this->db, 'Моск', 50);
         $result     = $completion->run();
 
-        $this->assertEquals(array('address'), $result[0]['tags']);
+        $this->assertEquals(['address'], $result[0]['tags']);
     }
 }

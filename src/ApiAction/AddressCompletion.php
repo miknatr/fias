@@ -16,9 +16,9 @@ class AddressCompletion implements ApiActionInterface
     private $address;
     private $parentId;
     private $maxAddressLevel;
-    private $regions = array();
+    private $regions = [];
 
-    public function __construct(ConnectionInterface $db, $address, $limit, $maxAddressLevel = 'building', array $regions = array())
+    public function __construct(ConnectionInterface $db, $address, $limit, $maxAddressLevel = 'building', array $regions = [])
     {
         $this->db      = $db;
         $this->limit   = $limit;
@@ -40,7 +40,7 @@ class AddressCompletion implements ApiActionInterface
         $houseCount     = $address ? $address['house_count'] : null;
 
         if ($houseCount && $this->maxAddressLevel) {
-            return array();
+            return [];
         }
 
         if ($this->getHouseCount()) {
@@ -52,7 +52,7 @@ class AddressCompletion implements ApiActionInterface
         }
 
         foreach ($rows as $key => $devNull) {
-            $rows[$key]['tags'] = array('address');
+            $rows[$key]['tags'] = ['address'];
         }
 
         return $rows;
@@ -66,7 +66,7 @@ class AddressCompletion implements ApiActionInterface
 
         $sql = 'SELECT house_count FROM address_objects WHERE address_id = ?q';
 
-        return $this->db->execute($sql, array($this->parentId))->fetchResult();
+        return $this->db->execute($sql, [$this->parentId])->fetchResult();
     }
 
     private function findAddressesWithParentId($pattern)
@@ -83,7 +83,7 @@ class AddressCompletion implements ApiActionInterface
 
         return $this->db->execute(
             $sql,
-            array($where, $this->parentId, $this->limit)
+            [$where, $this->parentId, $this->limit]
         )->fetchAll();
     }
 
@@ -113,10 +113,10 @@ class AddressCompletion implements ApiActionInterface
         ;
 
         $where  = $this->generateGeneralWherePart($pattern);
-        $values = array(
+        $values = [
             'where' => $where,
             'limit' => $this->limit
-        );
+        ];
 
         return $this->db->execute($sql, $values)->fetchAll();
     }
@@ -132,14 +132,14 @@ class AddressCompletion implements ApiActionInterface
 
     private function generateGeneralWherePart($pattern)
     {
-        $whereParts = array($this->db->replacePlaceholders("ao.title ilike '?e%'", array($pattern)));
+        $whereParts = [$this->db->replacePlaceholders("ao.title ilike '?e%'", [$pattern])];
 
         if ($this->maxAddressLevel) {
-            $whereParts[] = $this->db->replacePlaceholders('ao.address_level <= ?q', array($this->maxAddressLevel));
+            $whereParts[] = $this->db->replacePlaceholders('ao.address_level <= ?q', [$this->maxAddressLevel]);
         }
 
         if ($this->regions) {
-            $whereParts[] = $this->db->replacePlaceholders('ao.region IN (?l)', array($this->regions));
+            $whereParts[] = $this->db->replacePlaceholders('ao.region IN (?l)', [$this->regions]);
         }
 
         return '(' . implode(') AND (', $whereParts) . ')';
@@ -157,7 +157,7 @@ class AddressCompletion implements ApiActionInterface
             ORDER BY (regexp_matches(full_number, '^[0-9]+', 'g'))[1]
             LIMIT ?e"
         ;
-        $values = array(static::BUILDING_ADDRESS_LEVEL, $this->parentId, $pattern, $this->limit);
+        $values = [static::BUILDING_ADDRESS_LEVEL, $this->parentId, $pattern, $this->limit];
 
         return $this->db->execute($sql, $values)->fetchAll();
     }
@@ -182,10 +182,10 @@ class AddressCompletion implements ApiActionInterface
     {
         $tmp = explode(',', $address);
 
-        return array(
+        return [
             'pattern' => static::cleanAddressPart(array_pop($tmp)),
             'address' => implode(',', $tmp),
-        );
+        ];
     }
 
     private static function cleanAddressPart($rawAddress)
@@ -212,7 +212,7 @@ class AddressCompletion implements ApiActionInterface
     {
         $result = $this->db->execute(
             'SELECT id FROM address_object_levels WHERE code = ?q',
-            array($code)
+            [$code]
         )->fetchResult();
 
         if ($result === null) {
