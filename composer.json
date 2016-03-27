@@ -2,9 +2,9 @@
     "name": "stiffbeards/fias",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "miknatr/grace-dbal": "dev-master",
-        "stiffbeards/bravicility": "dev-master",
+        "miknatr/bravicility": "dev-master",
         "stiffbeards/kola": "dev-master",
         "stiffbeards/browser": "dev-master"
     },
@@ -16,15 +16,15 @@
     "repositories": [
         {
             "type": "vcs",
-            "url":  "git@bitbucket.org:stiffbeards/bravicility.git"
+            "url":  "https://github.com/miknatr/bravicility.git"
         },
         {
             "type": "vcs",
-            "url":  "git@bitbucket.org:stiffbeards/kola.git"
+            "url":  "git@bitbucket.org:miknatr/tos-kola.git"
         },
         {
             "type": "vcs",
-            "url":  "git@bitbucket.org:stiffbeards/browser.git"
+            "url":  "https://github.com/miknatr/browser.git"
         }
     ]
 }
