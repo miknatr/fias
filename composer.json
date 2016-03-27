@@ -4,7 +4,7 @@
     "require": {
         "php": ">=5.5.0",
         "miknatr/grace-dbal": "dev-master",
-        "miknatr/bravicility": "dev-master",
+        "miknatr/bravicility": "1.0.0",
         "stiffbeards/kola": "dev-master",
         "stiffbeards/browser": "dev-master"
     },
