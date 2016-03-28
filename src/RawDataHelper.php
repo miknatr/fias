@@ -32,7 +32,7 @@ SQL;
 
     public static function cleanHouses(ConnectionInterface $db, $table = 'houses')
     {
-        $inCorrectValues = array('нет', '-', 'стр.', 'стр1');
+        $inCorrectValues = ['нет', '-', 'стр.', 'стр1'];
 
         // Если будем импортировать больше половины регионов из фиаса, перенести на сторону PHP.
         $db->execute(
@@ -44,7 +44,7 @@ SQL;
                 OR building  ~ '[^0-9]+'
                 OR structure ~ '[^0-9]+'
             ",
-            array($table, $inCorrectValues, $inCorrectValues)
+            [$table, $inCorrectValues, $inCorrectValues]
         );
 
         // Убираем ложные данные по корпусам и строениям ("1а" и в корпусе и в номере, например)
@@ -59,7 +59,7 @@ SQL;
                     (building ~ '[^0-9]+' AND number = building)
                 )
             ",
-            array($table)
+            [$table]
         );
 
         // нормализуем адрес по яндексу
@@ -69,7 +69,7 @@ SQL;
                     ||COALESCE('к'||building, '')
                     ||COALESCE('с'||structure, '')
             ",
-            array($table)
+            [$table]
         );
     }
 

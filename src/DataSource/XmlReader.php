@@ -10,10 +10,10 @@ class XmlReader implements DataSource
     /** @var \XMLReader */
     private $reader;
     private $nodeName;
-    private $attributes = array();
-    private $filters    = array();
+    private $attributes = [];
+    private $filters    = [];
 
-    public function __construct($pathToFile, $nodeName, array $attributes, array $filters = array())
+    public function __construct($pathToFile, $nodeName, array $attributes, array $filters = [])
     {
         $this->nodeName   = $nodeName;
         $this->attributes = $attributes;
@@ -38,7 +38,7 @@ class XmlReader implements DataSource
     {
         $this->ensureMaxCountIsValid($maxCount);
 
-        $result = array();
+        $result = [];
         $count  = 0;
 
         while (($count < $maxCount) && $this->reader->read()) {
@@ -97,7 +97,7 @@ class XmlReader implements DataSource
 
     private function getRowAttributes()
     {
-        $result = array();
+        $result = [];
         foreach ($this->attributes as $attribute) {
             // Если атрибут отсутствует, в $result[$attribute] окажется null, также передаем null вместо пустого значения
             $result[$attribute] = $this->reader->getAttribute($attribute) ?: null;

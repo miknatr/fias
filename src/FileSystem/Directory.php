@@ -51,7 +51,7 @@ class Directory
     {
         $files = scandir($this->directoryPath);
         foreach ($files as $file) {
-            if (in_array($file, array('.', '..'))) {
+            if (in_array($file, ['.', '..'])) {
                 continue;
             }
 

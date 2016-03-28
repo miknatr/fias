@@ -9,26 +9,26 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filters = array(
-            array('field' => 'available', 'type' => 'eq', 'value' => 1),
-            array('field' => 'madeIn', 'type' => 'in', 'value' => array('USA', 'China', 'Germany', 'Rwanda')),
-            array('field' => 'title', 'type' => 'in', 'value' => array()),
-            array('field' => 'id', 'type' => 'nin', 'value' => array(6)),
-            array(
+        $filters = [
+            ['field' => 'available', 'type' => 'eq', 'value' => 1],
+            ['field' => 'madeIn', 'type' => 'in', 'value' => ['USA', 'China', 'Germany', 'Rwanda']],
+            ['field' => 'title', 'type' => 'in', 'value' => []],
+            ['field' => 'id', 'type' => 'nin', 'value' => [6]],
+            [
                 'field' => 'id',
                 'type'  => 'hash',
-                'value' => array(1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true, 7 => false)
-            ),
-        );
+                'value' => [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true, 7 => false]
+            ],
+        ];
 
         $this->reader = new XmlReader(
             __DIR__ . '/resources/readerTest.xml',
             'Computer',
-            array(
+            [
                 'id',
                 'madeIn',
                 'fakeAttribute'
-            ),
+            ],
             $filters
         );
     }

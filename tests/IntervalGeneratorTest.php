@@ -10,16 +10,16 @@ class IntervalGeneratorTest extends TestAbstract
      */
     public function testBadCount()
     {
-        $reader = $this->getGenerator(array());
+        $reader = $this->getGenerator();
         $reader->getRows(0);
     }
 
     public function testGeneratedRow()
     {
         $reader = $this->getGenerator(
-            array(
-                array(array('title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1)),
-            )
+            [
+                [['title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1]],
+            ]
         );
 
         $rows = $reader->getRows();
@@ -33,11 +33,11 @@ class IntervalGeneratorTest extends TestAbstract
     public function testGetRowsWithCount()
     {
         $reader = $this->getGenerator(
-            array(
-                array(array('title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1)),
-                array(array('title' => 'Title 2', 'start' => 10, 'end' => 14, 'type' => 2)),
-                array(array('title' => 'Title 3', 'start' => 15, 'end' => 20, 'type' => 3)),
-            )
+            [
+                [['title' => 'Title 1', 'start' => 5, 'end' => 9, 'type' => 1]],
+                [['title' => 'Title 2', 'start' => 10, 'end' => 14, 'type' => 2]],
+                [['title' => 'Title 3', 'start' => 15, 'end' => 20, 'type' => 3]],
+            ]
         );
 
         // Выборка прервана на getRowsFromInterval
@@ -64,41 +64,41 @@ class IntervalGeneratorTest extends TestAbstract
      */
     public function testGeneration($correctResult, $readerData)
     {
-        $reader = $this->getGenerator(array($readerData));
+        $reader = $this->getGenerator([$readerData]);
         $this->assertEquals($correctResult, count($reader->getRows()));
     }
 
     public function provider()
     {
-        return array(
-            array(
+        return [
+            [
                 3,
-                array(
-                    array('title' => 'Title', 'start' => 9, 'end' => 15, 'type' => 2),
-                ),
-            ),
-            array(
+                [
+                    ['title' => 'Title', 'start' => 9, 'end' => 15, 'type' => 2],
+                ],
+            ],
+            [
                 4,
-                array(
-                    array('title' => 'Title', 'start' => 10, 'end' => 16, 'type' => 2),
-                ),
-            ),
-            array(
+                [
+                    ['title' => 'Title', 'start' => 10, 'end' => 16, 'type' => 2],
+                ],
+            ],
+            [
                 3,
-                array(
-                    array('title' => 'Title', 'start' => 8, 'end' => 14, 'type' => 3),
-                ),
-            ),
-            array(
+                [
+                    ['title' => 'Title', 'start' => 8, 'end' => 14, 'type' => 3],
+                ],
+            ],
+            [
                 4,
-                array(
-                    array('title' => 'Title', 'start' => 9, 'end' => 15, 'type' => 3),
-                ),
-            ),
-        );
+                [
+                    ['title' => 'Title', 'start' => 9, 'end' => 15, 'type' => 3],
+                ],
+            ],
+        ];
     }
 
-    public function getGenerator($results)
+    public function getGenerator($results = [])
     {
         return new IntervalGenerator($this->getReaderMock($this, $results), 'start', 'end', 'type', 'result');
     }

@@ -52,11 +52,11 @@ class ApiActionPlaceCompletionTest extends TestAbstract
         $completion = new PlaceCompletion($this->db, 'пулко', 50);
         $result     = $completion->run();
 
-        $this->assertEquals(array('place', 'airport'), $result[0]['tags']);
+        $this->assertEquals(['place', 'airport'], $result[0]['tags']);
 
         $completion = new PlaceCompletion($this->db, 'Павел', 50);
         $result     = $completion->run();
 
-        $this->assertEquals(array('place', 'bus_terminal'), $result[0]['tags']);
+        $this->assertEquals(['place', 'bus_terminal'], $result[0]['tags']);
     }
 }

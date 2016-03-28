@@ -39,7 +39,7 @@ class IntervalGenerator implements DataSource
         $this->ensureMaxCountIsValid($maxCount);
 
         $count  = 0;
-        $result = array();
+        $result = [];
 
         // Первый раз $this->currentRow гарантировано равна null. Поэтому do - while.
         do {
@@ -64,7 +64,7 @@ class IntervalGenerator implements DataSource
 
     private function getRowsFromInterval($maxCount)
     {
-        $result = array();
+        $result = [];
         $count  = 0;
 
         while (($count < $maxCount) && ($this->currentPosition <= $this->endPosition)) {

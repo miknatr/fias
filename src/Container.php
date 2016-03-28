@@ -12,15 +12,15 @@ class Container
     use RouterContainerTrait;
     use LoggingContainerTrait;
 
-    private $config       = array();
-    private $importConfig = array();
+    private $config       = [];
+    private $importConfig = [];
 
     public function __construct()
     {
         $this->config = parse_ini_file(__DIR__ . '/../config.ini', true);
         $this->ensureParameters(
             $this->config,
-            array('app.host', 'app.file_directory', 'app.wsdl_url', 'app.max_completion_limit', 'db.uri')
+            ['app.host', 'app.file_directory', 'app.wsdl_url', 'app.max_completion_limit', 'db.uri']
         );
 
         $this->importConfig = require(__DIR__ . '/import.php');
@@ -31,7 +31,7 @@ class Container
 
     protected function ensureParameters(array $config, array $parameterNames)
     {
-        $undefinedMessages = array();
+        $undefinedMessages = [];
         foreach ($parameterNames as $name) {
             if (!isset($config[$name])) {
                 $undefinedMessages[] = "Config parameter {$name} is not defined";

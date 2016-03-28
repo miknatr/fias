@@ -22,6 +22,6 @@ class PlaceStorage
             WHERE lower(full_title) = lower(?q)'
         ;
 
-        return $this->db->execute($sql, array($place))->fetchOneOrFalse();
+        return $this->db->execute($sql, [$place])->fetchOneOrFalse();
     }
 }

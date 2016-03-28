@@ -5,7 +5,7 @@ use Grace\DBAL\ConnectionAbstract\ConnectionInterface;
 
 class Importer
 {
-    private $fields = array();
+    private $fields = [];
 
     /** @var ConnectionInterface */
     protected $db;
@@ -37,7 +37,7 @@ class Importer
     {
         $i = 0;
         while ($rows = $reader->getRows($this->rowsPerInsert)) {
-            $this->db->execute($this->getQuery($rows[0]), array($rows));
+            $this->db->execute($this->getQuery($rows[0]), [$rows]);
             ++$i;
             if (($i % 100) == 0) {
                 $this->db->getLogger()->reset();
@@ -52,12 +52,12 @@ class Importer
     private function getQuery($rowExample)
     {
         if (!$this->sqlHeader) {
-            $fields = array();
+            $fields = [];
             foreach ($rowExample as $attribute => $devNull) {
                 $fields[] = $this->fields[$attribute]['name'];
             }
 
-            $headerPart = $this->db->replacePlaceholders('INSERT INTO ?f(?i) VALUES ', array($this->table, $fields));
+            $headerPart = $this->db->replacePlaceholders('INSERT INTO ?f(?i) VALUES ', [$this->table, $fields]);
 
             $this->sqlHeader = $headerPart . ' ?v';
         }

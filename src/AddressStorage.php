@@ -23,7 +23,7 @@ class AddressStorage
             LIMIT 1'
         ;
 
-        return $this->db->execute($sql, array($level, $address))->fetchOneOrFalse();
+        return $this->db->execute($sql, [$level, $address])->fetchOneOrFalse();
     }
 
     public function findHouse($address)
@@ -42,7 +42,7 @@ class AddressStorage
                 LIMIT 1'
             ;
 
-            return $this->db->execute($sql, array($addressId, $house))->fetchOneOrFalse();
+            return $this->db->execute($sql, [$addressId, $house])->fetchOneOrFalse();
         }
 
         return false;
@@ -58,7 +58,7 @@ class AddressStorage
             LIMIT 1'
         ;
 
-        return $this->db->execute($sql, array($id))->fetchOneOrFalse();
+        return $this->db->execute($sql, [$id])->fetchOneOrFalse();
     }
 
     public function findHousesByPostalCode($postalCode)
@@ -69,6 +69,6 @@ class AddressStorage
             WHERE postal_code = ?q'
         ;
 
-        return $this->db->execute($sql, array($postalCode))->fetchResult();
+        return $this->db->execute($sql, [$postalCode])->fetchResult();
     }
 }

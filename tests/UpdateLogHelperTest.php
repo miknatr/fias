@@ -14,12 +14,12 @@ class UpdateLogHelperLogTest extends TestAbstract
 
     public function testGetLastVersionId()
     {
-        $values = array(
-            array(12),
-            array(18),
-            array(180),
-        );
-        $this->db->execute('INSERT INTO update_log(version_id) VALUES ?v', array($values));
+        $values = [
+            [12],
+            [18],
+            [180],
+        ];
+        $this->db->execute('INSERT INTO update_log(version_id) VALUES ?v', [$values]);
 
         $this->assertEquals(
             180,

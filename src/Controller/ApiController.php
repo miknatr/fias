@@ -28,13 +28,16 @@ class ApiController
      * @route GET /api/complete
      * @route GET /api/complete.json
      * @route GET /api/complete.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function complete(Request $request)
     {
         $maxLimit = $this->container->getMaxCompletionLimit();
 
         $maxAddressLevel = $request->get('max_address_level');
-        $regions         = $request->get('regions', array());
+        $regions         = $request->get('regions', []);
         $pattern         = $request->get('pattern', '');
         $limit           = $request->get('limit', $maxLimit);
 
@@ -52,7 +55,7 @@ class ApiController
             $regions
         ))->run();
 
-        $result = array('items' => array_merge($places, $addresses));
+        $result = ['items' => array_merge($places, $addresses)];
 
         return $this->makeResponse($request, $result);
     }
@@ -61,6 +64,9 @@ class ApiController
      * @route GET /api/validate
      * @route GET /api/validate.json
      * @route GET /api/validate.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function validate(Request $request)
     {
@@ -69,7 +75,7 @@ class ApiController
             return $this->makeErrorResponse($request, 'Отсутствует обязательный параметр: pattern.');
         }
 
-        $result = array('items' => (new Validation($this->container->getDb(), $pattern))->run());
+        $result = ['items' => (new Validation($this->container->getDb(), $pattern))->run()];
 
         return $this->makeResponse($request, $result);
     }
@@ -78,6 +84,9 @@ class ApiController
      * @route GET /api/address_postal_code
      * @route GET /api/address_postal_code.json
      * @route GET /api/address_postal_code.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function postalCode(Request $request)
     {
@@ -88,13 +97,16 @@ class ApiController
 
         $result = (new AddressPostalCode($this->container->getDb(), $address))->run();
 
-        return $this->makeResponse($request, array('postal_code' => $result));
+        return $this->makeResponse($request, ['postal_code' => $result]);
     }
 
     /**
      * @route GET /api/postal_code_location
      * @route GET /api/postal_code_location.json
      * @route GET /api/postal_code_location.jsonp format=jsonp
+     * @param Request $request
+     * @return JsonpResponse|JsonResponse|Response
+     * @throws RouteNotFoundException
      */
     public function postalCodeLocation(Request $request)
     {
@@ -103,14 +115,14 @@ class ApiController
             return $this->makeErrorResponse($request, 'Отсутствует обязательный параметр: postal_code.');
         }
 
-        $result = array('address_parts' => (new PostalCodeLocation($this->container->getDb(), $postalCode))->run());
+        $result = ['address_parts' => (new PostalCodeLocation($this->container->getDb(), $postalCode))->run()];
 
         return $this->makeResponse($request, $result);
     }
 
     private function makeErrorResponse(Request $request, $message)
     {
-        return $this->makeResponse($request, array('error_message' => $message), 400);
+        return $this->makeResponse($request, ['error_message' => $message], 400);
     }
 
     private function makeResponse(Request $request, array $values, $status = 200)

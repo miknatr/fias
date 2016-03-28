@@ -11,8 +11,8 @@ class AddressObjectsUpdaterTest extends TestAbstract
     {
         parent::setUp();
 
-        $results = array(
-            array(
+        $results = [
+            [
                 'AOID'        => '5c8b06f1-518e-496e-b683-7bf917e0d70b',
                 'AOGUID'      => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
                 'PREVIOUSID' => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
@@ -20,8 +20,8 @@ class AddressObjectsUpdaterTest extends TestAbstract
                 'FORMALNAME'  => 'Москваа',
                 'POSTALCODE'  => NULL,
                 'SHORTNAME'   => 'г',
-            ),
-            array(
+            ],
+            [
                 'AOID'        => '00000000-0000-0000-0000-000000000000',
                 'AOGUID'      => '00000000-0000-0000-0000-000000000000',
                 'PREVIOUSID' => '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
@@ -29,10 +29,10 @@ class AddressObjectsUpdaterTest extends TestAbstract
                 'FORMALNAME'  => 'Все вы, питерские, идиоты какие-то',
                 'POSTALCODE'  => NULL,
                 'SHORTNAME'   => 'пл',
-            ),
-        );
+            ],
+        ];
 
-        $this->reader = $this->getReaderMock($this, array($results));
+        $this->reader = $this->getReaderMock($this, [$results]);
     }
 
     /** @group slow */
@@ -40,7 +40,7 @@ class AddressObjectsUpdaterTest extends TestAbstract
     {
         $addressObjectConfig = $this->container->getAddressObjectsImportConfig();
 
-        $addressObjectConfig['fields']['PREVIOUSID'] = array('name' => 'previous_id', 'type' => 'uuid');
+        $addressObjectConfig['fields']['PREVIOUSID'] = ['name' => 'previous_id', 'type' => 'uuid'];
 
         $updater = new AddressObjectsUpdater($this->db, $addressObjectConfig['table_name'], $addressObjectConfig['fields']);
         $updater->update($this->reader);
@@ -49,7 +49,7 @@ class AddressObjectsUpdaterTest extends TestAbstract
             'г Москваа',
             $this->db->execute(
                 'SELECT full_title FROM address_objects WHERE address_id = ?q',
-                array('0c5b2444-70a0-4932-980c-b4dc0d3f02b5')
+                ['0c5b2444-70a0-4932-980c-b4dc0d3f02b5']
             )->fetchResult()
         );
 
@@ -57,7 +57,7 @@ class AddressObjectsUpdaterTest extends TestAbstract
             'г Москваа, пл Все вы, питерские, идиоты какие-то',
             $this->db->execute(
                 'SELECT full_title FROM address_objects WHERE address_id = ?q',
-                array('00000000-0000-0000-0000-000000000000')
+                ['00000000-0000-0000-0000-000000000000']
             )->fetchResult()
         );
     }

@@ -28,7 +28,7 @@ class Remover
 
     private function removeRows(array $rows)
     {
-        $ids = array();
+        $ids = [];
 
         foreach ($rows as $row) {
             if (empty($row[$this->keyFieldXml])) {
@@ -38,6 +38,6 @@ class Remover
             $ids[] = $row[$this->keyFieldXml];
         }
 
-        $this->db->execute('DELETE FROM ?f WHERE ?f IN (?l)', array($this->table, $this->keyFieldDatabase, $ids));
+        $this->db->execute('DELETE FROM ?f WHERE ?f IN (?l)', [$this->table, $this->keyFieldDatabase, $ids]);
     }
 }

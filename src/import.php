@@ -1,37 +1,37 @@
 <?php
 
-return array(
-    'address_objects' => array(
+return [
+    'address_objects' => [
         'table_name'   => 'address_objects',
         'node_name'    => 'Object',
         'xml_key'      => 'AOID',
         'database_key' => 'id',
-        'fields'       => array(
-            'AOID'       => array('name' => 'id', 'type' => 'uuid'),
-            'AOGUID'     => array('name' => 'address_id', 'type' => 'uuid'),
-            'AOLEVEL'    => array('name' => 'address_level', 'type' => 'integer'),
-            'PARENTGUID' => array('name' => 'parent_id', 'type' => 'uuid'),
-            'FORMALNAME' => array('name' => 'title'),
-            'POSTALCODE' => array('name' => 'postal_code', 'type' => 'integer'),
-            'SHORTNAME'  => array('name' => 'prefix'),
-            'REGIONCODE' => array('name' => 'region', 'type' => 'integer'),
-        ),
-        'filters' => array(
-            array('field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1),
-        ),
-    ),
-    'houses' => array(
+        'fields'       => [
+            'AOID'       => ['name' => 'id', 'type' => 'uuid'],
+            'AOGUID'     => ['name' => 'address_id', 'type' => 'uuid'],
+            'AOLEVEL'    => ['name' => 'address_level', 'type' => 'integer'],
+            'PARENTGUID' => ['name' => 'parent_id', 'type' => 'uuid'],
+            'FORMALNAME' => ['name' => 'title'],
+            'POSTALCODE' => ['name' => 'postal_code', 'type' => 'integer'],
+            'SHORTNAME'  => ['name' => 'prefix'],
+            'REGIONCODE' => ['name' => 'region', 'type' => 'integer'],
+        ],
+        'filters' => [
+            ['field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1],
+        ],
+    ],
+    'houses' => [
         'table_name'   => 'houses',
         'node_name'    => 'House',
         'xml_key'      => 'HOUSEID',
         'database_key' => 'id',
-        'fields'       => array(
-            'HOUSEID'   => array('name' => 'id', 'type' => 'uuid'),
-            'HOUSEGUID' => array('name' => 'house_id', 'type' => 'uuid'),
-            'AOGUID'    => array('name' => 'address_id', 'type' => 'uuid'),
-            'HOUSENUM'  => array('name' => 'number'),
-            'BUILDNUM'  => array('name' => 'building'),
-            'STRUCNUM'  => array('name' => 'structure'),
-        ),
-    ),
-);
+        'fields'       => [
+            'HOUSEID'   => ['name' => 'id', 'type' => 'uuid'],
+            'HOUSEGUID' => ['name' => 'house_id', 'type' => 'uuid'],
+            'AOGUID'    => ['name' => 'address_id', 'type' => 'uuid'],
+            'HOUSENUM'  => ['name' => 'number'],
+            'BUILDNUM'  => ['name' => 'building'],
+            'STRUCNUM'  => ['name' => 'structure'],
+        ],
+    ],
+];

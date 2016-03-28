@@ -55,8 +55,8 @@ if ($deletedHouseFile) {
         new XmlReader(
             $deletedHouseFile,
             $housesConfig['node_name'],
-            array($housesConfig['primary_key']),
-            array()
+            [$housesConfig['primary_key']],
+            []
         )
     );
 }
@@ -73,14 +73,14 @@ if ($deletedAddressObjectsFile) {
         new XmlReader(
             $deletedAddressObjectsFile,
             $addressObjectsConfig['node_name'],
-            array($addressObjectsConfig['xml_key']),
-            array()
+            [$addressObjectsConfig['xml_key']],
+            []
         )
     );
 }
 
 $addressObjectFields           = $addressObjectsConfig['fields'];
-$addressObjectFields['PREVID'] = array('name' => 'previous_id', 'type' => 'uuid');
+$addressObjectFields['PREVID'] = ['name' => 'previous_id', 'type' => 'uuid'];
 $addressObjectsUpdater         = new AddressObjectsUpdater($db, $addressObjectsConfig['table_name'], $addressObjectFields);
 $addressObjectsUpdater->update(
     new XmlReader(
@@ -92,13 +92,13 @@ $addressObjectsUpdater->update(
 );
 
 $houseFields           = $housesConfig['fields'];
-$houseFields['PREVID'] = array('name' => 'previous_id', 'type' => 'uuid');
+$houseFields['PREVID'] = ['name' => 'previous_id', 'type' => 'uuid'];
 $housesUpdater         = new HousesUpdater($db, $housesConfig['table_name'], $houseFields);
 $housesUpdater->update(new XmlReader(
     $directory->getHouseFile(),
     $housesConfig['node_name'],
     array_keys($houseFields),
-    array()
+    []
 ));
 
 UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());
