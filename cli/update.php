@@ -44,7 +44,7 @@ $housesConfig         = $container->getHousesImportConfig();
 $addressObjectsConfig = $container->getAddressObjectsImportConfig();
 
 $deletedHouseFile = $directory->getDeletedHouseFile();
-if ($deletedHouseFile) {
+if ($deletedHouseFile && $housesConfig) {
     $houseRemover = new Remover(
         $db,
         $housesConfig['table_name'],
@@ -91,15 +91,17 @@ $addressObjectsUpdater->update(
     )
 );
 
-$houseFields           = $housesConfig['fields'];
-$houseFields['PREVID'] = ['name' => 'previous_id', 'type' => 'uuid'];
-$housesUpdater         = new HousesUpdater($db, $housesConfig['table_name'], $houseFields);
-$housesUpdater->update(new XmlReader(
-    $directory->getHouseFile(),
-    $housesConfig['node_name'],
-    array_keys($houseFields),
-    []
-));
+if ($housesConfig) {
+    $houseFields           = $housesConfig['fields'];
+    $houseFields['PREVID'] = ['name' => 'previous_id', 'type' => 'uuid'];
+    $housesUpdater         = new HousesUpdater($db, $housesConfig['table_name'], $houseFields);
+    $housesUpdater->update(new XmlReader(
+        $directory->getHouseFile(),
+        $housesConfig['node_name'],
+        array_keys($houseFields),
+        []
+    ));
+}
 
 UpdateLogHelper::addVersionIdToLog($db, $directory->getVersionId());
 
