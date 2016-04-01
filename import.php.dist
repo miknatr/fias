@@ -20,6 +20,7 @@ return [
             ['field' => 'ACTSTATUS', 'type' => 'eq', 'value' => 1],
         ],
     ],
+    // При простановке false вместо массива загрузка домов не будет производится.
     'houses' => [
         'table_name'   => 'houses',
         'node_name'    => 'House',
