@@ -23,7 +23,7 @@ class Container
             ['app.host', 'app.file_directory', 'app.wsdl_url', 'app.max_completion_limit', 'db.uri']
         );
 
-        $this->importConfig = require(__DIR__ . '/import.php');
+        $this->importConfig = require(__DIR__ . '/../import.php');
         $this->loadDbConfig($this->config);
         $this->loadRouterConfig($this->config, $this->getRootDirectory());
         $this->loadLoggingConfig($this->config, $this->getRootDirectory());

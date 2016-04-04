@@ -50,20 +50,26 @@ $reader               = new XmlReader(
 $addressObjects->import($reader);
 
 $housesConfig = $container->getHousesImportConfig();
-$houses       = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
-$reader = new XmlReader(
-    $directory->getHouseFile(),
-    $housesConfig['node_name'],
-    array_keys($housesConfig['fields'])
-);
+if ($housesConfig) {
+    $houses = new HousesImporter($db, $housesConfig['table_name'], $housesConfig['fields']);
 
-$houses->import($reader);
+    $reader = new XmlReader(
+        $directory->getHouseFile(),
+        $housesConfig['node_name'],
+        array_keys($housesConfig['fields'])
+    );
+
+    $houses->import($reader);
+}
 
 DbHelper::runFile($dataBaseName, $dbPath . '/03_indexes.sql');
 
 $addressObjects->modifyDataAfterImport();
-$houses->modifyDataAfterImport();
+
+if ($housesConfig) {
+    $houses->modifyDataAfterImport();
+}
 
 DbHelper::runFile($dataBaseName, $dbPath . '/04_constraints.sql');
 DbHelper::runFile($dataBaseName, $dbPath . '/05_clean_up.sql');
