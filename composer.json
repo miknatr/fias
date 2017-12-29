@@ -23,7 +23,7 @@
         },
         {
             "type": "vcs",
-            "url":  "git@bitbucket.org:miknatr/tos-kola.git"
+            "url":  "https://bitbucket.org/miknatr/tos-kola.git"
         },
         {
             "type": "vcs",
